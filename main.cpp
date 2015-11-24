@@ -1,6 +1,12 @@
 #include <iostream>
+#include"rubik.h"
 
-int main(int argc, char **argv) {
-    std::cout << "Hello, world!" << std::endl;
-    return 0;
+using namespace auxiliary;
+
+int main(int argc, char **argv) 
+{
+    Topology::singleton();
+    Rubik teszt;
+    
+  return 0;
 }
