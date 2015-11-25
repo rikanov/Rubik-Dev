@@ -21,7 +21,12 @@ public:
   
   Sidemarks whatIs(const Sidemarks & S) const;
   Sidemarks locationOf(const Sidemarks& S) const;
+  
+  int parser(const String & In) const;
+  void print(std::string& C ) const;
 
-  Rubik & operator << (const std::string & Rot);
+  Rubik & operator << (const String & Rot);
+  
+  void REPL();
 };
 #endif

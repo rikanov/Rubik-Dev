@@ -3,6 +3,7 @@
 
 Rubik::Rubik(): A_map NEW, B_map NEW, C_map(nullptr)
 {
+  Topology::singleton();
   FUNCTOR(temp)
   CPY_FUNC(A_map,temp)
   CPY_FUNC(B_map,temp)
@@ -18,7 +19,7 @@ Sidemarks Rubik::locationOf(const Sidemarks& S) const
   return A_map[S];
 }
 
-Rubik& Rubik::operator<<(const std::string& Rot)
+Rubik& Rubik::operator<<(const String & Rot)
 {
   EMPTY(Act)
   Topology::defOperation(Act,Rot);

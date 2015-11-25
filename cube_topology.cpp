@@ -172,9 +172,19 @@ int Topology::getIndex(const std::string& SMarks)
   }
 }
 
+int Topology::getIndex(const int& x, const int& y, const int& z)
+{
+  return Singleton->Hash_In[hash(x,y,z)];
+}
+
 const std::string& Topology::sideMarksOf(const int& Index)
 {
   return Singleton->Cubes[Index].Facets;
+}
+
+int Topology::sideDigit(const char& C)
+{
+  return Singleton->SideDigits[C];
 }
 
 void Topology::operate(int* Q, const int& Rot, const int& A)
@@ -332,3 +342,4 @@ void Topology::close()
 {
   delete Singleton;
 }
+
