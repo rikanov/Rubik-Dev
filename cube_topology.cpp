@@ -187,13 +187,15 @@ int Topology::sideDigit(const char& C)
   return Singleton->SideDigits[C];
 }
 
-void Topology::operate(int* Q, const int& Rot, const int& A)
+bool Topology::operate(int* Q, const int& Rot, const int& A)
 {
+  bool Result=false;
   if(A & AllCubes)
   {
     EACH_FUNC(Q,q,index)
     {
-	*q=Singleton->Rotation[A&Inverter ? OPPOSITE(Rot) : Rot][*q];   
+	*q=Singleton->Rotation[A&Inverter ? OPPOSITE(Rot) : Rot][*q];  
+	Result=true;
     }
   }
   else
@@ -231,6 +233,7 @@ void Topology::operate(int* Q, const int& Rot, const int& A)
       }
       if(Acting)
       {
+	Result=true;
 	*q=Singleton->Rotation[Invert ? OPPOSITE(Rot) : Rot][*q]; 
 	if( !Invert && (A & DoubleMove))
 	{
@@ -239,6 +242,7 @@ void Topology::operate(int* Q, const int& Rot, const int& A)
       }
     }
   }
+  return Result;
 }
 
 void Topology::operate(const int* Q, const int* R, int* S) // Group operation: QR -> S
@@ -249,8 +253,9 @@ void Topology::operate(const int* Q, const int* R, int* S) // Group operation: Q
   }
 }
 
-void Topology::defOperation(int* Q, const std::string& Operations, const int & Including, const int & Restriction)
+bool Topology::defOperation(int* Q, const std::string& Operations, const int & Including, const int & Restriction)
 {
+  bool Result=false;
   CPY_FUNC(Q,IdentityMap)
   for(std::string::const_iterator it=Operations.begin(); it!=Operations.end(); ++it)
   {
@@ -294,9 +299,10 @@ void Topology::defOperation(int* Q, const std::string& Operations, const int & I
     }
     if((Modifier&Restriction)==Restriction)
     {
-      operate(Q,R,Modifier|Including);
+      Result|=operate(Q,R,Modifier|Including);
     }
   }
+  return Result;
 }
 
 void Topology::inverse(const int* Q, int* Result)

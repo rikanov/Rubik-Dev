@@ -70,8 +70,8 @@ public:
   static const std::string & sideMarksOf(const int & Index);
   static int sideDigit(const char & C);
   
-  static void defOperation(int* Q, const std::string& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
-  static void operate(int* Q, const int& Rot, const int& A);
+  static bool defOperation(int* Q, const std::string& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
+  static bool operate(int* Q, const int& Rot, const int& A);
   static void operate(const int* Q, const int* R, int* Result);
   static void inverse(const int* Q, int* Result);
   static void inverse(int* Q);
