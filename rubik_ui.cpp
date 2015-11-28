@@ -1,3 +1,4 @@
+#include"globals.h"
 #include"rubik.h"
 
 // TODO
@@ -7,11 +8,14 @@ void Rubik::REPL()
   OUT_(NL<<"To log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems")
   String In;
   OUT("REPL > ")
-  do
+  while( std::cin >> In )
   {
     const int request=parser(In);
     switch (request)
     {
+      case 0:
+	OUT_(NL<<(In=="" ? "REPL >":"Unrecognised command. To read manual, type H or Help..."))
+	break;
       case 1:
 	std::cin >> In;
 	print(In);
@@ -28,11 +32,25 @@ void Rubik::REPL()
 	std::cin>>In;
 	OUT_(locationOf(In))
 	break;
+      case 5:
+	OUT_("It is"<<(is_solved(IdentityMap,78) ? " solved." : " not solved."))
+	break;
+      case 6:
+	print(Topology::SideMarks);
+	break;
+      case 7:
+      {
+	std::cin>>In;
+	String Rest;
+	getline(std::cin,Rest);
+	OUT_(bruteForce(Rest,In))
+	break;
+      }
       default:
 	continue; // do nothing
     }
     OUT("REPL > ")
-  }while( std::cin >> In );
+  };
   OUT_(NL<<"REPL mode has been closed...")
 }
 
@@ -50,23 +68,30 @@ int Rubik::parser(const String & In) const
     return 4;
   if(In=="location_of")
     return 4;
-      
+  if(In=="is_solved")
+    return 5;
+  if(In=="list")
+    return 6;
+  if(In=="brute_force")
+    return 7;
+  if(In=="!")
+    return 7;
   return 0;
 }
 
-void Rubik::print(String & C) const
+void Rubik::print(const String & C) const
 {
   OUT("\nquery: "<<C<<NL<<"--------")
-  FOR_STR(C,it)
+  C_FOR_STR(C,it)
   { 
-    *it=UPCASE(*it);
     OUT('-')
   }
   OUT(NL<<'\t')
+  int nl=0;
   for(int i=2; i<7 ;++i)
     for(int j=1; j<i ;++j)
     {
-      if(C.find(SideMarks[i])==STR_END && C.find(SideMarks[j])==STR_END)
+      if(C.find(Topology::SideMarks[i])==STR_END && C.find(Topology::SideMarks[j])==STR_END)
       {
 	continue;
       }
@@ -78,15 +103,23 @@ void Rubik::print(String & C) const
       const Sidemarks Sm1=Sidemarks(index);
       const Sidemarks Sm2=Sidemarks(B_map[index]);
       OUT(Sm1<<(index<10?" ":"")<<" -> "<<(B_map[index]<10?" ":"")<<Sm2<<"  ")
+      if(++nl%4==0)
+      {
+	OUT(NL<<'\t')
+      }
     }
-  OUT(NL<<'\t')
+  if(nl%4)
+  {
+    OUT(NL<<'\t')
+  }
+  nl=0;
   for(int i=3;i<7;++i)
     for(int j=2;j<i;++j)
       for(int k=1;k<j;++k)
       {
-	if(C.find(SideMarks[i])==STR_END && 
-	    C.find(SideMarks[j])==STR_END && 
-	      C.find(SideMarks[k])==STR_END)
+	if(C.find(Topology::SideMarks[i])==STR_END && 
+	    C.find(Topology::SideMarks[j])==STR_END && 
+	      C.find(Topology::SideMarks[k])==STR_END)
 	{
 	  continue;
 	}
@@ -98,6 +131,10 @@ void Rubik::print(String & C) const
 	const Sidemarks Sm1=Sidemarks(index);
 	const Sidemarks Sm2=Sidemarks(B_map[index]);
 	OUT(Sm1<<"->"<<Sm2<<"  ")
+	if(++nl%4==0)
+	{
+	  OUT(NL<<'\t')
+	}
       }
   OUT(NL)
 }

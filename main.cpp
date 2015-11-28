@@ -5,7 +5,7 @@
 using namespace auxiliary;
 
 int main(int argc, char **argv) 
-{
+{ 
     Rubik teszt;
     teszt.REPL();
     

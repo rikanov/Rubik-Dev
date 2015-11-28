@@ -1,6 +1,6 @@
 #include "cube_topology.h"
 
-const char * SideMarks="@FURLDB";
+const char * Topology::SideMarks="@FURLDB";
 const Topology * Topology::Singleton(nullptr);
 
 Topology::Side::Side(const char& S, const int& D): SideMark(S), Digit(D) 
@@ -185,6 +185,17 @@ const std::string& Topology::sideMarksOf(const int& Index)
 int Topology::sideDigit(const char& C)
 {
   return Singleton->SideDigits[C];
+}
+void Topology::operateOnRestrictedSpace(int* Q, const int* R, const int& Rot, const bool & Invert)
+{
+  int *q=Q;
+  for(const int * r=R; *r!=-1; ++r)
+  {
+    *(q++)= Singleton->Cubes[*r].onTheSide[Rot] ?
+	    Singleton->Rotation[Invert ? OPPOSITE(Rot):Rot][*r] :
+	    *r;
+  }
+  *q=-1;
 }
 
 bool Topology::operate(int* Q, const int& Rot, const int& A)

@@ -31,29 +31,29 @@ std::ostream& auxiliary::operator<<(std::ostream& os, const auxiliary::Sidemarks
 
 const std::string auxiliary::Line::DefaultSeparators=" \t\n;";
 
-auxiliary::Line& auxiliary::Line::fill_up(const std::string& Read, const std::string& Separator)
+auxiliary::Line& auxiliary::Line::fill_up(const String& Read, const String & Separator)
 {
-  int index=0, begin=-1;
-  for(const char a: Read)
+  push_back("");
+  for(char a: Read)
   {
-    const bool S = (Separator.find(a)!=std::string::npos);
-    if( !S && begin==-1 ) 
+    if(Separator.find(a)!=String::npos)
     {
-      begin=index;
-    } 
-    else if( S && begin>-1)
-    {
-      begin=-1;
-      const int Length=index-begin;
-      push_back(Read.substr(begin, Length));
+      if(back()!="")
+      {
+	push_back("");
+      }
+      continue;
     }
-    ++index;
+    back().push_back(a);
   }
-  if(begin>-1)
-    push_back(Read.substr(begin));
+  if(back()=="")
+  {
+    pop_back();
+  }
+  return *this;
 }
 
-auxiliary::Line::Line(const std::string& Read, const std::string& Separator)
+auxiliary::Line::Line(const String & Read, const String & Separator)
 {
   fill_up(Read,Separator);
 }
@@ -61,7 +61,7 @@ auxiliary::Line::Line(const std::string& Read, const std::string& Separator)
 std::ostream& auxiliary::operator<<(std::ostream& os, const auxiliary::Line& line)
 {
   for(const std::string S : line)
-    os << S;
+    os << S<<'('<<S.length()<<')';
   return os;
 }
 
@@ -73,3 +73,41 @@ std::istream & auxiliary::operator>>(std::istream & is, auxiliary::Line & line)
   //line.fill_up(Read, Line::DefaultSeparators);
   return is;
 }
+
+///=================================================================================
+
+int auxiliary::t_state::order=1;
+auxiliary::t_state::t_state(const int* S, const int& L, const std::string& P): 
+  State(new int[order]), 
+  LastSide(L), 
+  Path(P)
+{
+  memcpy(State,S,order*sizeof(int));
+}
+
+auxiliary::t_state::t_state(const auxiliary::t_state& T): 
+  State(new int[order]), 
+  LastSide(T.LastSide), 
+  Path(T.Path) 
+{
+  memcpy(State,T.State,order*sizeof(int)); 
+}
+
+auxiliary::t_state& auxiliary::t_state::operator=(const auxiliary::t_state& T)
+{
+  if(this==&T)
+  {
+    return *this;
+  }
+  State=new int[order]; 
+  LastSide=T.LastSide; 
+  Path=T.Path;
+  memcpy(State,T.State,order*sizeof(int)); 
+}
+
+auxiliary::t_state::~t_state()
+{
+  delete State;
+  State=nullptr;
+}
+

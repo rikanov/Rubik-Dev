@@ -5,6 +5,9 @@
 
 class Topology
 {
+public:
+  static const char * SideMarks;
+private:
   static const Topology * Singleton;
   
   struct Side
@@ -19,7 +22,7 @@ class Topology
   
   struct Cube 
   {
-    std::string Facets;
+    String Facets;
     int Index;
     Side * Sides[4];
     bool onTheSide[6];
@@ -65,14 +68,15 @@ public:
     AllCubes=16
   } Modifiers;
   
-  static int getIndex(const std::string & SMarks);
+  static int getIndex(const String & SMarks);
   static int getIndex(const int & x, const int & y, const int & z);
-  static const std::string & sideMarksOf(const int & Index);
+  static const String & sideMarksOf(const int & Index);
   static int sideDigit(const char & C);
   
-  static bool defOperation(int* Q, const std::string& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
-  static bool operate(int* Q, const int& Rot, const int& A);
-  static void operate(const int* Q, const int* R, int* Result);
+  static bool defOperation(int* Q, const String& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
+  static bool operate(int * Q, const int & Rot, const int & A);
+  static void operate(const int * Q, const int * R, int * Result);
+  static void operateOnRestrictedSpace(int* Q, const int* R, const int& Rot, const bool& Invert);
   static void inverse(const int* Q, int* Result);
   static void inverse(int* Q);
   static void actOn(int * Q, const int * R);
