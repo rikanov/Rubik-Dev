@@ -196,11 +196,23 @@ bool Topology::operate(int* Q, const int& Rot, const int& A)
   bool Result=false;
   if(A & AllCubes)
   {
-    EACH_FUNC(Q,q,index)
+    if(A & DoubleMove)
     {
-	*q=Singleton->Rotation[A&Inverter ? OPPOSITE(Rot) : Rot][*q];  
-	Result=true;
+      EACH_FUNC(Q,q,index)
+      {
+	  *q=Singleton->Rotation[Rot][*q];
+	  *q=Singleton->Rotation[Rot][*q];
+      }
+      
+    }	
+    else
+    {
+      EACH_FUNC(Q,q,index)
+      {
+	  *q=Singleton->Rotation[A&Inverter ? OPPOSITE(Rot) : Rot][*q]; 
+      }
     }
+    Result=true;
   }
   else
   {
@@ -293,10 +305,13 @@ bool Topology::defOperation(int* Q, const std::string& Operations, const int & I
 	  Modifier^=SingleSide;
 	  Modifier|=Middle;
 	  ++it;
-	  break;
+	  if(it+1==Operations.end() || (*(it+1)!='2' && *(it+1)!='|'))
+	  {
+	    break;
+	  } // don't break if middle block rotation is doubled!
 	case '2':
-	  Modifier|=DoubleMove;
-	  ++it;
+	  Modifier|=DoubleMove; 
+	  ++it; 
 	  break;
 	default:
 	  break;
@@ -304,7 +319,7 @@ bool Topology::defOperation(int* Q, const std::string& Operations, const int & I
     }
     if((Modifier&Restriction)==Restriction)
     {
-      Result|=operate(Q,R,Modifier|Including);
+      Result=operate(Q,R,Modifier|Including);
     }
   }
   return Result;
