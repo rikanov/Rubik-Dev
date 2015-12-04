@@ -1,8 +1,6 @@
 #include"globals.h"
 #include"rubik.h"
 
-// TODO
-
 void Rubik::REPL()
 {
   OUT_(NL<<"To log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems")
@@ -43,7 +41,7 @@ void Rubik::REPL()
 	std::cin>>In;
 	String Rest;
 	getline(std::cin,Rest);
-	OUT_(bruteForce(Rest,In))
+	bruteForce(Rest,In);
 	break;
       }
       default:

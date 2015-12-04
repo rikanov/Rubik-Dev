@@ -37,7 +37,7 @@ String Rubik::bruteForce(const std::string& S, const std::string& AS)
   auxiliary::t_state::order=sp_end+1;
   std::list<t_state> Seeking;
   Seeking.push_back(t_state(InitialState,-1,""));
-  const String allowed_sides= AS=="*" ? "FURBDL" : AS;
+  const String allowed_sides= (AS=="ALL" || AS=="All" || AS=="all") ? "FURBDL" : AS;
   int allowed[allowed_sides.length()+1];
   for(int i=0; i<allowed_sides.length();++i)
   {
@@ -45,9 +45,17 @@ String Rubik::bruteForce(const std::string& S, const std::string& AS)
   }
   allowed[allowed_sides.length()]=-1;
   std::pair<int,String> Result=seeker(Seeking,SolvedState,SolutionIdices,allowed);
-  return Result.first ? 
-	 Result.second + " combination has been found for condition "+char('0'+Result.first) :
-	 "Not found.";
+#ifndef SILENT
+  if(Result.first)
+  {  
+    OUT_( Result.second << " combination has been found for condition "+char('0'+Result.first) );
+  }
+  else
+  {
+    OUT_("Not found." );
+  }
+#endif
+  return Result.second;
 }
 
 int Rubik::checkConditions(const int *State, const int * SolvedState, const int * Conditions) const
