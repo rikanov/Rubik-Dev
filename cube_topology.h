@@ -24,8 +24,8 @@ private:
   {
     String Facets;
     int Index;
-    Side * Sides[4];
-    bool onTheSide[6];
+    Side * Sides[4]={};
+    bool onTheSide[6]={};
     
     Cube();
   } Cubes[NumberOfSideMarks];
