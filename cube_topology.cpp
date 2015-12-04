@@ -15,13 +15,6 @@ Topology::Side::Side(const char& S, const int& D): SideMark(S), Digit(D)
 
 Topology::Cube::Cube()
 {
-  memset(Sides,0,sizeof Sides);
-  memset(onTheSide,0,sizeof onTheSide);
-  /*
-  for(int i=0;i<4;++i)
-    Sides[i]=nullptr;
-  for(int i=0;i<6;++i)
-    onTheSide[i]=false;*/
 }
 
 ///=======================================================
@@ -297,6 +290,7 @@ bool Topology::defOperation(int* Q, const std::string& Operations, const int & I
 	  ++it;
 	  break;
 	case '|':
+	  Modifier^=SingleSide;
 	  Modifier|=Middle;
 	  ++it;
 	  break;
