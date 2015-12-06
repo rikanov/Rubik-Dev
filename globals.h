@@ -20,6 +20,7 @@
 #define CPY_FUNC(x,y) memcpy(x,y, NumberOfSideMarks*sizeof(int)); // DON'T use sizeof y or x !!!!!!!!
 #define FOR_FUNC(x) for(int x=0;x<NumberOfSideMarks;++x)
 #define EACH_FUNC(x,y,i) for(int* y=x,i=0;i<NumberOfSideMarks;++y,++i)
+#define PRINT_FUNC(x) for(int* y=x,i=0;i<NumberOfSideMarks;++y,++i) std::cout<<i<<':'<<*y<<' ';
 #define C_EACH_FUNC(x,y,i) int i=0;for(const int* y=x;i<NumberOfSideMarks;++y,++i)
 #define OUT_(x) std::cout<<x<<std::endl;
 #define OUT(x) std::cout<<x;

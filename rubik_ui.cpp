@@ -44,6 +44,13 @@ void Rubik::REPL()
 	bruteForce(Rest,In);
 	break;
       }
+      case 8:
+	std::cin>>In;
+	suppose(In);
+	break;
+      case 9:
+	noSuppose();
+	break;
       default:
 	continue; // do nothing
     }
@@ -74,6 +81,10 @@ int Rubik::parser(const String & In) const
     return 7;
   if(In=="!")
     return 7;
+  if(In=="suppose")
+    return 8;
+  if(In=="no_suppose")
+    return 9;
   return 0;
 }
 
@@ -99,7 +110,7 @@ void Rubik::print(const String & C) const
 	continue;
       }
       const Sidemarks Sm1=Sidemarks(index);
-      const Sidemarks Sm2=Sidemarks(B_map[index]);
+      const Sidemarks Sm2=whatIs(index);
       OUT(Sm1<<(index<10?" ":"")<<" -> "<<(B_map[index]<10?" ":"")<<Sm2<<"  ")
       if(++nl%4==0)
       {
@@ -127,7 +138,7 @@ void Rubik::print(const String & C) const
 	  continue;
 	}
 	const Sidemarks Sm1=Sidemarks(index);
-	const Sidemarks Sm2=Sidemarks(B_map[index]);
+	const Sidemarks Sm2=whatIs(index);
 	OUT(Sm1<<"->"<<Sm2<<"  ")
 	if(++nl%4==0)
 	{

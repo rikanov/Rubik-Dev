@@ -13,6 +13,9 @@ class Rubik
   int * A_map; 	// indices of side marks what we need here, 
   int * B_map;	// indices of side marks what ARE actually here
 
+  int * Sup_map;  // to find partial solutions we need supposations
+  int * Sup_inv;  // by default they both are identical mappings. (no supposation)
+  
   bool is_solved(const int* Cubes, const int& Limit) const;
   int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
@@ -22,6 +25,8 @@ public:
   Rubik(Rubik * R);
   ~Rubik();
   
+  void noSuppose();
+  void suppose(const Sidemarks & S);
   Sidemarks whatIs(const Sidemarks & S) const;
   Sidemarks locationOf(const Sidemarks& S) const;
   

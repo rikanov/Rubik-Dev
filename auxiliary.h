@@ -6,7 +6,7 @@
 
 namespace auxiliary 
 {
-  class Sidemarks: protected std::string
+  class Sidemarks: public std::string
   {
     int Index;
     
