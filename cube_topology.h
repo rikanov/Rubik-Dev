@@ -30,7 +30,7 @@ private:
     Cube();
   } Cubes[NumberOfSideMarks];
   
-  int SideDigits[90];
+  int SideDigits[90]={};
   int Hash_In[CompressedArraySize]={};
   int Hash_Out[NumberOfSideMarks]={};
   const int * Rotation[6];
