@@ -31,8 +31,8 @@ private:
   } Cubes[NumberOfSideMarks];
   
   int SideDigits[90];
-  int Hash_In[CompressedArraySize];
-  int Hash_Out[NumberOfSideMarks];
+  int Hash_In[CompressedArraySize]={};
+  int Hash_Out[NumberOfSideMarks]={};
   const int * Rotation[6];
   
   static int hash(const int & r2, const int & r1, const int & r0);
