@@ -46,9 +46,17 @@ String Rubik::bruteForce(const std::string& S, const std::string& AS)
   allowed[allowed_sides.length()]=-1;
   std::pair<int,String> Result=seeker(Seeking,SolvedState,SolutionIdices,allowed);
 #ifndef SILENT
+  NL_
   if(Result.first)
   {  
-    OUT_( Result.second << " combination has been found for condition "+char('0'+Result.first) );
+    if(Result.second=="")
+    {
+      OUT_("The condition "<<Result.first<<" is already satisfied. \nNothing to do.")
+    }
+    else
+    {
+      OUT_("The "<<Result.second << " path has been found for condition "<<Result.first );
+    }
   }
   else
   {
@@ -84,6 +92,11 @@ int Rubik::checkConditions(const int *State, const int * SolvedState, const int 
 std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * SolvedState, 
 				    const int * Conditions, const int * AllowedSides) const			       
 {
+  const int pre_check=checkConditions(Trace.front().State,SolvedState,Conditions);
+  if(pre_check)
+  {
+    return std::pair<int,String>(pre_check,"");
+  }
   const int step=2000;
   String A="",B="----------------------------";
   const char mode_sign[]={'x','\'','2'};
