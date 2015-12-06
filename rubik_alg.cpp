@@ -114,7 +114,9 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
 	Topology::operateOnRestrictedSpace(nstate,Trace.front().State,*a,mode==1);
 	if(mode==2)
 	{
-	  Topology::operateOnRestrictedSpace(nstate,Trace.front().State,*a,false);
+	  EMPTY(double_move);
+	  CPY_FUNC(double_move,nstate);
+	  Topology::operateOnRestrictedSpace(nstate,double_move,*a,false);
 	}
 	String npath=Trace.front().Path+Topology::sideMarksOf(*a);
 	if(mode)
