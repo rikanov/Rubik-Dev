@@ -27,7 +27,7 @@ String Rubik::bruteForce(const std::string& S, const std::string& AS)
     *(sp++)=index;
     if(index==sp_end)
     {
-      InitialState[index]=A_map[Solved];
+      InitialState[index]=locationOf(Solved);
       SolvedState[index]=Solved;
       ++sp_end; 
     }
