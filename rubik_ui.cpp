@@ -51,6 +51,10 @@ void Rubik::REPL()
       case 9:
 	noSuppose();
 	break;
+      case 10:
+	std::cin>>In;
+	OUT_(Sidemarks(In).setEigenvalue());
+	break;
       default:
 	continue; // do nothing
     }
@@ -85,6 +89,8 @@ int Rubik::parser(const String & In) const
     return 8;
   if(In=="no_suppose")
     return 9;
+  if(In=="eigen" || In=="eigenvalue")
+    return 10;
   return 0;
 }
 

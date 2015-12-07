@@ -1,5 +1,7 @@
 #include "auxiliary.h"
 
+const char auxiliary::Sidemarks::PositiveGroup[][4]={"FUR","FRD","FDL","FLU","UBR","ULB","RDB","BLD"};
+  
 auxiliary::Sidemarks::Sidemarks(const int& In): Index(In), std::string(Topology::sideMarksOf(In))
 {
   
@@ -19,6 +21,41 @@ auxiliary::Sidemarks& auxiliary::Sidemarks::operator=(const std::string& S)
 auxiliary::Sidemarks::Sidemarks(const std::string& S): Index(Topology::getIndex(S)),std::string(S)
 {
   
+}
+
+const int & auxiliary::Sidemarks::setEigenvalue()
+{
+  if(std::string::length()<3)
+  {
+    return eigenvalue=0;
+  }
+  else
+  {
+    char tester[4];
+    strcpy(tester,std::string::c_str());
+    for(int j=0;j<8;++j)
+    {
+      if(strcmp(tester,PositiveGroup[j])==0)
+      {
+	return eigenvalue=1;
+      }
+    }
+    for(int i=0;i<2;++i)
+    {
+      const char t=tester[0];
+      tester[0]=tester[1];
+      tester[1]=tester[2];
+      tester[2]=t; // cyclic rotation <<
+      for(int j=0;j<8;++j)
+      {
+	if(strcmp(tester,PositiveGroup[j])==0)
+	{
+	  return eigenvalue=1;
+	}
+      }
+    }
+    return eigenvalue=-1;
+  }
 }
 
 std::ostream& auxiliary::operator<<(std::ostream& os, const auxiliary::Sidemarks& sm)

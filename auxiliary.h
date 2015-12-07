@@ -8,7 +8,9 @@ namespace auxiliary
 {
   class Sidemarks: public std::string
   {
+    static const char PositiveGroup[][4];
     int Index;
+    mutable int eigenvalue;
     
   public:
     Sidemarks()=default;
@@ -17,10 +19,11 @@ namespace auxiliary
     Sidemarks(const char * C);
     Sidemarks & operator = (const std::string & S);
     operator int() const {return Index;}
+    const int& setEigenvalue();
+    const int & getEigenvalue() const {return eigenvalue;}
     
   friend std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
   };
-  
   //============================================================================
   
   class Line: public std::list<String>
