@@ -34,7 +34,7 @@ public:
   void print(const String & C ) const;
 
   String bruteForce(const std::string& S, const std::string& AS="*") const;
-  String findPath(const Sidemarks& From, const Sidemarks To) const;
+  String findPath(const Sidemarks& From, const Sidemarks& To) const;
   
   Rubik & operator << (const String & Rot);
   
