@@ -7,6 +7,7 @@
 
 //#define SILENT
 
+#define SKIP ;
 #define String std::string
 #define STR_END std::string::npos
 #define FOR_STR(S,it) for(std::string::iterator it=S.begin();it!=S.end();++it)

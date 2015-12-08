@@ -9,13 +9,7 @@ auxiliary::Sidemarks::Sidemarks(const int& In): Index(In), std::string(Topology:
 
 auxiliary::Sidemarks::Sidemarks(const char* C): Index(Topology::getIndex(C)), std::string(C)
 {
-
-}
-
-auxiliary::Sidemarks& auxiliary::Sidemarks::operator=(const std::string& S)
-{
-  std::string::operator=(S);
-  Index=Topology::getIndex(S);
+  
 }
 
 auxiliary::Sidemarks::Sidemarks(const std::string& S): Index(Topology::getIndex(S)),std::string(S)
@@ -23,7 +17,49 @@ auxiliary::Sidemarks::Sidemarks(const std::string& S): Index(Topology::getIndex(
   
 }
 
-const int & auxiliary::Sidemarks::setEigenvalue()
+auxiliary::Sidemarks& auxiliary::Sidemarks::operator=(const std::string& S)
+{
+  std::string::operator=(S);
+  Index=Topology::getIndex(S);
+  return *this;
+}
+
+auxiliary::Sidemarks& auxiliary::Sidemarks::operator=(const int& In)
+{
+  Index=In;
+  std::string::operator=(Topology::sideMarksOf(Index));
+}
+
+auxiliary::Sidemarks& auxiliary::Sidemarks::operator<<(const std::string& S)
+{
+  const bool real_moves= S.front()=='@';
+  C_FOR_STR(S,s)
+  {
+    const int side=Topology::sideDigit(*s)-1;
+    if(side==-1)
+    {
+      continue;
+    }
+    if(!real_moves || Topology::onTheSide(Index,side))
+    {
+      bool Invert= (s+1!=S.end() && *(s+1)=='\'');
+      Index=Topology::rotation(Index,side,Invert);
+      if(s+1!=S.end() && *(s+1)=='\2')
+      {
+	Index=Topology::rotation(Index,side,false);
+      }
+    }
+  }
+  return operator=(Index);
+}
+
+auxiliary::Sidemarks auxiliary::Sidemarks::operator+(const String & S) const
+{
+  Sidemarks clone(*this);
+  return clone << S;
+}
+
+const int & auxiliary::Sidemarks::setEigenvalue() const
 {
   if(std::string::length()<3)
   {

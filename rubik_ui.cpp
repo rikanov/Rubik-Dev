@@ -13,6 +13,10 @@ void Rubik::REPL()
     {
       case 0:
 	OUT_(NL<<(In=="" ? "REPL >":"Unrecognised command. To read manual, type H or Help..."))
+	if(In!="")
+	{
+	  getline(std::cin,In);
+	}
 	break;
       case 1:
 	std::cin >> In;
@@ -55,6 +59,21 @@ void Rubik::REPL()
 	std::cin>>In;
 	OUT_(Sidemarks(In).setEigenvalue());
 	break;
+      case 11:
+      {
+	String a,b;
+	std::cin>>a;
+	std::cin>>b;
+	OUT_((Sidemarks(a)<<b));
+      }
+      break;
+      case 12:
+      {
+	String From, To;
+	std::cin>>From>>To;
+	OUT_(findPath(From,To))
+      }
+      break;
       default:
 	continue; // do nothing
     }
@@ -91,6 +110,20 @@ int Rubik::parser(const String & In) const
     return 9;
   if(In=="eigen" || In=="eigenvalue")
     return 10;
+  if(In=="move")
+    return 11;
+  if(In=="find_path" || In=="fp")
+    return 12;
+  String op, b;
+  std::cin>>op;
+  if(op=="<<")
+  {
+    std::cin>>b;
+    Sidemarks t(In);
+    t<<b;
+    OUT_(t);
+    return -1;
+  }
   return 0;
 }
 

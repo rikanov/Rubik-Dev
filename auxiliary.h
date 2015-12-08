@@ -18,9 +18,13 @@ namespace auxiliary
     Sidemarks(const std::string & S);
     Sidemarks(const char * C);
     Sidemarks & operator = (const std::string & S);
+    Sidemarks & operator = (const int & In);
+    Sidemarks operator + (const String & S) const;
+    Sidemarks & operator << (const String & S);
     operator int() const {return Index;}
-    const int& setEigenvalue();
+    const int& setEigenvalue() const;
     const int & getEigenvalue() const {return eigenvalue;}
+    const bool& onTheSide(const int& S) const;
     
   friend std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
   };

@@ -83,7 +83,7 @@ void Topology::setHash()
     Hash_Out[index]=h_index;
     Cubes[index].Facets=SideMarks[index+1];
     Cubes[index].Sides[0]=Sides[index];
-    Cubes[index].onTheSide[index]=true;
+    Cubes[index].OnTheSide[index]=true;
   }
     
   int hash_checking=hash(0,0,index);
@@ -111,7 +111,7 @@ void Topology::setHash()
 	
 	Cube & Q=Cubes[index];
 	std::string & F=Q.Facets;
-	bool * S=Q.onTheSide;
+	bool * S=Q.OnTheSide;
 	Side ** C=Q.Sides;
 	if(r2)
 	{
@@ -165,6 +165,11 @@ int Topology::getIndex(const std::string& SMarks)
   }
 }
 
+const bool & Topology::onTheSide(const int& In, const int& S)
+{
+  return Singleton->Cubes[In].OnTheSide[S];
+}
+
 int Topology::getIndex(const int& x, const int& y, const int& z)
 {
   return Singleton->Hash_In[hash(x,y,z)];
@@ -184,12 +189,18 @@ void Topology::operateOnRestrictedSpace(int* Q, const int* R, const int& Rot, co
   int *q=Q;
   for(const int * r=R; *r!=-1; ++r)
   {
-    *(q++)= Singleton->Cubes[*r].onTheSide[Rot] ?
+    *(q++)= Singleton->Cubes[*r].OnTheSide[Rot] ?
 	    Singleton->Rotation[Invert ? OPPOSITE(Rot):Rot][*r] :
 	    *r;
   }
   *q=-1;
 }
+
+int Topology::rotation(const int& Index, const int& Rot, const bool & Invert)
+{
+  return Singleton->Rotation[Invert ? OPPOSITE(Rot):Rot][Index];
+}
+
 
 bool Topology::operate(int* Q, const int& Rot, const int& A)
 {
@@ -226,21 +237,21 @@ bool Topology::operate(int* Q, const int& Rot, const int& A)
 	case InvertSide:
 	case DoubleSide:  
 	case SingleSide:
-	  Acting= C.onTheSide[Rot]; 
+	  Acting= C.OnTheSide[Rot]; 
 	  break;
 	//----------------
 	  
 	case InvertMiddle:
 	case DoubleMiddle:
 	case Middle:
-	  Acting= ! C.onTheSide[Rot] && ! C.onTheSide[OPPOSITE(Rot)]; 
+	  Acting= ! C.OnTheSide[Rot] && ! C.OnTheSide[OPPOSITE(Rot)]; 
 	  break;
 	//----------------
 	  
 	case InvertBlock:
 	case DoubleBlock:
 	case Block:
-	  Acting= ! C.onTheSide[OPPOSITE(Rot)]; 
+	  Acting= ! C.OnTheSide[OPPOSITE(Rot)]; 
 	  break;
 	//----------------
 	  

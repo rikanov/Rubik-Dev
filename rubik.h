@@ -33,7 +33,8 @@ public:
   int parser(const String & In) const;
   void print(const String & C ) const;
 
-  String bruteForce(const std::string& S, const std::string& AS="*");
+  String bruteForce(const std::string& S, const std::string& AS="*") const;
+  String findPath(const Sidemarks& From, const Sidemarks To) const;
   
   Rubik & operator << (const String & Rot);
   

@@ -25,7 +25,7 @@ private:
     String Facets;
     int Index;
     Side * Sides[4]={};
-    bool onTheSide[6]={};
+    bool OnTheSide[6]={};
     
     Cube();
   } Cubes[NumberOfSideMarks];
@@ -68,11 +68,12 @@ public:
     AllCubes=16
   } Modifiers;
   
+  static const bool& onTheSide(const int& In, const int& S);
   static int getIndex(const String & SMarks);
   static int getIndex(const int & x, const int & y, const int & z);
   static const String & sideMarksOf(const int & Index);
   static int sideDigit(const char & C);
-  
+  static int rotation(const int& Index, const int& Rot, const bool& Invert=false);
   static bool defOperation(int* Q, const String& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
   static bool operate(int * Q, const int & Rot, const int & A);
   static void operate(const int * Q, const int * R, int * Result);

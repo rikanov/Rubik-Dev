@@ -1,6 +1,6 @@
 #include"rubik.h"
 
-String Rubik::bruteForce(const std::string& S, const std::string& AS)
+String Rubik::bruteForce(const std::string& S, const std::string& AS) const
 {
   auxiliary::Line Solutions(S);
   const int SizeS=Solutions.size();
@@ -149,4 +149,54 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
       Trace.pop_front();
   }
   return std::pair<int,String>(0,"");
+}
+
+String Rubik::findPath(const Sidemarks& From, const Sidemarks To) const
+{
+  if(From==To  || From.setEigenvalue() != To.setEigenvalue())
+  {
+    return "";
+  }
+  typedef std::pair<Sidemarks,String>  state;
+  std::list<state> Trace;
+  Trace.push_back(state(From,"E")); // E means: Empty. It will be deleted before return
+  while(true)
+  {
+    Sidemarks next_pos=Trace.front().first;
+    String path=Trace.front().second;
+    const char last_sign=path.back();
+    const char last_move= 'A'<=last_sign && last_sign<='Z' ? last_sign : path[path.length()-2];
+    const String sides(next_pos);
+    C_FOR_STR(sides,s)
+    {
+      if(*s==last_move)
+      {
+	continue;
+      }
+      for(int mode=0;mode<3;++mode)
+      {
+	String op;
+	op.push_back(*s);
+	switch(mode)
+	{
+	  case 1:  // inverse
+	    op.push_back('\'');
+	    break;
+	  case 2:  // double
+	    op.push_back('2');
+	    break;
+	  default:
+	    SKIP
+	}
+	Sidemarks next=next_pos+op;
+	if(next==To)
+	{
+	  path.erase(path.begin());
+	  return path+op;
+	}
+	Trace.push_back(state(next,path+op));
+      }
+    }
+    Trace.pop_front();
+  }
 }
