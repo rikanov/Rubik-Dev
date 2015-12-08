@@ -5,7 +5,7 @@
 #include <sstream>
 #include <cstring>
 
-//#define SILENT
+#define SILENT
 
 #define SKIP ;
 #define String std::string

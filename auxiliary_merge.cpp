@@ -50,7 +50,7 @@ std::string auxiliary::mergeSimplePaths(const std::string& A, const std::string&
   {
     if(B.length()==1)
     {
-      Result=A.substr(0,A.size()-1)+"2"; // X + X = X2
+      Result=A.substr(0,A.size())+"2"; // X + X = X2
     }
     else switch(B[1])
     {
@@ -61,7 +61,7 @@ std::string auxiliary::mergeSimplePaths(const std::string& A, const std::string&
 	Result=A.substr(0,A.size()-1)+"'"+B.substr(2); // X + X2 = X'
 	break;
       default:
-	Result=A.substr(0,A.size()-1)+"2"+B.substr(1); // X + X = X2
+	Result=A.substr(0,A.size())+"2"+B.substr(1); // X + X = X2
     }
   }
   return Result;

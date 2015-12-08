@@ -7,7 +7,11 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
   while(IS)
   {
     OS<<"\nREPL > ";
-    OS<<parser(IS);
+    const String last=parser(IS);
+    if(last.find(';')==std::string::npos)
+    {
+      OS<<last;
+    }
   }
   OS<<"\nREPL mode has been closed.\n";
 }
@@ -43,6 +47,20 @@ String Rubik::parser(std::istream & IS)
   else if(read_in=="where_is" || read_in=="where")
   {
     return locationOf(parser(IS));
+  }
+    
+    //=======================================//
+   //  *** Line interpreter functions ***   //
+  //=======================================//
+  else if(read_in=="merge" || read_in=="add")
+  {
+    String Result=parser(IS),A=parser(IS);
+    while(IS && A!=";" )
+    {
+      Result=auxiliary::mergeSimplePaths(Result,A);
+      A=parser(IS); 
+    }
+    return Result;
   }
   else if(read_in=="path_finder" || read_in=="pf")
   {
