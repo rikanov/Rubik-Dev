@@ -7,7 +7,6 @@ using namespace auxiliary;
 int main(int argc, char **argv) 
 { 
     Rubik teszt;
-    teszt.REPL();
-    
-  return 0;
+    teszt.REPL(std::cin,std::cout);
+    return EXIT_SUCCESS;
 }

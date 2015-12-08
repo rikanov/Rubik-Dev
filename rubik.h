@@ -19,6 +19,7 @@ class Rubik
   bool is_solved(const int* Cubes, const int& Limit) const;
   int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
+  String parser(std::istream& IS);
 public:
   
   Rubik();
@@ -30,7 +31,6 @@ public:
   Sidemarks whatIs(const Sidemarks & S) const;
   Sidemarks locationOf(const Sidemarks& S) const;
   
-  int parser(const String & In) const;
   void print(const String & C ) const;
 
   String bruteForce(const std::string& S, const std::string& AS="*") const;
@@ -38,6 +38,6 @@ public:
   
   Rubik & operator << (const String & Rot);
   
-  void REPL();
+  void REPL(std::istream & IS, std::ostream & OS);
 };
 #endif

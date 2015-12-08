@@ -1,188 +1,44 @@
 #include"globals.h"
 #include"rubik.h"
 
-void Rubik::REPL()
+void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {
-  OUT_(NL<<"To log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems")
-  String In;
-  OUT("REPL > ")
-  while( std::cin >> In )
+  OS<<"\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems";
+  while(IS)
   {
-    const int request=parser(In);
-    switch (request)
-    {
-      case 0:
-	OUT_(NL<<(In=="" ? "REPL >":"Unrecognised command. To read manual, type H or Help..."))
-	if(In!="")
-	{
-	  getline(std::cin,In);
-	}
-	break;
-      case 1:
-	std::cin >> In;
-	print(In);
-	break;
-      case 2:
-	std::cin >> In;
-	*this << In;
-	break;
-      case 3:
-	std::cin>>In;
-	OUT_(whatIs(In))
-	break;
-      case 4:
-	std::cin>>In;
-	OUT_(locationOf(In))
-	break;
-      case 5:
-	OUT_("It is"<<(is_solved(IdentityMap,78) ? " solved." : " not solved."))
-	break;
-      case 6:
-	print(Topology::SideMarks);
-	break;
-      case 7:
-      {
-	std::cin>>In;
-	String Rest;
-	getline(std::cin,Rest);
-	bruteForce(Rest,In);
-	break;
-      }
-      case 8:
-	std::cin>>In;
-	suppose(In);
-	break;
-      case 9:
-	noSuppose();
-	break;
-      case 10:
-	std::cin>>In;
-	OUT_(Sidemarks(In).setEigenvalue());
-	break;
-      case 11:
-      {
-	String a,b;
-	std::cin>>a;
-	std::cin>>b;
-	OUT_((Sidemarks(a)<<b));
-      }
-      break;
-      case 12:
-      {
-	String From, To;
-	std::cin>>From>>To;
-	OUT_(findPath(From,To))
-      }
-      break;
-      default:
-	continue; // do nothing
-    }
-    OUT("REPL > ")
-  };
-  OUT_(NL<<"REPL mode has been closed...")
+    OS<<"\nREPL > ";
+    OS<<parser(IS);
+  }
+  OS<<"\nREPL mode has been closed.";
 }
 
-int Rubik::parser(const String & In) const
+String Rubik::parser(std::istream & IS)
 {
-  if(In=="print")
-    return 1;
-  if(In=="do")
-    return 2;
-  if(In=="what_is")
-    return 3;
-  if(In=="find")
-    return 4;
-  if(In=="where_is")
-    return 4;
-  if(In=="location_of")
-    return 4;
-  if(In=="is_solved")
-    return 5;
-  if(In=="list")
-    return 6;
-  if(In=="brute_force")
-    return 7;
-  if(In=="!")
-    return 7;
-  if(In=="suppose")
-    return 8;
-  if(In=="no_suppose")
-    return 9;
-  if(In=="eigen" || In=="eigenvalue")
-    return 10;
-  if(In=="move")
-    return 11;
-  if(In=="find_path" || In=="fp")
-    return 12;
-  String op, b;
-  std::cin>>op;
-  if(op=="<<")
+  String read_in;
+  IS>>read_in;
+  
+    //=======================================//
+   //  *** Evaluate built-in constants ***  //
+  //=======================================//
+  if(read_in=="all" || read_in=="All" || read_in=="ALL")
   {
-    std::cin>>b;
-    Sidemarks t(In);
-    t<<b;
-    OUT_(t);
-    return -1;
+    return Topology::SideMarks;
   }
-  return 0;
-}
-
-void Rubik::print(const String & C) const
-{
-  OUT("\nquery: "<<C<<NL<<"--------")
-  C_FOR_STR(C,it)
-  { 
-    OUT('-')
-  }
-  OUT(NL<<'\t')
-  int nl=0;
-  for(int i=2; i<7 ;++i)
-    for(int j=1; j<i ;++j)
-    {
-      if(C.find(Topology::SideMarks[i])==STR_END && C.find(Topology::SideMarks[j])==STR_END)
-      {
-	continue;
-      }
-      const int index= Topology::getIndex(0,i,j);
-      if (index==0)
-      {
-	continue;
-      }
-      const Sidemarks Sm1=Sidemarks(index);
-      const Sidemarks Sm2=whatIs(index);
-      OUT(Sm1<<(index<10?" ":"")<<" -> "<<(B_map[index]<10?" ":"")<<Sm2<<"  ")
-      if(++nl%4==0)
-      {
-	OUT(NL<<'\t')
-      }
-    }
-  if(nl%4)
+  
+    //=======================================//
+   //  *** Evaluate built-in functions ***  //
+  //=======================================//
+  if(read_in=="echo" || read_in=="print")
   {
-    OUT(NL<<'\t')
+    print(parser(IS));
+  } 
+  else if (read_in=="list")
+  {
+    print(Topology::SideMarks);
   }
-  nl=0;
-  for(int i=3;i<7;++i)
-    for(int j=2;j<i;++j)
-      for(int k=1;k<j;++k)
-      {
-	if(C.find(Topology::SideMarks[i])==STR_END && 
-	    C.find(Topology::SideMarks[j])==STR_END && 
-	      C.find(Topology::SideMarks[k])==STR_END)
-	{
-	  continue;
-	}
-	const int index= Topology::getIndex(i,j,k);
-	if(index==0)
-	{
-	  continue;
-	}
-	const Sidemarks Sm1=Sidemarks(index);
-	const Sidemarks Sm2=whatIs(index);
-	OUT(Sm1<<"->"<<Sm2<<"  ")
-	if(++nl%4==0)
-	{
-	  OUT(NL<<'\t')
-	}
-      }
-  OUT(NL)
+  else if(read_in=="do")
+  {
+    (*this) << parser(IS);
+  }
+  return read_in;
 }
