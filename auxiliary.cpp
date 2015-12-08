@@ -1,6 +1,6 @@
 #include "auxiliary.h"
 
-const char auxiliary::Sidemarks::PositiveGroup[][4]={"FUR","FRD","FDL","FLU","UBR","ULB","RDB","BLD"};
+const char auxiliary::Sidemarks::PositiveGroup[][4]={"FUR","FRD","FDL","FLU","UBR","ULB","RBD","BLD"};
   
 auxiliary::Sidemarks::Sidemarks(const int& In): Index(In), std::string(Topology::sideMarksOf(In))
 {
