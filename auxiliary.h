@@ -25,9 +25,12 @@ namespace auxiliary
     const int& setEigenvalue() const;
     const int & getEigenvalue() const {return eigenvalue;}
     const bool& onTheSide(const int& S) const;
-    
+/*    
   friend std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
-  };
+  friend std::istream & operator>>(std::istream & is, const Sidemarks & sm);
+ */ };
+ std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
+ std::istream & operator>>(std::istream& is, auxiliary::Sidemarks& sm);
   //============================================================================
   
   class Line: public std::list<String>
@@ -59,5 +62,9 @@ namespace auxiliary
     t_state& operator= (const t_state& T);
   };
   
+  
+  String mergeSimplePaths(const String & A, const String & B);
+
 }
+
 #endif

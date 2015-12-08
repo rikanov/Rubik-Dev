@@ -44,9 +44,9 @@ auxiliary::Sidemarks& auxiliary::Sidemarks::operator<<(const std::string& S)
     {
       bool Invert= (s+1!=S.end() && *(s+1)=='\'');
       Index=Topology::rotation(Index,side,Invert);
-      if(s+1!=S.end() && *(s+1)=='\2')
+      if(s+1!=S.end() && *(s+1)=='2')
       {
-	Index=Topology::rotation(Index,side,false);
+	Index=Topology::rotation(Index,side,false); 
       }
     }
   }
@@ -96,7 +96,16 @@ const int & auxiliary::Sidemarks::setEigenvalue() const
 
 std::ostream& auxiliary::operator<<(std::ostream& os, const auxiliary::Sidemarks& sm)
 {
-  os << sm.c_str() <<'('<<sm.Index<<')';
+  os << (std::string)sm <<'('<<(int)sm<<')';
+  return os;
+}
+
+std::istream& auxiliary::operator>>(std::istream& is, auxiliary::Sidemarks& sm)
+{
+  String In;
+  is >> In;
+  sm=In;
+  return is;
 }
 
 ///=====================================================================
@@ -183,4 +192,3 @@ auxiliary::t_state::~t_state()
   delete State;
   State=nullptr;
 }
-
