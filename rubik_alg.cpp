@@ -1,42 +1,14 @@
 #include"rubik.h"
 
-String Rubik::bruteForce(const std::string& S, const std::string& AS) const
+String Rubik::bruteForce(const auxiliary::Line & Solutions, const String & AS) const
 {
-  auxiliary::Line Solutions(S);
   const int SizeS=Solutions.size();
   int SolutionIdices[SizeS+1];
-  int *sp=SolutionIdices;
-  int SolvedState[NumberOfSideMarks],sp_end=0;
+  int SolvedState[NumberOfSideMarks];
   int InitialState[NumberOfSideMarks];
-  for(String s: Solutions)
-  {
-    if(s=="*")
-    {
-      *(sp++)=-1;
-      continue;
-    }
-    const int Solved=Topology::getIndex(s);
-    int index=0;
-    for(; index<sp_end;++index)
-    {
-      if(SolvedState[index]==Solved)
-      {
-	break;
-      }
-    }
-    *(sp++)=index;
-    if(index==sp_end)
-    {
-      InitialState[index]=locationOf(Solved);
-      SolvedState[index]=Solved;
-      ++sp_end; 
-    }
-  } 
-  *sp=-2;  // the end sign of testing
-  InitialState[sp_end]=-1; // end of inner state
-  auxiliary::t_state::order=sp_end+1;
   std::list<t_state> Seeking;
-  Seeking.push_back(t_state(InitialState,-1,""));
+  setConditions(SolutionIdices,SolvedState,InitialState,Solutions,Seeking);
+  
   const String allowed_sides= (AS=="ALL" || AS=="All" || AS=="all") ? "FURBDL" : AS;
   int allowed[allowed_sides.length()+1];
   for(int i=0; i<allowed_sides.length();++i)
@@ -64,6 +36,39 @@ String Rubik::bruteForce(const std::string& S, const std::string& AS) const
   }
 #endif
   return Result.second;
+}
+
+void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * InitialState, const Line& Solutions, std::list<t_state> & Seeking) const
+{
+  int *sp=SolutionIdices,sp_end=0;
+  for(String s: Solutions)
+  {
+    if(s=="*")
+    {
+      *(sp++)=-1;
+      continue;
+    }
+    const int Solved=Topology::getIndex(s);
+    int index=0;
+    for(; index<sp_end;++index)
+    {
+      if(SolvedState[index]==Solved)
+      {
+	break;
+      }
+    }
+    *(sp++)=index;
+    if(index==sp_end)
+    {
+      InitialState[index]=locationOf(Solved);
+      SolvedState[index]=Solved;
+      ++sp_end; 
+    }
+  } 
+  *sp=-2;  // the end sign of testing
+  InitialState[sp_end]=-1; // end of inner state
+  auxiliary::t_state::order=sp_end+1;
+  Seeking.push_back(t_state(InitialState,-1,""));
 }
 
 int Rubik::checkConditions(const int *State, const int * SolvedState, const int * Conditions) const

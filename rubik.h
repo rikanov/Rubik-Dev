@@ -5,7 +5,6 @@
   
   using namespace auxiliary;
 
-
 class Rubik 
 {
 		// Let I the index of a certain side mark in the current state 
@@ -17,9 +16,10 @@ class Rubik
   int * Sup_inv;  // by default they both are identical mappings. (no supposation)
   
   bool is_solved(const int* Cubes, const int& Limit) const;
+  void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, const Line& Solutions, std::list< t_state >& Seeking) const;
   int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
-  String parser(std::istream& IS);
+  String parser(std::stringstream& IS);
 public:
   
   Rubik();
@@ -33,7 +33,7 @@ public:
   
   void print(const String & C ) const;
 
-  String bruteForce(const std::string& S, const std::string& AS="*") const;
+  String bruteForce(const Line& Solutions, const std::string& AS) const;
   String findPath(const Sidemarks& From, const Sidemarks& To) const;
   
   Rubik & operator << (const String & Rot);

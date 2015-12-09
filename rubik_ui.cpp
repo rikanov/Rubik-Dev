@@ -7,16 +7,16 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
   while(IS)
   {
     OS<<"\nREPL > ";
-    const String last=parser(IS);
-    if(last.find(';')==std::string::npos)
-    {
-      OS<<last;
-    }
+    String Get;
+    Stream toParse;
+    getline(IS, Get);
+    toParse << Get;
+    OS<<parser(toParse);
   }
   OS<<"\nREPL mode has been closed.\n";
 }
 
-String Rubik::parser(std::istream & IS)
+String Rubik::parser(Stream & IS)
 {
   String read_in;
   IS>>read_in;
@@ -34,7 +34,7 @@ String Rubik::parser(std::istream & IS)
   //=======================================//
   if(read_in=="all" || read_in=="All" || read_in=="ALL")
   {
-    return "FURBDL";
+    read_in="FURBDL";
   }
   
     //=======================================//
@@ -42,11 +42,11 @@ String Rubik::parser(std::istream & IS)
   //=======================================//
   if(read_in=="what_is" || read_in=="what")
   {
-    return whatIs(parser(IS));
+    read_in=whatIs(parser(IS));
   }
   else if(read_in=="where_is" || read_in=="where")
   {
-    return locationOf(parser(IS));
+    read_in=locationOf(parser(IS));
   }
     
     //=======================================//
@@ -55,17 +55,17 @@ String Rubik::parser(std::istream & IS)
   else if(read_in=="merge" || read_in=="add")
   {
     String Result=parser(IS),A=parser(IS);
-    while(IS && A!=";" )
+    while(IS)
     {
       Result=auxiliary::mergeSimplePaths(Result,A);
       A=parser(IS); 
     }
-    return Result;
+    read_in=Result;
   }
   else if(read_in=="path_finder" || read_in=="pf")
   {
     String Result, From=parser(IS), To=parser(IS);
-    while(IS && To!=";" && From!=";")
+    while(IS)
     {
       String segment=findPath(From,To);
       if(segment=="" && From != To)
@@ -77,23 +77,12 @@ String Rubik::parser(std::istream & IS)
       From=To;
       To=parser(IS);
     }
-    return Result;
+    read_in=Result;
   }
   else if(read_in=="brute_force" || read_in=="bf")
   {
-    String a,b;
-    a=parser(IS);
-    while(IS)
-    {
-      String i=parser(IS);
-      if(i==";")
-      {
-	break;
-      }
-      b+=i+" ";
-    }
-    b.pop_back();
-    return bruteForce(b,a);
+    String As=parser(IS);
+    read_in=bruteForce(IS,As);
   }
   
     //==========================================//
@@ -103,6 +92,17 @@ String Rubik::parser(std::istream & IS)
   {
     print(parser(IS));
   } 
+  else if(read_in=="is_solved" || read_in=="?")
+  {
+    const bool check=is_solved(A_map,NumberOfSideMarks);
+#ifndef SILENT
+    OUT_((check ? "It is solved." : "It is not solved yet."))
+#endif
+    if(check==false)
+    {
+      read_in="";
+    }
+  }
   else if(read_in=="list")
   {
     print(Topology::SideMarks);

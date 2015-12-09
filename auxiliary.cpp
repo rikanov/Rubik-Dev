@@ -135,6 +135,15 @@ auxiliary::Line& auxiliary::Line::fill_up(const String& Read, const String & Sep
   return *this;
 }
 
+auxiliary::Line::Line(std::stringstream& IS)
+{
+  String A;
+  while(IS>>A)
+  {
+    push_back(A);
+  }
+}
+
 auxiliary::Line::Line(const String & Read, const String & Separator)
 {
   fill_up(Read,Separator);

@@ -24,7 +24,7 @@ bool Rubik::is_solved(const int* Cubes, const int & Limit) const
   {
     if(index==Limit)
     {
-      return true;
+      break;
     }
     if(*c!=*(b++))
     {
@@ -43,8 +43,7 @@ void Rubik::noSuppose()
 void Rubik::suppose(const Sidemarks& S)
 {
   noSuppose();
-  String SMap(bruteForce(S,"all"));
-  Topology::defOperation(Sup_inv,SMap,Topology::AllCubes,Topology::NotDefined);
+  Topology::defOperation(Sup_inv,findPath(S,whatIs(S)),Topology::AllCubes,Topology::NotDefined);
   Topology::inverse(Sup_inv,Sup_map);
 }
 

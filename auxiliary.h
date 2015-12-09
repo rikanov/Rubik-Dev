@@ -40,6 +40,7 @@ namespace auxiliary
     
   public:
     Line()=default;
+    Line(Stream & IS);
     Line(const std::string & Read, const String & Separator=DefaultSeparators);
     
   friend std::ostream & operator<<(std::ostream & os, const Line & line);
