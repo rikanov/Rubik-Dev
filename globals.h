@@ -3,12 +3,14 @@
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <cstring>
 
-#define SILENT
+//#define SILENT
 
 #define SKIP ;
 #define String std::string
+#define Stream std::stringstream
 #define STR_END std::string::npos
 #define FOR_STR(S,it) for(std::string::iterator it=S.begin();it!=S.end();++it)
 #define C_FOR_STR(S,it) for(std::string::const_iterator it=S.begin();it!=S.end();++it)

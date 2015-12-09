@@ -135,7 +135,7 @@ auxiliary::Line& auxiliary::Line::fill_up(const String& Read, const String & Sep
   return *this;
 }
 
-auxiliary::Line::Line(std::stringstream& IS)
+auxiliary::Line::Line(std::istream& IS)
 {
   String A;
   while(IS>>A)

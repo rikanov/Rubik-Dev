@@ -29,6 +29,24 @@ String Rubik::parser(Stream & IS)
     read_in=parser(IS);
   }
   
+    //==========================================//
+   //  *** Swap REPL to a new file stream ***  //
+  //==========================================//
+  if(read_in=="%file_open" || read_in=="%fo")
+  {
+    String F;
+    IS >> F;
+    std::ifstream ifs(F,std::ifstream::in);
+    if(ifs.is_open())
+    {
+      REPL(ifs,std::cout);
+    }
+    else
+    {
+      OUT_(NL<<"Something went wrong. Unable to open the file: "<<F)
+    }
+    ifs.close();
+  }
     //=======================================//
    //  *** Evaluate built-in constants ***  //
   //=======================================//
@@ -92,7 +110,7 @@ String Rubik::parser(Stream & IS)
   {
     print(parser(IS));
   } 
-  else if(read_in=="is_solved" || read_in=="?")
+  else if(read_in=="is_solved?" || read_in=="solv?")
   {
     const bool check=is_solved(A_map,NumberOfSideMarks);
 #ifndef SILENT
