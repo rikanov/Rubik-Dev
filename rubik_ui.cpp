@@ -137,5 +137,9 @@ String Rubik::parser(Stream & IS)
   {
     noSuppose();
   }
+  else if(read_in=="align")
+  {
+    align(parser(IS),parser(IS));
+  }
   return read_in;
 }

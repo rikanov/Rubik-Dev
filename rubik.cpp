@@ -47,6 +47,15 @@ void Rubik::suppose(const Sidemarks& S)
   Topology::inverse(Sup_inv,Sup_map);
 }
 
+void Rubik::align(const Sidemarks& A, const Sidemarks& B)
+{
+  EMPTY(Act)
+  Topology::defOperation(Act,findPath(A,B));
+  Topology::actOn(A_map,Act);
+  Topology::inverse(A_map,B_map);
+  Topology::actOn(B_map,Act);
+  Topology::inverse(B_map,A_map);
+}
 
 Sidemarks Rubik::whatIs(const Sidemarks& S) const
 {

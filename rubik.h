@@ -28,6 +28,7 @@ public:
   
   void noSuppose();
   void suppose(const Sidemarks & S);
+  void align(const Sidemarks & A, const Sidemarks & B);
   Sidemarks whatIs(const Sidemarks & S) const;
   Sidemarks locationOf(const Sidemarks& S) const;
   
