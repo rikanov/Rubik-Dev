@@ -3,7 +3,10 @@
 
 void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {
-  OS<<"\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems";
+  if(IS==std::cin)
+  {
+    OS<<"\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems";
+  }
   while(IS)
   {
     OS<<"\nREPL > ";
@@ -13,7 +16,10 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
     toParse << Get;
     OS<<parser(toParse);
   }
-  OS<<"\nREPL mode has been closed.\n";
+  if(IS==std::cin)
+  {
+    OS<<"\nREPL mode has been closed.\n";
+  }
 }
 
 String Rubik::parser(Stream & IS)
@@ -45,6 +51,7 @@ String Rubik::parser(Stream & IS)
     {
       OUT_(NL<<"Something went wrong. Unable to open the file: "<<F)
     }
+    OUT_(NL<<"The file "<<F<<" has been closed.\n");
     ifs.close();
   }
     //=======================================//
