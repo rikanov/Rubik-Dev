@@ -26,6 +26,8 @@ public:
   Rubik(Rubik * R);
   ~Rubik();
   
+  static String findPath(const Sidemarks& From, const Sidemarks& To);
+  
   void noSuppose();
   void suppose(const Sidemarks & S);
   void align(const Sidemarks & A, const Sidemarks & B);
@@ -35,8 +37,6 @@ public:
   void print(const String & C ) const;
 
   String bruteForce(const Line& Solutions, const std::string& AS) const;
-  String findPath(const Sidemarks& From, const Sidemarks& To) const;
-  
   Rubik & operator << (const String & Rot);
   
   void REPL(std::istream & IS, std::ostream & OS);

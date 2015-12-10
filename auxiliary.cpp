@@ -2,17 +2,26 @@
 
 const char auxiliary::Sidemarks::PositiveGroup[][4]={"FUR","FRD","FDL","FLU","UBR","ULB","RBD","BLD"};
   
-auxiliary::Sidemarks::Sidemarks(const int& In): Index(In), std::string(Topology::sideMarksOf(In))
+auxiliary::Sidemarks::Sidemarks(const int& In): 
+  Index(In), 
+  std::string(Topology::sideMarksOf(In)),
+  eigenvalue(Topology::getEigenvalue(In))
 {
   
 }
 
-auxiliary::Sidemarks::Sidemarks(const char* C): Index(Topology::getIndex(C)), std::string(C)
+auxiliary::Sidemarks::Sidemarks(const char* C): 
+  Index(Topology::getIndex(C)), 
+  std::string(C),
+  eigenvalue(Topology::getEigenvalue(Index))
 {
   
 }
 
-auxiliary::Sidemarks::Sidemarks(const std::string& S): Index(Topology::getIndex(S)),std::string(S)
+auxiliary::Sidemarks::Sidemarks(const std::string& S): 
+  Index(Topology::getIndex(S)),
+  std::string(S),
+  eigenvalue(Topology::getEigenvalue(Index))
 {
   
 }
@@ -21,6 +30,7 @@ auxiliary::Sidemarks& auxiliary::Sidemarks::operator=(const std::string& S)
 {
   std::string::operator=(S);
   Index=Topology::getIndex(S);
+  eigenvalue=Topology::getEigenvalue(Index);
   return *this;
 }
 
@@ -57,41 +67,6 @@ auxiliary::Sidemarks auxiliary::Sidemarks::operator+(const String & S) const
 {
   Sidemarks clone(*this);
   return clone << S;
-}
-
-const int & auxiliary::Sidemarks::setEigenvalue() const
-{
-  if(std::string::length()<3)
-  {
-    return eigenvalue=0;
-  }
-  else
-  {
-    char tester[4];
-    strcpy(tester,std::string::c_str());
-    for(int j=0;j<8;++j)
-    {
-      if(strcmp(tester,PositiveGroup[j])==0)
-      {
-	return eigenvalue=1;
-      }
-    }
-    for(int i=0;i<2;++i)
-    {
-      const char t=tester[0];
-      tester[0]=tester[1];
-      tester[1]=tester[2];
-      tester[2]=t; // cyclic rotation <<
-      for(int j=0;j<8;++j)
-      {
-	if(strcmp(tester,PositiveGroup[j])==0)
-	{
-	  return eigenvalue=1;
-	}
-      }
-    }
-    return eigenvalue=-1;
-  }
 }
 
 std::ostream& auxiliary::operator<<(std::ostream& os, const auxiliary::Sidemarks& sm)

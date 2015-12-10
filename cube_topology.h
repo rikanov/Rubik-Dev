@@ -9,6 +9,7 @@ public:
   static const char * SideMarks;
 private:
   static const Topology * Singleton;
+  static const char PositiveGroup[][4];
   
   struct Side
   {
@@ -24,12 +25,14 @@ private:
   {
     String Facets;
     int Index;
+    int Eigenvalue;
     Side * Sides[4]={};
     bool OnTheSide[6]={};
     
     Cube();
   } Cubes[NumberOfSideMarks];
   
+  void setEigenvalue(Topology::Cube& C);
   int SideDigits[90]={};
   int Hash_In[CompressedArraySize]={};
   int Hash_Out[NumberOfSideMarks]={};
@@ -71,6 +74,7 @@ public:
   static const bool& onTheSide(const int& In, const int& S);
   static int getIndex(const String & SMarks);
   static int getIndex(const int & x, const int & y, const int & z);
+  static const int& getEigenvalue(const int& Index);
   static const String & sideMarksOf(const int & Index);
   static int sideDigit(const char & C);
   static int rotation(const int& Index, const int& Rot, const bool& Invert=false);

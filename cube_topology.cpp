@@ -2,6 +2,7 @@
 
 const char * Topology::SideMarks="@FURLDB";
 const Topology * Topology::Singleton(nullptr);
+const char Topology::PositiveGroup[][4]={"FUR","FRD","FDL","FLU","UBR","ULB","RBD","BLD"};
 
 Topology::Side::Side(const char& S, const int& D): SideMark(S), Digit(D) 
 {
@@ -122,9 +123,51 @@ void Topology::setHash()
 	F.push_back(SideMarks[r1]); S[r1-1]=true; C[1]=Sides[r1-1];
 	F.push_back(SideMarks[r0]); S[r0-1]=true; C[0]=Sides[r0-1];
 	Cubes[index].Index=index;
-	//OUT_(index<<':'<<value<<':'<<Cubes[index].Facets)
+	setEigenvalue(Q);
 	++index;
       }
+}
+
+void Topology::setEigenvalue(Topology::Cube & C)
+{
+  if(C.Facets.length()<3)
+  {
+    C.Eigenvalue=0;
+  }
+  else
+  {
+    char tester[4];
+    strcpy(tester,C.Facets.c_str());
+    for(int j=0;j<8;++j)
+    {
+      if(strcmp(tester,PositiveGroup[j])==0)
+      {
+	C.Eigenvalue=1;
+	return;
+      }
+    }
+    for(int i=0;i<2;++i)
+    {
+      const char t=tester[0];
+      tester[0]=tester[1];
+      tester[1]=tester[2];
+      tester[2]=t; // cyclic rotation <<
+      for(int j=0;j<8;++j)
+      {
+	if(strcmp(tester,PositiveGroup[j])==0)
+	{
+	  C.Eigenvalue=1;
+	  return;
+	}
+      }
+    }
+    C.Eigenvalue=-1;
+  }
+}
+
+const int & Topology::getEigenvalue(const int & Index)
+{
+  return Singleton->Cubes[Index].Eigenvalue;
 }
 
 int Topology::computeRotate(const Cube & C, const int& R)

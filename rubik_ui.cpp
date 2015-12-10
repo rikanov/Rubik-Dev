@@ -148,5 +148,11 @@ String Rubik::parser(Stream & IS)
   {
     align(parser(IS),parser(IS));
   }
+  else if(read_in=="side_marks" || read_in=="sm")
+  {
+    const String s=parser(IS);
+    Sidemarks S= isdigit(s.front()) ? Sidemarks(stoi(s)) : Sidemarks(s);
+    OUT_(S<<':'<<S.getEigenvalue());
+  }
   return read_in;
 }

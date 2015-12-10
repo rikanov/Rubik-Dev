@@ -10,7 +10,7 @@ namespace auxiliary
   {
     static const char PositiveGroup[][4];
     int Index;
-    mutable int eigenvalue;
+    int eigenvalue;
     
   public:
     Sidemarks()=default;
@@ -22,13 +22,8 @@ namespace auxiliary
     Sidemarks operator + (const String & S) const;
     Sidemarks & operator << (const String & S);
     operator int() const {return Index;}
-    const int& setEigenvalue() const;
     const int & getEigenvalue() const {return eigenvalue;}
-    const bool& onTheSide(const int& S) const;
-/*    
-  friend std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
-  friend std::istream & operator>>(std::istream & is, const Sidemarks & sm);
- */ };
+ };
  std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
  std::istream & operator>>(std::istream& is, auxiliary::Sidemarks& sm);
   //============================================================================
