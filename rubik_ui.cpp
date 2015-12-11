@@ -1,20 +1,49 @@
 #include"globals.h"
 #include"rubik.h"
 
+static String input_last;
+static String output_last;
+
+String Rubik::echo(Stream& IS)
+{
+  String result,read_in;
+    while(IS.good())
+    {
+      IS>>read_in;
+      if(read_in=="%i")
+      {
+	result+=input_last+' ';
+	continue;
+      }
+      if(read_in=="%o")
+      {
+	result+=output_last+' ';
+	continue;
+      }
+      std::map<String,String>::const_iterator it=Var_space.find(read_in);
+      result+= (it!=Var_space.end() ? it->second : read_in)+' ';
+    }
+   return result;
+}
+
 void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {
   if(IS==std::cin)
   {
     OS<<"\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems";
   }
-  while(IS)
+  while(IS.good())
   {
     OS<<"\nREPL > ";
     String Get;
     Stream toParse;
     getline(IS, Get);
     toParse << Get;
-    OS<<parser(toParse);
+    OS<<(output_last=parser(toParse));
+    if(Get.find("%i")==std::string::npos)
+    {
+      input_last=Get;
+    }
   }
   if(IS==std::cin)
   {
@@ -32,6 +61,10 @@ String Rubik::parser(Stream & IS)
   //=======================================//
   if(read_in=="exec")
   {
+    read_in=echo(IS);
+    IS.str("");
+    IS.clear();
+    IS<<read_in;
     read_in=parser(IS);
   }  
   
@@ -42,7 +75,7 @@ String Rubik::parser(Stream & IS)
   {
     IS>>read_in;
     Var_space[read_in]="";
-    while(IS)
+    while(IS.good())
     {
       String S;
       IS>>S;
@@ -75,9 +108,7 @@ String Rubik::parser(Stream & IS)
   }
   else if (read_in=="echo")
   {
-    IS>>read_in;
-    std::map<String,String>::const_iterator it=Var_space.find(read_in);
-    read_in= it!=Var_space.end() ? it->second : "";
+    read_in=echo(IS);
   }
   else if(read_in.back()=='!')
   {
@@ -115,6 +146,18 @@ String Rubik::parser(Stream & IS)
     //=======================================//
    //  *** Evaluate built-in constants ***  //
   //=======================================//
+  else if(read_in=="all" || read_in=="All" || read_in=="ALL")
+  {
+    read_in="FURBDL";
+  }
+  else if(read_in=="%i")
+  {
+    read_in=input_last;
+  }
+  else if(read_in=="%o")
+  {
+    read_in=output_last;
+  }
   
     //=======================================//
    //  *** Evaluate built-in functions ***  //
@@ -134,7 +177,7 @@ String Rubik::parser(Stream & IS)
   else if(read_in=="merge" || read_in=="add")
   {
     String Result=parser(IS),A=parser(IS);
-    while(IS)
+    while(IS.good())
     {
       Result=auxiliary::mergeSimplePaths(Result,A);
       A=parser(IS); 
@@ -144,7 +187,7 @@ String Rubik::parser(Stream & IS)
   else if(read_in=="path_finder" || read_in=="pf")
   {
     String Result, From=parser(IS), To=parser(IS);
-    while(IS)
+    while(IS.good())
     {
       String segment=findPath(From,To);
       if(segment=="" && From != To)
@@ -161,7 +204,12 @@ String Rubik::parser(Stream & IS)
   else if(read_in=="brute_force" || read_in=="bf")
   {
     String As=parser(IS);
-    read_in=bruteForce(IS,As);
+    read_in="";
+    while(IS.good())
+    {
+      read_in+=parser(IS)+' ';
+    }OUT_(read_in)
+    read_in=bruteForce(read_in,As);
   }
   
     //==========================================//
@@ -204,7 +252,7 @@ String Rubik::parser(Stream & IS)
   }
   else if(read_in=="side_marks" || read_in=="sm")
   {
-    while(IS)
+    while(IS.good())
     {
       Sidemarks S= parser(IS);
       if(S==0&&S!="F")
