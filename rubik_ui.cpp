@@ -33,8 +33,57 @@ String Rubik::parser(Stream & IS)
   if(read_in=="exec")
   {
     read_in=parser(IS);
-  }
+  }  
   
+    //========================================//
+   //  *** User declarations, variables ***  //
+  //========================================//
+  if (read_in=="defvar")
+  {
+    IS>>read_in;
+    Var_space[read_in]="";
+    while(IS)
+    {
+      String S;
+      IS>>S;
+      Var_space[read_in]+=S+' ';
+    }
+  }
+  else if (read_in=="clone")
+  {
+    String value;
+    IS>>read_in;
+    IS>>value;
+    Var_space[read_in]=Var_space.at(value);
+  }
+  else if (read_in=="get_value")
+  {
+    IS>>read_in;
+    Var_space[read_in]=parser(IS);
+  }
+  else if(Var_space.find(read_in)!=Var_space.end())
+  {
+    String IS_;
+    if(IS.good())
+    {
+      getline(IS,IS_);
+    }
+    IS.str("");
+    IS.clear();
+    IS<<Var_space.at(read_in)<<' '<<IS_;
+    read_in=parser(IS);
+  }
+  else if (read_in=="echo")
+  {
+    IS>>read_in;
+    std::map<String,String>::const_iterator it=Var_space.find(read_in);
+    read_in= it!=Var_space.end() ? it->second : "";
+  }
+  else if(read_in.back()=='!')
+  {
+    read_in.pop_back();
+  }
+    
     //==========================================//
    //  *** Swap REPL to a new file stream ***  //
   //==========================================//
@@ -62,14 +111,10 @@ String Rubik::parser(Stream & IS)
   {
     read_in=Sidemarks(stoi(read_in));
   }
-  
+
     //=======================================//
    //  *** Evaluate built-in constants ***  //
   //=======================================//
-  else if(read_in=="all" || read_in=="All" || read_in=="ALL")
-  {
-    read_in="FURBDL";
-  }
   
     //=======================================//
    //  *** Evaluate built-in functions ***  //
@@ -122,7 +167,7 @@ String Rubik::parser(Stream & IS)
     //==========================================//
    //  *** Evaluate side-effect functions ***  //
   //==========================================// 
-  else if(read_in=="echo" || read_in=="print")
+  else if(read_in=="print")
   {
     print(parser(IS));
   } 

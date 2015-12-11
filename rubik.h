@@ -2,7 +2,7 @@
 #define RUBIK_CLASS
 
 #include"auxiliary.h"
-  
+#include<map>
   using namespace auxiliary;
 
 class Rubik 
@@ -14,6 +14,8 @@ class Rubik
 
   int * Sup_map;  // to find partial solutions we need supposations
   int * Sup_inv;  // by default they both are identical mappings. (no supposation)
+  
+  std::map<String, String> Var_space;
   
   bool is_solved(const int* Cubes, const int& Limit) const;
   void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, const Line& Solutions, std::list< t_state >& Seeking) const;
