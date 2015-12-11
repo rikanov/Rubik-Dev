@@ -1,7 +1,5 @@
 #include "auxiliary.h"
 
-const char auxiliary::Sidemarks::PositiveGroup[][4]={"FUR","FRD","FDL","FLU","UBR","ULB","RBD","BLD"};
-  
 auxiliary::Sidemarks::Sidemarks(const int& In): 
   Index(In), 
   std::string(Topology::sideMarksOf(In)),
@@ -38,6 +36,8 @@ auxiliary::Sidemarks& auxiliary::Sidemarks::operator=(const int& In)
 {
   Index=In;
   std::string::operator=(Topology::sideMarksOf(Index));
+  eigenvalue=Topology::getEigenvalue(Index);
+  return *this;
 }
 
 auxiliary::Sidemarks& auxiliary::Sidemarks::operator<<(const std::string& S)
@@ -175,4 +175,16 @@ auxiliary::t_state::~t_state()
 {
   delete State;
   State=nullptr;
+}
+
+int * auxiliary::nestedLoop(int* Array, int depth, const int& UpperBound, const int& LowerBound )
+{
+  int *i=Array;
+  ++(*i); 
+  while( --depth && *i==UpperBound)
+  {
+    *(i++)=LowerBound;
+    ++(*i);
+  }
+  return (depth || *i<UpperBound) ? i : nullptr;
 }
