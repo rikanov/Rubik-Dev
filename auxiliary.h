@@ -8,7 +8,6 @@ namespace auxiliary
 {
   class Sidemarks: public std::string
   {
-    static const char PositiveGroup[][4];
     int Index;
     int eigenvalue;
     
@@ -17,6 +16,7 @@ namespace auxiliary
     Sidemarks(const int & In); 
     Sidemarks(const std::string & S);
     Sidemarks(const char * C);
+    Sidemarks & operator = (const Sidemarks & S)=default;
     Sidemarks & operator = (const std::string & S);
     Sidemarks & operator = (const int & In);
     Sidemarks operator + (const String & S) const;
@@ -58,9 +58,9 @@ namespace auxiliary
     t_state& operator= (const t_state& T);
   };
   
-  
-  String mergeSimplePaths(const String & A, const String & B);
-
+  bool checkSimplePath(const String & A);
+  String mergeSimplePaths(const std::string& wA, const std::string& wB);
+  int * nestedLoop(int * Array,int depth, const int & UpperBound, const int & LowerBound=0);
 }
 
 #endif

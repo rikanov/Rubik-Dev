@@ -54,10 +54,19 @@ String Rubik::parser(Stream & IS)
     OUT_(NL<<"The file "<<F<<" has been closed.\n");
     ifs.close();
   }
+  
+    //=======================================//
+   //  *** Convert numeric data to SM  ***  //
+  //=======================================//
+  else if(isdigit(read_in.front()))
+  {
+    read_in=Sidemarks(stoi(read_in));
+  }
+  
     //=======================================//
    //  *** Evaluate built-in constants ***  //
   //=======================================//
-  if(read_in=="all" || read_in=="All" || read_in=="ALL")
+  else if(read_in=="all" || read_in=="All" || read_in=="ALL")
   {
     read_in="FURBDL";
   }
@@ -65,7 +74,7 @@ String Rubik::parser(Stream & IS)
     //=======================================//
    //  *** Evaluate built-in functions ***  //
   //=======================================//
-  if(read_in=="what_is" || read_in=="what")
+  else if(read_in=="what_is" || read_in=="what")
   {
     read_in=whatIs(parser(IS));
   }
@@ -150,9 +159,16 @@ String Rubik::parser(Stream & IS)
   }
   else if(read_in=="side_marks" || read_in=="sm")
   {
-    const String s=parser(IS);
-    Sidemarks S= isdigit(s.front()) ? Sidemarks(stoi(s)) : Sidemarks(s);
-    OUT_(S<<':'<<S.getEigenvalue());
+    while(IS)
+    {
+      Sidemarks S= parser(IS);
+      if(S==0&&S!="F")
+      {
+	continue;
+      }
+      OUT(S<<':'<<S.getEigenvalue()<<' ');
+    }
+    NL_
   }
   return read_in;
 }

@@ -1,68 +1,78 @@
 #include"auxiliary.h"
 
-
-std::string auxiliary::mergeSimplePaths(const std::string& A, const std::string& B)
+static int modifierIssue(const char& a)
 {
-  String Result;
-  const char last_sign=A.back();
-  const char last_move= 'A'<=last_sign && last_sign<='Z' ? last_sign : A[A.length()-2];
-  if(last_move!=B.front())
+  switch(a)
   {
-    Result=A+B;
+    case '\'':
+      return 3;
+    case '2':
+      return 2;
+    default:
+      return 1;
   }
-  else if(A.back()=='\'')
+}
+
+static char modifierIssue(const int& a)
+{
+  switch(a)
   {
-    if(B.length()==1)
-    {
-      Result=A.substr(0,A.size()-2); // X' + X = 0
-    }
-    else switch (B[1])
-    {
-      case '\'':
-	Result=A.substr(0,A.size()-1)+"2"+B.substr(2); // X' + X' = X2
-	break;
-      case '2':
-	Result=A.substr(0,A.size()-1)+B.substr(2); // X' + X2 = X
-	break;
-      default:
-	Result=A.substr(0,A.size()-2)+B.substr(1); // X' + X = 0
-    }
+    case 3:
+      return '\'';
+    case 2:
+      return '2';
+    default:
+      return '\0';
   }
-  else if(A.back()=='2')
+}
+
+bool auxiliary::checkSimplePath(const String& S)
+{
+  for(std::string::const_iterator it=S.begin(); it+1!=S.end(); ++it)
   {
-    if(B.length()==1)
+    if(*it==*(it+1) && *it!='|')
     {
-      Result=A.substr(0,A.size()-1)+"'"; // X2 + X = X'
+      return false;
     }
-    else switch(B[1])
+    if(it+2!=S.end() && isletter(*it) && !isletter(*(it+1)) && *it==*(it+2))
     {
-      case '\'':
-	Result=A.substr(0,A.size()-1)+B.substr(2); // X2 + X' = X
-	break;
-      case '2':
-	Result=A.substr(0,A.size()-2)+B.substr(2); // X2 + X2 = 0
-	break;
-      default:
-	Result=A.substr(0,A.size()-1)+"'"+B.substr(1); // X2 + X = X'
+      return false;
     }
+    
   }
-  else
+  return true;
+}
+String auxiliary::mergeSimplePaths(const String & wA,const String & wB)
+{
+  if(wA==""||wB=="")
   {
-    if(B.length()==1)
-    {
-      Result=A.substr(0,A.size())+"2"; // X + X = X2
-    }
-    else switch(B[1])
-    {
-      case '\'':
-	Result=A.substr(0,A.size()-1)+B.substr(2); // X + X' = 0
-	break;
-      case '2':
-	Result=A.substr(0,A.size()-1)+"'"+B.substr(2); // X + X2 = X'
-	break;
-      default:
-	Result=A.substr(0,A.size())+"2"+B.substr(1); // X + X = X2
-    }
+    return wA+wB;
   }
-  return Result;
+  String A(wA), B(wB);
+  const char sideB=B.front();
+  B.erase(B.begin());
+  const int a_op=modifierIssue(A.back());
+  const int b_op= B=="" ? 1 : modifierIssue(B.front());
+  const int result=(4+a_op+b_op)%4;
+  if(a_op>1)
+  {
+    A.pop_back();
+  }
+  if(A.back()!=sideB)
+  {
+    return wA+wB;
+  }
+  if(b_op>1)
+  {
+    B.erase(B.begin());
+  }
+  if(result>1)
+  {
+    A.push_back(modifierIssue(result));
+  }
+  else if(result==0)
+  {
+    A.pop_back();
+  }
+  return mergeSimplePaths(A,B);
 }
