@@ -204,13 +204,13 @@ int Topology::getIndex(const std::string& SMarks)
       }
       return Singleton->Hash_In[ hash(0,0,Singleton->SideDigits[SMarks[0]]) ];
     case 2:
-      if(IS_FACET(SMarks[0])&&IS_FACET(SMarks[1])==false)
+      if((IS_FACET(SMarks[0])&&IS_FACET(SMarks[1]))==false)
       {
 	return -1;
       }
       return Singleton->Hash_In[ hash(0,Singleton->SideDigits[SMarks[0]],Singleton->SideDigits[SMarks[1]]) ];
     case 3:
-      if(IS_FACET(SMarks[0])&&IS_FACET(SMarks[1])&&IS_FACET(SMarks[2])==false)
+      if((IS_FACET(SMarks[0])&&IS_FACET(SMarks[1])&&IS_FACET(SMarks[2]))==false)
       {
 	return -1;
       }
