@@ -1,8 +1,21 @@
 #include"rubik.h"
 
-String Rubik::parser(Stream & IS)
-{
+String Rubik::parser(Stream & IS, const String arg)
+{  
   String read_in;
+  
+    //========================================//
+   //  *** Replacing function arguments ***  //
+  //========================================// 
+  if(arg!="")
+  {
+    getline(IS,read_in);
+    replaceArguments(read_in, arg);
+    IS.str(read_in);
+    IS.clear();
+    read_in=parser(IS);
+  }
+  
   IS>>read_in;
   
     //=======================================//
@@ -20,16 +33,16 @@ String Rubik::parser(Stream & IS)
     //========================================//
    //  *** User declarations, variables ***  //
   //========================================//
-  if (read_in=="defvar"||read_in=="def")
+  if(read_in=="defun")
   {
     IS>>read_in;
-    Var_space[read_in]="";
-    while(IS.good())
-    {
-      String S;
-      IS>>S;
-      Var_space[read_in]+=S+' ';
-    }
+    Var_space[read_in]=read_in+'&';
+    read_in=defvar(IS,read_in+'&');
+  }
+  else if (read_in=="defvar"||read_in=="define")
+  {
+    IS>>read_in;
+    read_in=defvar(IS,read_in);
   }
   else if (read_in=="clone")
   {

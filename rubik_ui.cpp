@@ -4,6 +4,17 @@
 static String input_last;
 static String output_last;
 
+static void imbueStream(Stream& IS, const String & V)
+{
+  String IS_;
+  if(IS.good())
+  {
+    getline(IS,IS_);
+  }
+  IS.str("");
+  IS.clear();
+  IS<<V<<' '<<IS_;
+}
 
 void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {
@@ -48,6 +59,39 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
   {
     OS<<"\nREPL mode has been closed.\n";
   }
+}
+
+void Rubik::replaceArguments(String & read_line, const String & arg)
+{
+  if(arg.find('&')!=String::npos)
+  {
+    return;
+  }
+  if(read_line=="&")
+  {
+    read_line=arg;
+  }
+  else
+  {
+    int index=0;
+    while((index=read_line.find('&',index))!=String::npos)
+    {
+      read_line.replace(index,1,arg);
+      index+=arg.length();
+    }
+  }
+}
+
+String Rubik::defvar(Stream& IS, const String& fName)
+{
+  Var_space[fName]="";
+  while(IS.good())
+  {
+    String S;
+    IS>>S;
+    Var_space[fName]+=S+' ';
+  }
+  return fName;
 }
 
 String Rubik::assoc(Stream& IS)
@@ -145,17 +189,15 @@ String Rubik::cube(Stream& IS)
   return Result;
 }
 
-String Rubik::variable(Stream& IS, String R)
+String Rubik::variable(Stream& IS, const String& R)
 {
-  String IS_;
-  if(IS.good())
+  String arg;
+  if(R.back()=='&')
   {
-    getline(IS,IS_);
+    IS>>arg; // it's a function. Argumentum is needed
   }
-  IS.str("");
-  IS.clear();
-  IS<<Var_space.at(R)<<' '<<IS_;
-  return parser(IS);
+  imbueStream(IS,Var_space.at(R));
+  return parser(IS,arg);
 }
 
 void Rubik::printSidemarks(Stream& IS)

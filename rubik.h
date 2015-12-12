@@ -25,7 +25,9 @@ class Rubik
      //==========================//
     //  *** User Interface ***  //
    //==========================//
-  String parser(Stream& IS);
+  void replaceArguments(String& read_in, const String& arg);
+  String parser(Stream& IS,const String arg="");
+  String defvar(Stream& IS,const String& fName);
   String echo(Stream & IS);
   String assoc(Stream& IS);
   String select(Stream& IS, bool Inv);
@@ -33,7 +35,7 @@ class Rubik
   String lastInput(const char& C) const;
   String merge(Stream& IS);
   String cube(Stream& IS);
-  String variable(Stream& IS, String R);
+  String variable(Stream& IS,const String& R);
   String callBruteForce(Stream& IS);
   void printSidemarks(Stream& IS);
 public:
