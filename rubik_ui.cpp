@@ -50,6 +50,13 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
   }
 }
 
+String Rubik::assoc(Stream& IS)
+{
+    String A=parser(IS);
+    String B=parser(IS);
+    return (A=="" || B=="") ? A+B : A==B ? A : A+"->"+B;
+}
+
 String Rubik::echo(Stream& IS)
 {
   String result,read_in;
@@ -169,9 +176,7 @@ String Rubik::parser(Stream & IS)
   //=======================================//
   else if(read_in=="assoc")
   {
-    String A=parser(IS);
-    String B=parser(IS);
-    read_in=(A=="" || B=="") ? A+B : A==B ? A : A+"->"+B;
+    read_in=assoc(IS);
   }
   else if(read_in=="what_is" || read_in=="what")
   {
@@ -182,6 +187,40 @@ String Rubik::parser(Stream & IS)
   {
     Sidemarks S(parser(IS));
     read_in=S.valid() ? locationOf(S) : "";
+  }
+  else if(read_in=="select" )
+  {
+    String head;
+    IS>>head;
+    read_in="";
+    Stream SS(parser(IS));
+    while(SS.good())
+    {
+      String next;
+      next=="";
+      SS>>next;
+      if(next.find(head)!=String::npos)
+      {
+	read_in+=next+' ';
+      }
+    }
+  }
+  else if(read_in=="deselect" )
+  {
+    String head;
+    IS>>head;
+    read_in="";
+    Stream SS(parser(IS));
+    while(SS.good())
+    {
+      String next;
+      next=="";
+      SS>>next;
+      if(next.find(head)==String::npos)
+      {
+	read_in+=next+' ';
+      }
+    }
   }
     
     //=======================================//
@@ -248,9 +287,9 @@ String Rubik::parser(Stream & IS)
     read_in="";
     EACH_FUNC(B_map,b,index)
     {
-      read_in+=Sidemarks(index);
-      read_in+="->";
-      read_in+=Sidemarks(*b)+' ';
+      Stream S;
+      S<<Sidemarks(index).c_str()<<' '<<Sidemarks(*b).c_str();
+      read_in+=assoc(S)+' ';
     }
   }
   else if(read_in=="do")

@@ -23,6 +23,7 @@ class Rubik
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
   String parser(std::stringstream& IS);
     std::string echo(std::stringstream & IS);
+    std::string assoc(std::stringstream& IS);
 public:
   
   Rubik();
