@@ -196,12 +196,24 @@ int Topology::getIndex(const std::string& SMarks)
   switch(SMarks.length())
   {
     case 0:
-      return 0;
+      return -1;
     case 1:
+      if(IS_FACET(SMarks[0])==false)
+      {
+	return -1;
+      }
       return Singleton->Hash_In[ hash(0,0,Singleton->SideDigits[SMarks[0]]) ];
     case 2:
+      if(IS_FACET(SMarks[0])&&IS_FACET(SMarks[1])==false)
+      {
+	return -1;
+      }
       return Singleton->Hash_In[ hash(0,Singleton->SideDigits[SMarks[0]],Singleton->SideDigits[SMarks[1]]) ];
     case 3:
+      if(IS_FACET(SMarks[0])&&IS_FACET(SMarks[1])&&IS_FACET(SMarks[2])==false)
+      {
+	return -1;
+      }
       return Singleton->Hash_In[ hash(Singleton->SideDigits[SMarks[0]],Singleton->SideDigits[SMarks[1]],Singleton->SideDigits[SMarks[2]]) ];
     default:
       return -1; //ToDo Wrong input

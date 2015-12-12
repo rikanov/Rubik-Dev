@@ -170,7 +170,7 @@ String Rubik::parser(Stream & IS)
   //=========================================//  
   else if(Sidemarks(read_in).valid())
   {
-    SKIP
+    SKIP OUT_(Sidemarks(read_in))
   }
   
     //=========================================//
