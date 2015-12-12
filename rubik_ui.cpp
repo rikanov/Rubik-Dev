@@ -30,7 +30,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
       {
 	Get.pop_back();
       }
-      if(Get=="")
+      if(Get=="" && IS.good())
       {
 	sign_nwln=true;
 	continue;
@@ -119,15 +119,11 @@ String Rubik::parser(Stream & IS)
   {
     read_in=echo(IS);
   }
-  else if(read_in.back()=='!')
-  {
-    read_in.pop_back();
-  }
     
     //==========================================//
    //  *** Swap REPL to a new file stream ***  //
   //==========================================//
-  if(read_in=="%file_open" || read_in=="%fo")
+  else if(read_in=="%file_open" || read_in=="%fo")
   {
     String F;
     IS >> F;
@@ -171,13 +167,21 @@ String Rubik::parser(Stream & IS)
     //=======================================//
    //  *** Evaluate built-in functions ***  //
   //=======================================//
+  else if(read_in=="assoc")
+  {
+    String A=parser(IS);
+    String B=parser(IS);
+    read_in=(A=="" || B=="") ? A+B : A==B ? A : A+"->"+B;
+  }
   else if(read_in=="what_is" || read_in=="what")
   {
-    read_in=whatIs(parser(IS));
+    Sidemarks S(parser(IS));
+    read_in=S.valid() ? whatIs(S) : "";
   }
   else if(read_in=="where_is" || read_in=="where")
   {
-    read_in=locationOf(parser(IS));
+    Sidemarks S(parser(IS));
+    read_in=S.valid() ? locationOf(S) : "";
   }
     
     //=======================================//
@@ -239,9 +243,15 @@ String Rubik::parser(Stream & IS)
       read_in="";
     }
   }
-  else if(read_in=="list")
+  else if(read_in=="cube")
   {
-    print(Topology::SideMarks);
+    read_in="";
+    EACH_FUNC(B_map,b,index)
+    {
+      read_in+=Sidemarks(index);
+      read_in+="->";
+      read_in+=Sidemarks(*b)+' ';
+    }
   }
   else if(read_in=="do")
   {
@@ -273,7 +283,6 @@ String Rubik::parser(Stream & IS)
     NL_
   }
   
-    
     //=========================================//
    //  *** Return user-defined variables ***  //
   //=========================================//  
@@ -296,6 +305,14 @@ String Rubik::parser(Stream & IS)
     IS.clear();
     IS<<Var_space.at(read_in)<<' '<<IS_;
     read_in=parser(IS);
+  }
+  
+    //==========================================//
+   //  *** Return symbol without evaluate ***  //
+  //==========================================//  
+  else if(read_in.back()=='!')
+  {
+    read_in.pop_back();
   }
   return read_in;
 }

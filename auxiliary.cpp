@@ -85,7 +85,7 @@ std::istream& auxiliary::operator>>(std::istream& is, auxiliary::Sidemarks& sm)
 
 bool auxiliary::Sidemarks::valid() const
 {
-  return (Index || std::string::c_str()=="F");
+  return (Index>0 || std::string::c_str()=="F");
 }
 
 ///=====================================================================
