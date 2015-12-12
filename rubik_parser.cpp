@@ -20,7 +20,7 @@ String Rubik::parser(Stream & IS)
     //========================================//
    //  *** User declarations, variables ***  //
   //========================================//
-  if (read_in=="defvar")
+  if (read_in=="defvar"||read_in=="def")
   {
     IS>>read_in;
     Var_space[read_in]="";
@@ -109,7 +109,7 @@ String Rubik::parser(Stream & IS)
   {
     read_in=select(IS,true);
   }
-  else if(read_in=="is_solved?" || read_in=="solv?")
+  else if(read_in=="is_solved?")
   {
     if(!is_solved(A_map,NumberOfSideMarks))
     {
@@ -124,15 +124,15 @@ String Rubik::parser(Stream & IS)
     //=======================================//
    //  *** Line interpreter functions ***   //
   //=======================================//
-  else if(read_in=="merge" || read_in=="add")
+  else if(read_in=="merge")
   {
     read_in=merge(IS);
   }
-  else if(read_in=="path_finder" || read_in=="pf")
+  else if(read_in=="path_finder")
   {
     read_in=pathFinder(IS);
   }
-  else if(read_in=="brute_force" || read_in=="bf")
+  else if(read_in=="brute_force")
   {
     read_in=callBruteForce(IS);
   }
@@ -148,11 +148,11 @@ String Rubik::parser(Stream & IS)
   {
     (*this) << parser(IS);
   }
-  else if(read_in=="suppose" || read_in=="sup")
+  else if(read_in=="suppose")
   {
     suppose(parser(IS));
   }
-  else if(read_in=="no_suppose" || read_in=="nosup")
+  else if(read_in=="no_suppose")
   {
     noSuppose();
   }
@@ -160,7 +160,7 @@ String Rubik::parser(Stream & IS)
   {
     align(parser(IS),parser(IS));
   }
-  else if(read_in=="side_marks" || read_in=="sm")
+  else if(read_in=="side_marks")
   {
     printSidemarks(IS);
   }
@@ -170,7 +170,7 @@ String Rubik::parser(Stream & IS)
   //=========================================//  
   else if(Sidemarks(read_in).valid())
   {
-    SKIP OUT_(Sidemarks(read_in))
+    SKIP
   }
   
     //=========================================//
