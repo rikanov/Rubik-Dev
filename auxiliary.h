@@ -21,6 +21,7 @@ namespace auxiliary
     Sidemarks & operator = (const int & In);
     Sidemarks operator + (const String & S) const;
     Sidemarks & operator << (const String & S);
+    bool valid() const;
     operator int() const {return Index;}
     const int & getEigenvalue() const {return eigenvalue;}
  };

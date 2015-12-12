@@ -4,6 +4,52 @@
 static String input_last;
 static String output_last;
 
+
+void Rubik::REPL(std::istream & IS, std::ostream & OS)
+{
+  if(IS==std::cin)
+  {
+    OS<<"\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems";
+  }
+  while(IS.good())
+  {
+    String Get;
+    Stream toParse;
+    char prompt='>';
+    bool sign_nwln=false;
+    NL_
+    do
+    {   
+      OS<<"REPL "<<prompt<<' ';
+      getline(IS, Get);
+      while(Get.back()==' '|| Get.back()=='\t')
+      {
+	Get.pop_back();
+      }
+      if(sign_nwln=Get.back()=='\\')
+      {
+	Get.pop_back();
+      }
+      if(Get=="")
+      {
+	sign_nwln=true;
+	continue;
+      }
+      toParse<<' '<< Get;
+      prompt='\\';
+    } while(sign_nwln);
+    OS<<(output_last=parser(toParse));
+    if(Get.find("%i")==std::string::npos)
+    {
+      input_last=Get;
+    }
+  }
+  if(IS==std::cin)
+  {
+    OS<<"\nREPL mode has been closed.\n";
+  }
+}
+
 String Rubik::echo(Stream& IS)
 {
   String result,read_in;
@@ -24,31 +70,6 @@ String Rubik::echo(Stream& IS)
       result+= (it!=Var_space.end() ? it->second : read_in)+' ';
     }
    return result;
-}
-
-void Rubik::REPL(std::istream & IS, std::ostream & OS)
-{
-  if(IS==std::cin)
-  {
-    OS<<"\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems";
-  }
-  while(IS.good())
-  {
-    OS<<"\nREPL > ";
-    String Get;
-    Stream toParse;
-    getline(IS, Get);
-    toParse << Get;
-    OS<<(output_last=parser(toParse));
-    if(Get.find("%i")==std::string::npos)
-    {
-      input_last=Get;
-    }
-  }
-  if(IS==std::cin)
-  {
-    OS<<"\nREPL mode has been closed.\n";
-  }
 }
 
 String Rubik::parser(Stream & IS)
@@ -93,18 +114,6 @@ String Rubik::parser(Stream & IS)
   {
     IS>>read_in;
     Var_space[read_in]=parser(IS);
-  }
-  else if(Var_space.find(read_in)!=Var_space.end())
-  {
-    String IS_;
-    if(IS.good())
-    {
-      getline(IS,IS_);
-    }
-    IS.str("");
-    IS.clear();
-    IS<<Var_space.at(read_in)<<' '<<IS_;
-    read_in=parser(IS);
   }
   else if (read_in=="echo")
   {
@@ -262,6 +271,31 @@ String Rubik::parser(Stream & IS)
       OUT(S<<':'<<S.getEigenvalue()<<' ');
     }
     NL_
+  }
+  
+    
+    //=========================================//
+   //  *** Return user-defined variables ***  //
+  //=========================================//  
+  else if(Sidemarks(read_in).valid())
+  {
+    SKIP
+  }
+  
+    //=========================================//
+   //  *** Return user-defined variables ***  //
+  //=========================================//  
+  else if(Var_space.find(read_in)!=Var_space.end())
+  {
+    String IS_;
+    if(IS.good())
+    {
+      getline(IS,IS_);
+    }
+    IS.str("");
+    IS.clear();
+    IS<<Var_space.at(read_in)<<' '<<IS_;
+    read_in=parser(IS);
   }
   return read_in;
 }

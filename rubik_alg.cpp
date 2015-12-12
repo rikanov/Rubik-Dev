@@ -170,7 +170,7 @@ String Rubik::findPath(const Sidemarks& From, const Sidemarks& To)
     Sidemarks next_pos=Trace.front().first;
     String path=Trace.front().second;
     const char last_sign=path.back();
-    const char last_move= 'A'<=last_sign && last_sign<='Z' ? last_sign : path[path.length()-2];
+    const char last_move= isletter(last_sign) ? last_sign : path[path.length()-2];
     const String sides(next_pos);
     C_FOR_STR(sides,s)
     {
