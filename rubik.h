@@ -21,9 +21,21 @@ class Rubik
   void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, const Line& Solutions, std::list< t_state >& Seeking) const;
   int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
-  String parser(std::stringstream& IS);
-    std::string echo(std::stringstream & IS);
-    std::string assoc(std::stringstream& IS);
+  
+     //==========================//
+    //  *** User Interface ***  //
+   //==========================//
+  String parser(Stream& IS);
+  String echo(Stream & IS);
+  String assoc(Stream& IS);
+  String select(Stream& IS, bool Inv);
+  String pathFinder(Stream& IS);
+  String lastInput(const char& C) const;
+  String merge(Stream& IS);
+  String cube(Stream& IS);
+  String variable(Stream& IS, String R);
+  String callBruteForce(Stream& IS);
+  void printSidemarks(Stream& IS);
 public:
   
   Rubik();
