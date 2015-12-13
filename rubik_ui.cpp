@@ -1,9 +1,6 @@
 #include"globals.h"
 #include"rubik.h"
 
-static String input_last;
-static String output_last;
-
 static void imbueStream(Stream& IS, const String & V)
 {
   String IS_;
@@ -14,51 +11,6 @@ static void imbueStream(Stream& IS, const String & V)
   IS.str("");
   IS.clear();
   IS<<V<<' '<<IS_;
-}
-
-void Rubik::REPL(std::istream & IS, std::ostream & OS)
-{
-  if(IS==std::cin)
-  {
-    OS<<"\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems";
-  }
-  while(IS.good())
-  {
-    String Get;
-    Stream toParse;
-    char prompt='>';
-    bool sign_nwln=false;
-    NL_
-    do
-    {   
-      OS<<"REPL "<<prompt<<' ';
-      getline(IS, Get);
-      while(Get.back()==' '|| Get.back()=='\t')
-      {
-	Get.pop_back();
-      }
-      if(sign_nwln=Get.back()=='\\')
-      {
-	Get.pop_back();
-      }
-      if(Get=="" && IS.good())
-      {
-	sign_nwln=true;
-	continue;
-      }
-      toParse<<' '<< Get;
-      prompt='\\';
-    } while(sign_nwln);
-    OS<<(output_last=parser(toParse));
-    if(Get.find("%i")==std::string::npos)
-    {
-      input_last=Get;
-    }
-  }
-  if(IS==std::cin)
-  {
-    OS<<"\nREPL mode has been closed.\n";
-  }
 }
 
 void Rubik::replaceArguments(String & read_line, const String & arg)
@@ -107,16 +59,6 @@ String Rubik::echo(Stream& IS)
     while(IS.good())
     {
       IS>>read_in;
-      if(read_in=="%i")
-      {
-	result+=input_last+' ';
-	continue;
-      }
-      if(read_in=="%o")
-      {
-	result+=output_last+' ';
-	continue;
-      }
       std::map<String,String>::const_iterator it=Var_space.find(read_in);
       result+= (it!=Var_space.end() ? it->second : read_in)+' ';
     }
@@ -176,11 +118,6 @@ String Rubik::pathFinder(Stream& IS)
     To=parser(IS);
   }
   return Result;
-}
-
-String Rubik::lastInput(const char& C) const
-{
-  return C=='i' ? input_last : output_last;
 }
 
 String Rubik::merge(Stream& IS) 

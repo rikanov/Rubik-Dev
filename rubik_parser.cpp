@@ -95,14 +95,6 @@ String Rubik::parser(Stream & IS, const String arg)
   }
 
     //=======================================//
-   //  *** Handle former input/output  ***  //
-  //=======================================//
-  else if(read_in=="%i"||read_in=="%o")
-  {
-    read_in=lastInput(read_in.back());
-  }
-  
-    //=======================================//
    //  *** Evaluate built-in functions ***  //
   //=======================================//
   else if(read_in=="mapcar")
