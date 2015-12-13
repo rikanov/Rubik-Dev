@@ -28,6 +28,7 @@ class Rubik
   void replaceArguments(String& read_in, const String& arg);
   String parser(Stream& IS,const String arg="");
   String defvar(Stream& IS,const String& fName);
+  String mapcar(Stream& IS);
   String echo(Stream & IS);
   String assoc(Stream& IS);
   String select(Stream& IS, bool Inv);

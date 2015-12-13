@@ -123,6 +123,23 @@ String Rubik::echo(Stream& IS)
    return result;
 }
 
+String Rubik::mapcar(Stream& IS)
+{
+  String Result;
+  String lambda;
+  IS>>lambda;
+  Stream buffer(parser(IS));
+  while(buffer.good())
+  {
+    String step_buffer;
+    buffer>>step_buffer;
+    step_buffer=lambda+' '+step_buffer;
+    Stream step_stream(step_buffer);
+    Result+=parser(step_stream)+' ';
+  }
+  return Result;
+}
+
 String Rubik::select(Stream& IS, bool Inv)
 {
   String head;

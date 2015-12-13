@@ -30,10 +30,15 @@ String Rubik::parser(Stream & IS, const String arg)
     read_in=parser(IS);
   }  
   
+  if(read_in.front()=='\'')
+  {
+    read_in.erase(read_in.begin());
+    read_in+=' '+parser(IS);
+  }
     //========================================//
    //  *** User declarations, variables ***  //
   //========================================//
-  if(read_in=="defun")
+  else if(read_in=="defun")
   {
     IS>>read_in;
     Var_space[read_in]=read_in+'&';
@@ -100,6 +105,10 @@ String Rubik::parser(Stream & IS, const String arg)
     //=======================================//
    //  *** Evaluate built-in functions ***  //
   //=======================================//
+  else if(read_in=="mapcar")
+  {
+    read_in=mapcar(IS);
+  }
   else if(read_in=="assoc")
   {
     read_in=assoc(IS);
