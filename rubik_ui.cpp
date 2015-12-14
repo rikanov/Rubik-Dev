@@ -121,17 +121,17 @@ String Rubik::pathFinder(Stream& IS)
     From=To;
     To=parser(IS);
   }
-  return Result;
+  return Result+findPath(From,To);
 }
 
 String Rubik::merge(Stream& IS) 
 {
   String Result=parser(IS),A=parser(IS);
-  while(IS.good())
+  do
   {
     Result=auxiliary::mergeSimplePaths(Result,A);
     A=parser(IS); 
-  }
+  }while(IS.good());
   return Result;
 }
 
@@ -181,6 +181,22 @@ String Rubik::callBruteForce(Stream& IS)
     Result+=parser(IS)+' ';
   }
   return bruteForce(Result,As);
+}
+
+String Rubik::file_open(const char * F)
+{
+  std::ifstream ifs(F,std::ifstream::in);
+  if(ifs.is_open())
+  {
+    REPL(ifs,std::cout);
+  }
+  else
+  {
+    OUT_(NL<<"Something went wrong. Unable to open the file: "<<F)
+  }
+  OUT_(NL<<"The file "<<F<<" has been closed.\n");
+  ifs.close();
+  return F;
 }
 
 String Rubik::file_open(Stream& IS)
