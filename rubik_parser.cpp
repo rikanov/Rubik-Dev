@@ -28,12 +28,26 @@ String Rubik::parser(Stream & IS, const String arg)
     IS.clear();
     IS<<read_in;
     read_in=parser(IS);
-  }  
+  }
   
-  if(read_in.front()=='\'')
+    //=======================================//
+   //  *** S-expressions, no evaluate  ***  //
+  //=======================================//
+  else if(read_in.front()=='\'')
   {
     read_in.erase(read_in.begin());
     read_in+=' '+parser(IS);
+  }
+  
+    //=========================================//
+   //  *** LISP command PROGN for blocks ***  //
+  //=========================================//
+  else if(read_in=="progn")
+  {
+    while(IS.good())
+    {
+      read_in=parser(IS);
+    }
   }
     //========================================//
    //  *** User declarations, variables ***  //
@@ -71,19 +85,7 @@ String Rubik::parser(Stream & IS, const String arg)
   //==========================================//
   else if(read_in=="%file_open")
   {
-    String F;
-    IS >> F;
-    std::ifstream ifs(F,std::ifstream::in);
-    if(ifs.is_open())
-    {
-      REPL(ifs,std::cout);
-    }
-    else
-    {
-      OUT_(NL<<"Something went wrong. Unable to open the file: "<<F)
-    }
-    OUT_(NL<<"The file "<<F<<" has been closed.\n");
-    ifs.close();
+    read_in=file_open(IS);
   }
   
     //=======================================//

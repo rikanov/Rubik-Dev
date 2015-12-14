@@ -59,5 +59,6 @@ public:
   Rubik & operator << (const String & Rot);
   
   void REPL(std::istream & IS, std::ostream & OS);
+  String file_open(std::stringstream& IS);
 };
 #endif

@@ -178,3 +178,21 @@ String Rubik::callBruteForce(Stream& IS)
   }
   return bruteForce(Result,As);
 }
+
+String Rubik::file_open(Stream& IS)
+{
+  String F;
+  IS >> F;
+  std::ifstream ifs(F,std::ifstream::in);
+  if(ifs.is_open())
+  {
+    REPL(ifs,std::cout);
+  }
+  else
+  {
+    OUT_(NL<<"Something went wrong. Unable to open the file: "<<F)
+  }
+  OUT_(NL<<"The file "<<F<<" has been closed.\n");
+  ifs.close();
+  return F;
+}
