@@ -55,14 +55,10 @@ String Rubik::assoc(Stream& IS)
 
 String Rubik::echo(Stream& IS)
 {
-  String result,read_in;
-    while(IS.good())
-    {
-      IS>>read_in;
-      std::map<String,String>::const_iterator it=Var_space.find(read_in);
-      result+= (it!=Var_space.end() ? it->second : read_in)+' ';
-    }
-   return result;
+  String read_in;
+  IS>>read_in;
+  std::map<String,String>::const_iterator it=Var_space.find(read_in);
+  return (it!=Var_space.end() ? it->second : read_in)+' ';
 }
 
 String Rubik::mapcar(Stream& IS)
