@@ -75,6 +75,10 @@ String Rubik::mapcar(Stream& IS)
   {
     String step_buffer;
     buffer>>step_buffer;
+    if(step_buffer=="")
+    {
+      continue; // don't handle empty tags
+    }
     step_buffer=lambda+' '+step_buffer;
     Stream step_stream(step_buffer);
     Result+=parser(step_stream)+' ';
