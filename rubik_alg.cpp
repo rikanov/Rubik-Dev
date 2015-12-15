@@ -158,7 +158,7 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
 
 String Rubik::findPath(const Sidemarks& From, const Sidemarks& To)
 {
-  if(From==To  || From.getEigenvalue() != To.getEigenvalue())
+  if(From==To  || From.type()!= To.type() || From.getEigenvalue()!=To.getEigenvalue())
   {
     return "";
   }
