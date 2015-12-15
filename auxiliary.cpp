@@ -88,6 +88,12 @@ bool auxiliary::Sidemarks::valid() const
   return (Index>=0);
 }
 
+int auxiliary::Sidemarks::type() const
+{
+  return Index>0 ? String::size() : 0;
+}
+
+
 ///=====================================================================
 
 
