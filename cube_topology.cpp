@@ -167,7 +167,7 @@ void Topology::setEigenvalue(Topology::Cube & C)
 
 const int & Topology::getEigenvalue(const int & Index)
 {
-  return Singleton->Cubes[Index].Eigenvalue;
+  return Index > 0 ? Singleton->Cubes[Index].Eigenvalue : Index;
 }
 
 int Topology::computeRotate(const Cube & C, const int& R)
@@ -196,7 +196,7 @@ int Topology::getIndex(const std::string& SMarks)
   switch(SMarks.length())
   {
     case 0:
-      return -1;
+      return -1; 
     case 1:
       if(IS_FACET(SMarks[0])==false)
       {
