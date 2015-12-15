@@ -33,11 +33,11 @@ class Rubik
   String assoc(Stream& IS);
   String select(Stream& IS, bool Inv);
   String pathFinder(Stream& IS);
-  String lastInput(const char& C) const;
   String merge(Stream& IS);
   String cube(Stream& IS);
   String variable(Stream& IS,const String& R);
   String callBruteForce(Stream& IS);
+  String setAlign(Stream& IS);
   void printSidemarks(Stream& IS);
 public:
   

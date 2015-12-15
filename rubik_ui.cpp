@@ -154,6 +154,19 @@ String Rubik::variable(Stream& IS, const String& R)
   return parser(IS,arg);
 }
 
+String Rubik::setAlign(Stream & IS)
+{
+  String Result="";
+  String A=parser(IS);
+  String B=parser(IS);
+  if(Sidemarks(A).type()==2 && Sidemarks(B).type()==2)
+  {
+    Result=A+"->"+B; // assoc(A,B)
+    align(A,B);
+  }
+  return Result;
+}
+
 void Rubik::printSidemarks(Stream& IS)
 {
   while(IS.good())

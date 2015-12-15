@@ -174,7 +174,7 @@ String Rubik::parser(Stream & IS, const String arg)
   }
   else if(read_in=="align")
   {
-    align(parser(IS),parser(IS));
+   read_in=setAlign(IS);
   }
   else if(read_in=="side_marks")
   {
