@@ -7,10 +7,11 @@ static void imbueStream(Stream& IS, const String & V)
   if(IS.good())
   {
     getline(IS,IS_);
+    IS_=' '+IS_;
   }
-  IS.str("");
+  IS.str(String());
   IS.clear();
-  IS<<V<<' '<<IS_;
+  IS<<V<<IS_;
 }
 
 void Rubik::replaceArguments(String & read_line, const String & arg)
@@ -66,11 +67,11 @@ String Rubik::mapcar(Stream& IS)
   String Result;
   String lambda;
   IS>>lambda;
-  Stream buffer(parser(IS));
+  Stream buffer(echo(IS));
   while(buffer.good())
   {
     String step_buffer;
-    buffer>>step_buffer;
+    step_buffer=parser(buffer);
     if(step_buffer=="")
     {
       continue; // don't handle empty tags
@@ -104,7 +105,7 @@ String Rubik::select(Stream& IS, bool Inv)
 
 String Rubik::pathFinder(Stream& IS)
 {
-  String Result, From=parser(IS), To=parser(IS);
+  String Result, From=parser(IS), To=parser(IS), Next;
   while(IS.good())
   {
     String segment=findPath(From,To);

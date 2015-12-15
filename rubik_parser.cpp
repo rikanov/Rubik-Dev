@@ -1,7 +1,7 @@
 #include"rubik.h"
 
 String Rubik::parser(Stream & IS, const String arg)
-{  
+{ 
   String read_in;
   
     //========================================//
@@ -36,7 +36,7 @@ String Rubik::parser(Stream & IS, const String arg)
   else if(read_in.front()=='\'')
   {
     read_in.erase(read_in.begin());
-    read_in+=' '+parser(IS);
+//     read_in+=' '+parser(IS);
   }
   
     //=========================================//
@@ -200,9 +200,9 @@ String Rubik::parser(Stream & IS, const String arg)
     //==========================================//
    //  *** Return symbol without evaluate ***  //
   //==========================================//  
-  else if(read_in.back()=='!')
+  else if(IS.good())
   {
-    read_in.pop_back();
+    read_in;
   }
   return read_in;
 }
