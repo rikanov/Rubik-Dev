@@ -5,6 +5,7 @@
 int main(int argc, char **argv) 
 { 
   Rubik teszt;
+  teszt.file_open("autotest.lisp");
   teszt.file_open("abreviations.lisp");
   teszt.file_open("base.lisp");
   teszt.REPL(std::cin,std::cout);
