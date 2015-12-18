@@ -63,6 +63,8 @@ namespace auxiliary
   bool checkSimplePath(const String & A);
   String mergeSimplePaths(const std::string& wA, const std::string& wB);
   int * nestedLoop(int * Array,int depth, const int & UpperBound, const int & LowerBound=0);
+  void imbueStream(Stream& IS, const String & V);
+
 }
 
 #endif
