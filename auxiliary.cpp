@@ -196,3 +196,17 @@ int * auxiliary::nestedLoop(int* Array, int depth, const int& UpperBound, const 
   }
   return (depth || *i<UpperBound) ? i : nullptr;
 }
+
+void auxiliary::imbueStream(Stream& IS, const String & V)
+{
+  String IS_;
+  if(IS.good())
+  {
+    getline(IS,IS_);
+    IS_=' '+IS_;
+  }
+  IS.str(String());
+  IS.clear();
+  IS<<V<<IS_;
+}
+
