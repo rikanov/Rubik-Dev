@@ -21,19 +21,15 @@ String Rubik::parser(Stream & IS, const String arg)
     //=======================================//
    //  *** Self-evaluate EXEC function ***  //
   //=======================================//
-  if(read_in=="exec")
+  while(read_in=="exec")
   {
-    read_in=echo(IS);
-    IS.str("");
-    IS.clear();
-    IS<<read_in;
-    read_in=parser(IS);
+    auxiliary::imbueStream(IS,read_in=parser(IS));
   }
   
     //=======================================//
    //  *** S-expressions, no evaluate  ***  //
   //=======================================//
-  else if(read_in.front()=='\'')
+  if(read_in.front()=='\'')
   {
     read_in.erase(read_in.begin());
 //     read_in+=' '+parser(IS);
@@ -49,6 +45,15 @@ String Rubik::parser(Stream & IS, const String arg)
       read_in=parser(IS);
     }
   }
+  
+    //=========================================//
+   //  *** Return user-defined variables ***  //
+  //=========================================//  
+  else if(Sidemarks(read_in).valid())
+  {
+    SKIP
+  }
+  
     //========================================//
    //  *** User declarations, variables ***  //
   //========================================//
@@ -179,14 +184,6 @@ String Rubik::parser(Stream & IS, const String arg)
   else if(read_in=="side_marks")
   {
     printSidemarks(IS);
-  }
-  
-    //=========================================//
-   //  *** Return user-defined variables ***  //
-  //=========================================//  
-  else if(Sidemarks(read_in).valid())
-  {
-    SKIP
   }
   
     //=========================================//

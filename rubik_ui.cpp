@@ -1,19 +1,6 @@
 #include"globals.h"
 #include"rubik.h"
 
-static void imbueStream(Stream& IS, const String & V)
-{
-  String IS_;
-  if(IS.good())
-  {
-    getline(IS,IS_);
-    IS_=' '+IS_;
-  }
-  IS.str(String());
-  IS.clear();
-  IS<<V<<IS_;
-}
-
 void Rubik::replaceArguments(String & read_line, const String & arg)
 {
   if(arg.find('&')!=String::npos)
@@ -37,12 +24,17 @@ void Rubik::replaceArguments(String & read_line, const String & arg)
 
 String Rubik::defvar(Stream& IS, const String& fName)
 {
+  String former=Var_space[fName];
   Var_space[fName]="";
   while(IS.good())
   {
     String S;
     IS>>S;
-    Var_space[fName]+=S+' ';
+    if(S==fName)
+    {
+      S=former;
+    }
+    Var_space[fName]+=S+(IS.good() ? " " : "");
   }
   return fName;
 }
@@ -151,7 +143,7 @@ String Rubik::variable(Stream& IS, const String& R)
   {
     IS>>arg; // it's a function. Argumentum is needed
   }
-  imbueStream(IS,Var_space.at(R));
+  auxiliary::imbueStream(IS,Var_space.at(R));
   return parser(IS,arg);
 }
 
