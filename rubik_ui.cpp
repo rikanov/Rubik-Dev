@@ -54,23 +54,34 @@ String Rubik::echo(Stream& IS)
   return (it!=Var_space.end() ? it->second : read_in)+' ';
 }
 
+String Rubik::list(Stream& IS)
+{
+  String Result,read_in;
+  while(IS.good())
+  {
+    Result+=parser(IS);
+    if(IS.good())
+    {
+      Result.push_back(' ');
+    }
+  }
+  return Result;
+}
+
 String Rubik::mapcar(Stream& IS)
 {
-  String Result;
+  String Result, read_in;
   String lambda;
   IS>>lambda;
-  Stream buffer(echo(IS));
-  while(buffer.good())
+  if(Var_space[lambda]==String(lambda+'&'))
   {
-    String step_buffer;
-    step_buffer=parser(buffer);
-    if(step_buffer=="")
-    {
-      continue; // don't handle empty tags
-    }
-    step_buffer=lambda+' '+step_buffer;
-    Stream step_stream(step_buffer);
-    Result+=parser(step_stream)+' ';
+    lambda.push_back('&');
+  }
+  Stream buffer(list(IS));
+  while(buffer>>read_in)
+  {
+    Stream evaluate(lambda+' '+read_in);
+    Result+=parser(evaluate)+' ';
   }
   return Result;
 }
@@ -115,13 +126,8 @@ String Rubik::pathFinder(Stream& IS)
 
 String Rubik::merge(Stream& IS) 
 {
-  String Result=parser(IS),A=parser(IS);
-  do
-  {
-    Result=auxiliary::mergeSimplePaths(Result,A);
-    A=parser(IS); 
-  }while(IS.good());
-  return Result;
+  String A=parser(IS),B=parser(IS);
+  return mergeSimplePaths(A,B);
 }
 
 String Rubik::cube(Stream& IS)
@@ -136,15 +142,24 @@ String Rubik::cube(Stream& IS)
   return Result;
 }
 
-String Rubik::variable(Stream& IS, const String& R)
+String Rubik::variable(Stream& IS, const String & R)
 {
-  String arg;
-  if(R.back()=='&')
+  const String arg= (R.back()=='&') ? functionResolver(IS,R) : Var_space.at(R);
+  auxiliary::imbueStream(IS,arg);
+  return parser(IS);
+}
+
+String Rubik::functionResolver(Stream& IS,const String & R)
+{
+  String arg,Result,read_in;
+  IS>>arg;
+  Stream buffer(Var_space.at(R));
+  while(buffer>>read_in)
   {
-    IS>>arg; // it's a function. Argumentum is needed
+    Result+= (read_in=="&") ? arg : read_in;
+    Result.push_back(' ');
   }
-  auxiliary::imbueStream(IS,Var_space.at(R));
-  return parser(IS,arg);
+  return Result;
 }
 
 String Rubik::setAlign(Stream & IS)

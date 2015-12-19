@@ -1,20 +1,8 @@
 #include"rubik.h"
 
-String Rubik::parser(Stream & IS, const String arg)
+String Rubik::parser(Stream & IS)
 { 
   String read_in;
-  
-    //========================================//
-   //  *** Replacing function arguments ***  //
-  //========================================// 
-  if(arg!="")
-  {
-    getline(IS,read_in);
-    replaceArguments(read_in, arg);
-    IS.str(read_in);
-    IS.clear();
-    read_in=parser(IS);
-  }
   
   IS>>read_in;
   
@@ -41,6 +29,14 @@ String Rubik::parser(Stream & IS, const String arg)
   {
     read_in.erase(read_in.begin());
 //     read_in+=' '+parser(IS);
+  }
+  
+    //=======================================//
+   //  *** Make a new list from input  ***  //
+  //=======================================//
+  else if(read_in=="list")
+  {
+    read_in=list(IS);
   }
   
     //=========================================//
