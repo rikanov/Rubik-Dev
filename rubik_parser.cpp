@@ -29,7 +29,7 @@ String Rubik::parser(Stream & IS, const String arg)
     //===========================================//
    //  *** Catch the whole line in one line *** //
   //===========================================//
-  else if(read_in.front()=='#')
+  if(read_in.front()=='#')
   {
     getline(IS,read_in);
   }
@@ -37,7 +37,7 @@ String Rubik::parser(Stream & IS, const String arg)
     //=======================================//
    //  *** S-expressions, no evaluate  ***  //
   //=======================================//
-  if(read_in.front()=='\'')
+  else if(read_in.front()=='\'')
   {
     read_in.erase(read_in.begin());
 //     read_in+=' '+parser(IS);
