@@ -25,10 +25,11 @@ class Rubik
      //==========================//
     //  *** User Interface ***  //
    //==========================//
-  void replaceArguments(String& read_in, const String& arg);
   String parser(Stream& IS);
   String list(Stream& IS);
   String defvar(Stream& IS,const String& fName);
+  String variableEquality(Stream& IS);
+  String parsingEquality(Stream& IS);
   String mapcar(Stream& IS);
   String echo(Stream& IS);
   String assoc(Stream& IS);

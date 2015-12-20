@@ -52,6 +52,10 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	free(buf);
 	buf=NULL;
       }while(sign_nwln);
+      if(toParse.str()=="")
+      {
+	continue;
+      }
       while(toParse.good())
       {
 	OS<<parser(toParse)+' ';
@@ -60,7 +64,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
     }
   }
   else
-  {  OUT_("teszt")
+  { 
     while(IS.good())
     {
       String Get;

@@ -1,27 +1,6 @@
 #include"globals.h"
 #include"rubik.h"
 
-void Rubik::replaceArguments(String & read_line, const String & arg)
-{
-  if(arg.find('&')!=String::npos)
-  {
-    return;
-  }
-  if(read_line=="&")
-  {
-    read_line=arg;
-  }
-  else
-  {
-    int index=0;
-    while((index=read_line.find('&',index))!=String::npos)
-    {
-      read_line.replace(index,1,arg);
-      index+=arg.length();
-    }
-  }
-}
-
 String Rubik::defvar(Stream& IS, const String& fName)
 {
   String former=Var_space[fName];
@@ -39,11 +18,44 @@ String Rubik::defvar(Stream& IS, const String& fName)
   return fName;
 }
 
+String Rubik::variableEquality(Stream& IS)
+{
+  String A,B,Result=NIL;
+  IS>>A; IS>>B;
+  if(A==B)
+  {
+    Result=TRUE;
+  }
+  else
+  {
+    while(Var_space.find(A)!=Var_space.end())
+    {
+      A=Var_space[A];
+      if(A==B)
+      {
+	Result=TRUE;
+	break;
+      }
+    }
+  }
+  return Result;
+}
+
+String Rubik::parsingEquality(Stream& IS)
+{
+  String A; String B;
+  IS>>A;IS>>B;
+  Stream sA(A); Stream sB(B);
+  A=list(sA);
+  B=(B=="list") ? list(IS) : list(sB);
+  return A==B ? TRUE : NIL;
+}
+
 String Rubik::assoc(Stream& IS)
 {
-    String A=parser(IS);
-    String B=parser(IS);
-    return (A=="" || B=="") ? A+B : A==B ? A : A+"->"+B;
+  String A=parser(IS);
+  String B=parser(IS);
+  return (A=="" || B=="") ? A+B : A==B ? A : A+"->"+B;
 }
 
 String Rubik::echo(Stream& IS)
@@ -108,7 +120,7 @@ String Rubik::select(Stream& IS, bool Inv)
 
 String Rubik::pathFinder(Stream& IS)
 {
-  String Result, From=parser(IS), To=parser(IS), Next;
+  String Result, From=parser(IS), To=parser(IS), last_tag;
   while(IS.good())
   {
     String segment=findPath(From,To);
@@ -121,7 +133,8 @@ String Rubik::pathFinder(Stream& IS)
     From=To;
     To=parser(IS);
   }
-  return Result+findPath(From,To);
+  last_tag=findPath(From,To);
+  return last_tag=="" ? NIL : Result+findPath(From,To);
 }
 
 String Rubik::merge(Stream& IS) 

@@ -49,13 +49,29 @@ String Rubik::parser(Stream & IS)
       read_in=parser(IS);
     }
   }
-  
-    //=========================================//
-   //  *** Return user-defined variables ***  //
-  //=========================================//  
-  else if(Sidemarks(read_in).valid())
+
+    //=====================================//
+   //  *** Return constant variables ***  //
+  //=====================================//  
+  else if(read_in==TRUE || read_in==NIL || Sidemarks(read_in).valid())
   {
     SKIP
+  }
+  
+    //====================================//
+   //  *** LISP equality predicates ***  //
+  //====================================//
+  else if(read_in=="nil")
+  {
+    read_in= parser(IS)==NIL ? TRUE : NIL;
+  }
+  else if(read_in=="eq")
+  {
+    read_in=variableEquality(IS);
+  }
+  else if(read_in=="equalp")
+  {
+    read_in=parsingEquality(IS);
   }
   
     //========================================//
@@ -205,5 +221,5 @@ String Rubik::parser(Stream & IS)
   {
     read_in;
   }
-  return read_in;
+  nil_return(read_in);
 }
