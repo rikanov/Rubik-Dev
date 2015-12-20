@@ -1,5 +1,10 @@
 #include"rubik.h"
 
+#define trigger(X,Y) else if(read_in==X) {read_in=Y(IS);}
+#define trigger_v(X,Y) else if(read_in==X) {Y();}
+#define trigger_p(X,Y) else if(read_in==X) {read_in=Y(parser(IS));}
+#define trigger_pv(X,Y) else if(read_in==X) {Y(parser(IS));}
+
 String Rubik::parser(Stream & IS)
 { 
   String read_in;
@@ -30,25 +35,6 @@ String Rubik::parser(Stream & IS)
     read_in.erase(read_in.begin());
 //     read_in+=' '+parser(IS);
   }
-  
-    //=======================================//
-   //  *** Make a new list from input  ***  //
-  //=======================================//
-  else if(read_in=="list")
-  {
-    read_in=list(IS);
-  }
-  
-    //=========================================//
-   //  *** LISP command PROGN for blocks ***  //
-  //=========================================//
-  else if(read_in=="progn")
-  {
-    while(IS.good())
-    {
-      read_in=parser(IS);
-    }
-  }
 
     //=====================================//
    //  *** Return constant variables ***  //
@@ -57,169 +43,79 @@ String Rubik::parser(Stream & IS)
   {
     SKIP
   }
+    
+    //=======================================//
+   //  *** Make a new list from input  ***  //
+  //=======================================//
   
+  trigger("list",list)
+  
+    //=========================================//
+   //  *** LISP command PROGN for blocks ***  //
+  //=========================================//
+  
+  trigger("progn",progn)
+
     //====================================//
    //  *** LISP equality predicates ***  //
   //====================================//
-  else if(read_in=="nil")
-  {
-    read_in= parser(IS)==NIL ? TRUE : NIL;
-  }
-  else if(read_in=="eq")
-  {
-    read_in=variableEquality(IS);
-  }
-  else if(read_in=="equalp")
-  {
-    read_in=parsingEquality(IS);
-  }
+  
+  trigger("nil",        nilEquality)
+  trigger("eq",    variableEquality)
+  trigger("equalp", parsingEquality)
   
     //========================================//
    //  *** User declarations, variables ***  //
   //========================================//
-  else if(read_in=="defun")
-  {
-    IS>>read_in;
-    Var_space[read_in]=read_in+'&';
-    read_in=defvar(IS,read_in+'&');
-  }
-  else if (read_in=="defvar"||read_in=="define")
-  {
-    IS>>read_in;
-    read_in=defvar(IS,read_in);
-  }
-  else if (read_in=="clone")
-  {
-    String value;
-    IS>>read_in;
-    IS>>value;
-    Var_space[read_in]=Var_space.at(value);
-  }
-  else if (read_in=="get_value")
-  {
-    IS>>read_in;
-    Var_space[read_in]=parser(IS);
-  }
-  else if (read_in=="echo")
-  {
-    read_in=echo(IS);
-  }
-    
+  
+  trigger("defun",   defun)
+  trigger("defvar", defvar)
+  trigger("define", defvar)
+  trigger("echo",     echo)
+
     //==========================================//
    //  *** Swap REPL to a new file stream ***  //
   //==========================================//
-  else if(read_in=="%file_open")
-  {
-    read_in=file_open(IS);
-  }
   
-    //=======================================//
-   //  *** Convert numeric data to SM  ***  //
-  //=======================================//
-  else if(isdigit(read_in.front()))
-  {
-    read_in=Sidemarks(stoi(read_in));
-  }
-
+  trigger("%exec_file",file_open)
+  
     //=======================================//
    //  *** Evaluate built-in functions ***  //
   //=======================================//
-  else if(read_in=="mapcar")
-  {
-    read_in=mapcar(IS);
-  }
-  else if(read_in=="assoc")
-  {
-    read_in=assoc(IS);
-  }
-  else if(read_in=="what_is")
-  {
-    Sidemarks S(parser(IS));
-    read_in=S.valid() ? whatIs(S) : "";
-  }
-  else if(read_in=="where_is")
-  {
-    Sidemarks S(parser(IS));
-    read_in=S.valid() ? locationOf(S) : "";
-  }
-  else if(read_in=="select" )
-  {
-    read_in=select(IS,false);
-  }
-  else if(read_in=="deselect" )
-  {
-    read_in=select(IS,true);
-  }
-  else if(read_in=="is_solved?")
-  {
-    if(!is_solved(A_map,NumberOfSideMarks))
-    {
-      read_in="";
-    }
-  }
-  else if(read_in=="cube")
-  {
-    read_in=cube(IS);
-  }
+  
+  trigger("assoc",       assoc)
+  trigger("mapcar",     mapcar)
+  trigger("what_is",    whatIs)
+  trigger("where_is",  whereIs)
+  trigger("select",     select)
+  trigger("deselect", deselect)
+  trigger("solvedp",   solvedp)
+  trigger("cube",         cube)
     
-    //=======================================//
-   //  *** Line interpreter functions ***   //
-  //=======================================//
-  else if(read_in=="merge")
-  {
-    read_in=merge(IS);
-  }
-  else if(read_in=="path_finder")
-  {
-    read_in=pathFinder(IS);
-  }
-  else if(read_in=="brute_force")
-  {
-    read_in=callBruteForce(IS);
-  }
+    //=========================================//
+   //  *** Seeker and auxiliary functions *** //
+  //=========================================//
+  
+  trigger("merge",                merge)
+  trigger("path_finder",     pathFinder)
+  trigger("brute_force", callBruteForce)
   
     //==========================================//
    //  *** Evaluate side-effect functions ***  //
   //==========================================// 
-  else if(read_in=="print")
+ 
+  trigger   ("align",         setAlign)
+  trigger_v ("no_suppose",   noSuppose)
+  trigger_pv("suppose",        suppose) 
+  trigger_pv("print",            print)
+  trigger   ("side_marks", printSmarks)
+   
+    //===========================================//
+   //  *** Look for user-defined variables ***  //
+  //===========================================//  
+  else
   {
-    print(parser(IS));
-  } 
-  else if(read_in=="do")
-  {
-    (*this) << parser(IS);
-  }
-  else if(read_in=="suppose")
-  {
-    suppose(parser(IS));
-  }
-  else if(read_in=="no_suppose")
-  {
-    noSuppose();
-  }
-  else if(read_in=="align")
-  {
-   read_in=setAlign(IS);
-  }
-  else if(read_in=="side_marks")
-  {
-    printSidemarks(IS);
-  }
-  
-    //=========================================//
-   //  *** Return user-defined variables ***  //
-  //=========================================//  
-  else if(Var_space.find(read_in)!=Var_space.end())
-  {
-    read_in=variable(IS,read_in);
-  }
-  
-    //==========================================//
-   //  *** Return symbol without evaluate ***  //
-  //==========================================//  
-  else if(IS.good())
-  {
-    read_in;
+    variable(IS,read_in);
   }
   nil_return(read_in);
 }

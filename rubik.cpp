@@ -81,6 +81,87 @@ Rubik& Rubik::operator<<(const String & Rot)
   return *this;
 }
 
+bool Rubik::variableEquality(String& A, const String& B) const
+{
+  bool Result=false;
+  if(A==B)
+  {
+    Result=true;
+  }
+  else
+  {
+    while(Var_space.find(A)!=Var_space.end())
+    {
+      A=Var_space.at(A);
+      if(A==B)
+      {
+	Result=true;
+	break;
+      }
+    }
+  }
+  return Result;
+}
+
+void Rubik::select(Stream& IS, String& Result, const bool & Inv)
+{
+  String head;
+  IS>>head;
+  String Reault="";
+  Stream SS(parser(IS));
+  while(SS.good())
+  {
+    String next;
+    next=="";
+    SS>>next;
+    if((Inv && next.find(head)==String::npos) ||
+      (!Inv && next.find(head)!=String::npos) )
+    {
+      Result+=next+' ';
+    }
+  }
+}
+
+void Rubik::variable(Stream& IS, String& R)
+{
+  if(Var_space.find(R)!=Var_space.end())
+  {
+    const String arg= (R.back()=='&') ? functionResolver(IS,R) : Var_space.at(R);
+    auxiliary::imbueStream(IS,arg);
+    R=parser(IS);
+  }
+}
+
+String Rubik::functionResolver(Stream& IS,const String & R)
+{
+  String arg,Result,read_in;
+  IS>>arg;
+  Stream buffer(Var_space.at(R));
+  while(buffer>>read_in)
+  {
+    Result+= (read_in=="&") ? arg : read_in;
+    Result.push_back(' ');
+  }
+  return Result;
+}
+
+String Rubik::file_open(const char * F)
+{
+  std::ifstream ifs(F,std::ifstream::in);
+  if(ifs.is_open())
+  {
+    REPL(ifs,std::cout);
+  }
+  else
+  {
+    OUT_(NL<<"Something went wrong. Unable to open the file: "<<F)
+  }
+  OUT_(NL<<"The file "<<F<<" has been closed.\n");
+  ifs.close();
+  return F;
+}
+
+
 Rubik::~Rubik()
 {
   delete[] A_map, B_map, Sup_map, Sup_inv;

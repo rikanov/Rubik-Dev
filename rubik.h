@@ -3,7 +3,12 @@
 
 #include"auxiliary.h"
 #include<map>
-  using namespace auxiliary;
+
+#define UI_func(X) String X(Stream& IS);
+#define UI_rfunc(X) String Rubik::X(Stream& IS)
+using namespace auxiliary;
+  
+
 
 class Rubik 
 {
@@ -21,27 +26,38 @@ class Rubik
   void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, const Line& Solutions, std::list< t_state >& Seeking) const;
   int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
+  bool variableEquality(String& A, const String& B) const;
+  void variable(Stream& IS, String& R);
+  String functionResolver(Stream& IS, const String& R);
+  void select(Stream& IS, String& Result, const bool & Inv);
   
      //==========================//
     //  *** User Interface ***  //
    //==========================//
-  String parser(Stream& IS);
-  String list(Stream& IS);
-  String defvar(Stream& IS,const String& fName);
-  String variableEquality(Stream& IS);
-  String parsingEquality(Stream& IS);
-  String mapcar(Stream& IS);
-  String echo(Stream& IS);
-  String assoc(Stream& IS);
-  String select(Stream& IS, bool Inv);
-  String pathFinder(Stream& IS);
-  String merge(Stream& IS);
-  String cube(Stream& IS);
-  String variable(Stream& IS,const String& R);
-  String functionResolver(Stream& IS, const String& R);
-  String callBruteForce(Stream& IS);
-  String setAlign(Stream& IS);
-  void printSidemarks(Stream& IS);
+  UI_func(parser)
+  UI_func(list)
+  UI_func(defvar)
+  UI_func(defun)
+  UI_func(nilEquality)
+  UI_func(variableEquality)
+  UI_func(parsingEquality)
+  UI_func(whatIs)
+  UI_func(solvedp)
+  UI_func(doRotations)
+  UI_func(whereIs)
+  UI_func(mapcar)
+  UI_func(echo)
+  UI_func(assoc)
+  UI_func(select)
+  UI_func(deselect)
+  UI_func(pathFinder)
+  UI_func(merge)
+  UI_func(cube)
+  UI_func(callBruteForce)
+  UI_func(setAlign)
+  UI_func(progn)
+  UI_func(printSmarks)
+  
 public:
   
   Rubik();

@@ -1,15 +1,42 @@
 #include"globals.h"
 #include"rubik.h"
 
-String Rubik::defvar(Stream& IS, const String& fName)
+UI_rfunc(progn)
 {
+  String Result;
+  while(IS.good())
+    {
+      Result=parser(IS);
+    }
+  return Result;
+}
+UI_rfunc(defun)
+{
+  String fName;
+  IS>>fName;
+  Var_space[fName]=fName+'&';
+  fName.push_back('&');
+  Var_space[fName]="";
+  while(IS.good())
+  {
+    String S;
+    IS >> S;
+    Var_space[fName]+=S+(IS.good() ? " " : "");
+  }
+  return fName;
+}
+
+UI_rfunc(defvar)
+{
+  String fName;
+  IS>>fName;
   String former=Var_space[fName];
   Var_space[fName]="";
   while(IS.good())
   {
     String S;
     IS>>S;
-    if(S==fName)
+    if(variableEquality(S,fName))
     {
       S=former;
     }
@@ -18,30 +45,19 @@ String Rubik::defvar(Stream& IS, const String& fName)
   return fName;
 }
 
-String Rubik::variableEquality(Stream& IS)
+UI_rfunc(nilEquality)
 {
-  String A,B,Result=NIL;
-  IS>>A; IS>>B;
-  if(A==B)
-  {
-    Result=TRUE;
-  }
-  else
-  {
-    while(Var_space.find(A)!=Var_space.end())
-    {
-      A=Var_space[A];
-      if(A==B)
-      {
-	Result=TRUE;
-	break;
-      }
-    }
-  }
-  return Result;
+  return parser(IS)==NIL ? TRUE : NIL;
 }
 
-String Rubik::parsingEquality(Stream& IS)
+UI_rfunc(variableEquality)
+{
+  String A,B;
+  IS>>A; IS>>B;
+  return variableEquality(A,B) ? TRUE : NIL;
+}
+
+UI_rfunc(parsingEquality)
 {
   String A; String B;
   IS>>A;IS>>B;
@@ -51,14 +67,37 @@ String Rubik::parsingEquality(Stream& IS)
   return A==B ? TRUE : NIL;
 }
 
-String Rubik::assoc(Stream& IS)
+UI_rfunc(whatIs)
+{
+  Sidemarks S(parser(IS));
+  return S.valid() ? whatIs(S) : NIL;
+}
+
+UI_rfunc(whereIs)
+{
+  Sidemarks S(parser(IS));
+  return S.valid() ? locationOf(S) : NIL;
+}
+
+UI_rfunc(solvedp)
+{
+  // TODO
+}
+
+UI_rfunc(doRotations)
+{
+  (*this) << parser(IS);
+  return "do";
+}
+  
+UI_rfunc(assoc)
 {
   String A=parser(IS);
   String B=parser(IS);
   return (A=="" || B=="") ? A+B : A==B ? A : A+"->"+B;
 }
 
-String Rubik::echo(Stream& IS)
+UI_rfunc(echo)
 {
   String read_in;
   IS>>read_in;
@@ -66,7 +105,7 @@ String Rubik::echo(Stream& IS)
   return (it!=Var_space.end() ? it->second : read_in)+' ';
 }
 
-String Rubik::list(Stream& IS)
+UI_rfunc(list)
 {
   String Result,read_in;
   while(IS.good())
@@ -80,7 +119,7 @@ String Rubik::list(Stream& IS)
   return Result;
 }
 
-String Rubik::mapcar(Stream& IS)
+UI_rfunc(mapcar)
 {
   String Result, read_in;
   String lambda;
@@ -98,27 +137,21 @@ String Rubik::mapcar(Stream& IS)
   return Result;
 }
 
-String Rubik::select(Stream& IS, bool Inv)
+UI_rfunc(select)
 {
-  String head;
-  IS>>head;
-  String read_in="";
-  Stream SS(parser(IS));
-  while(SS.good())
-  {
-    String next;
-    next=="";
-    SS>>next;
-    if((Inv && next.find(head)==String::npos) ||
-      (!Inv && next.find(head)!=String::npos) )
-    {
-      read_in+=next+' ';
-    }
-  }
-  return read_in;
+  String Result;
+  select(IS,Result,false);
+  return Result;
 }
 
-String Rubik::pathFinder(Stream& IS)
+UI_rfunc(deselect)
+{
+  String Result;
+  select(IS,Result,true);
+  return Result;
+}
+
+UI_rfunc(pathFinder)
 {
   String Result, From=parser(IS), To=parser(IS), last_tag;
   while(IS.good())
@@ -137,13 +170,13 @@ String Rubik::pathFinder(Stream& IS)
   return last_tag=="" ? NIL : Result+findPath(From,To);
 }
 
-String Rubik::merge(Stream& IS) 
+UI_rfunc(merge) 
 {
   String A=parser(IS),B=parser(IS);
   return mergeSimplePaths(A,B);
 }
 
-String Rubik::cube(Stream& IS)
+UI_rfunc(cube)
 {
   String Result;
   C_EACH_FUNC(B_map,b,index)
@@ -155,27 +188,7 @@ String Rubik::cube(Stream& IS)
   return Result;
 }
 
-String Rubik::variable(Stream& IS, const String & R)
-{
-  const String arg= (R.back()=='&') ? functionResolver(IS,R) : Var_space.at(R);
-  auxiliary::imbueStream(IS,arg);
-  return parser(IS);
-}
-
-String Rubik::functionResolver(Stream& IS,const String & R)
-{
-  String arg,Result,read_in;
-  IS>>arg;
-  Stream buffer(Var_space.at(R));
-  while(buffer>>read_in)
-  {
-    Result+= (read_in=="&") ? arg : read_in;
-    Result.push_back(' ');
-  }
-  return Result;
-}
-
-String Rubik::setAlign(Stream & IS)
+UI_rfunc(setAlign)
 {
   String Result="";
   String A=parser(IS);
@@ -188,7 +201,26 @@ String Rubik::setAlign(Stream & IS)
   return Result;
 }
 
-void Rubik::printSidemarks(Stream& IS)
+UI_rfunc(callBruteForce)
+{
+  String As=parser(IS);
+  String Result;
+  while(IS.good())
+  {
+    Result+=parser(IS)+' ';
+  }
+  return bruteForce(Result,As);
+}
+
+UI_rfunc(file_open)
+{
+  String F;
+  IS >> F;
+  file_open(F.c_str());
+  return F;
+}
+
+UI_rfunc(printSmarks)
 {
   while(IS.good())
   {
@@ -200,49 +232,5 @@ void Rubik::printSidemarks(Stream& IS)
     OUT(S<<':'<<S.getEigenvalue()<<' ');
   }
   NL_
-}
-
-String Rubik::callBruteForce(Stream& IS)
-{
-  String As=parser(IS);
-  String Result;
-  while(IS.good())
-  {
-    Result+=parser(IS)+' ';
-  }
-  return bruteForce(Result,As);
-}
-
-String Rubik::file_open(const char * F)
-{
-  std::ifstream ifs(F,std::ifstream::in);
-  if(ifs.is_open())
-  {
-    REPL(ifs,std::cout);
-  }
-  else
-  {
-    OUT_(NL<<"Something went wrong. Unable to open the file: "<<F)
-  }
-  OUT_(NL<<"The file "<<F<<" has been closed.\n");
-  ifs.close();
-  return F;
-}
-
-String Rubik::file_open(Stream& IS)
-{
-  String F;
-  IS >> F;
-  std::ifstream ifs(F,std::ifstream::in);
-  if(ifs.is_open())
-  {
-    REPL(ifs,std::cout);
-  }
-  else
-  {
-    OUT_(NL<<"Something went wrong. Unable to open the file: "<<F)
-  }
-  OUT_(NL<<"The file "<<F<<" has been closed.\n");
-  ifs.close();
-  return F;
+  return "side_marks";
 }
