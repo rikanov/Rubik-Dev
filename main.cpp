@@ -11,5 +11,5 @@ int main(int argc, char **argv)
   teszt.REPL(std::cin,std::cout);
   OUT_("exit with success...")
   NL_
-  return EXIT_SUCCESS;
+  exit(EXIT_SUCCESS);
 }

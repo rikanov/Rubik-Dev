@@ -114,8 +114,8 @@ void Rubik::select(Stream& IS, String& Result, const bool & Inv)
     String next;
     next=="";
     SS>>next;
-    if((Inv && next.find(head)==String::npos) ||
-      (!Inv && next.find(head)!=String::npos) )
+    if((Inv && next.find(head)==STR_END) ||
+      (!Inv && next.find(head)!=STR_END) )
     {
       Result+=next+' ';
     }
@@ -160,7 +160,6 @@ String Rubik::file_open(const char * F)
   ifs.close();
   return F;
 }
-
 
 Rubik::~Rubik()
 {

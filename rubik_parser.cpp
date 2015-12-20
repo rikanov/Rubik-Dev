@@ -4,6 +4,7 @@
 #define trigger_v(X,Y) else if(read_in==X) {Y();}
 #define trigger_p(X,Y) else if(read_in==X) {read_in=Y(parser(IS));}
 #define trigger_pv(X,Y) else if(read_in==X) {Y(parser(IS));}
+#define nil_return(X) return(((X)=="" || (X)=="NIL") ? NIL : (X))
 
 String Rubik::parser(Stream & IS)
 { 
@@ -104,11 +105,19 @@ String Rubik::parser(Stream & IS)
    //  *** Evaluate side-effect functions ***  //
   //==========================================// 
  
+  trigger   ("do",         doRotations)
   trigger   ("align",         setAlign)
   trigger_v ("no_suppose",   noSuppose)
   trigger_pv("suppose",        suppose) 
   trigger_pv("print",            print)
   trigger   ("side_marks", printSmarks)
+  
+    //==========================================//
+   //  *** Handle the stack of cubestates ***  //
+  //==========================================// 
+   
+  trigger("store",   store)
+  trigger("revert", revert)
    
     //===========================================//
    //  *** Look for user-defined variables ***  //

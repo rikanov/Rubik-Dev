@@ -6,9 +6,8 @@
 
 #define UI_func(X) String X(Stream& IS);
 #define UI_rfunc(X) String Rubik::X(Stream& IS)
-using namespace auxiliary;
-  
 
+using namespace auxiliary;
 
 class Rubik 
 {
@@ -18,8 +17,12 @@ class Rubik
   int * B_map;	// indices of side marks what ARE actually here
 
   int * Sup_map;  // to find partial solutions we need supposations
-  int * Sup_inv;  // by default they both are identical mappings. (no supposation)
-  
+  int * Sup_inv;  // by default they both are identical mappings. (no supposation)  
+
+  static const int MaximumStackDepth=256;
+  int Stack[MaximumStackDepth][NumberOfSideMarks];
+  int stack_pointer=0;
+
   std::map<String, String> Var_space;
   
   bool is_solved(const int* Cubes, const int& Limit) const;
@@ -44,6 +47,8 @@ class Rubik
   UI_func(whatIs)
   UI_func(solvedp)
   UI_func(doRotations)
+  UI_func(store)
+  UI_func(revert)
   UI_func(whereIs)
   UI_func(mapcar)
   UI_func(echo)

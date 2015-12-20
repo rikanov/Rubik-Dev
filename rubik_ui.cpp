@@ -66,7 +66,36 @@ UI_rfunc(parsingEquality)
   B=(B=="list") ? list(IS) : list(sB);
   return A==B ? TRUE : NIL;
 }
+UI_rfunc(store)
+{
+  String Result;
+  if(stack_pointer==MaximumStackDepth)
+  {
+    Result=NIL;
+  }
+  else
+  {
+    CPY_FUNC(Stack[stack_pointer++],A_map)
+    Result=TRUE;
+  }
+  return Result;
+}
 
+UI_rfunc(revert)
+{
+  String Result;
+  if(stack_pointer==0)
+  {
+    Result=NIL;
+  }
+  else
+  {
+    CPY_FUNC(A_map,Stack[--stack_pointer])
+    Topology::inverse(A_map, B_map);
+    Result=TRUE;
+  }
+  return Result;
+}
 UI_rfunc(whatIs)
 {
   Sidemarks S(parser(IS));
