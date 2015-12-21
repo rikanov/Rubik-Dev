@@ -210,3 +210,74 @@ void auxiliary::imbueStream(Stream& IS, const String & V)
   IS<<V<<IS_;
 }
 
+String& auxiliary::regSimplifier(const String& R, String& S)
+{
+  bool asterisk=false;
+  C_FOR_STR(R,rit)
+  {
+    if(asterisk)
+    {
+      switch(*rit)
+      {
+	case '?':
+	  S.push_back('?');
+	  break;
+	case '*':
+	  SKIP
+	  break;
+	default:
+	  asterisk=false;
+	  S.push_back('*');
+	  S.push_back(*rit);
+      }
+    }
+    else if(*rit=='*')
+    {
+      asterisk=true;
+    }
+    else
+    {
+      S.push_back(*rit);
+    }
+  }
+  if(asterisk)
+  {
+    S.push_back('*');
+  }
+  return S;
+}
+
+bool auxiliary::regExp(const char* R, const char* C)
+{
+  if (*R=='*' && *(R+1)==0) 
+  {
+    return true;
+  }
+  if (*C==0)
+  {
+    return *R==0; 
+  }
+  
+  switch(*R) { 
+    case 0: 
+      return false;
+    
+    case '\\':
+      return *(++R)==*C ? regExp(++R, ++C) : false;
+  
+    case '!':
+      return *(++R)!=*C ? regExp(++R, ++C) : false;
+      
+    case '~':
+      return *(++R)!=*C ? regExp(R+1, C) || regExp(R+1, C+1) : false;
+      
+    case '?': 
+      return regExp(++R, ++C);
+    
+    case '*': 
+      return regExp(R+1,C) || regExp(R,C+1 );
+
+    default:
+      return (*R)==(*C) ? regExp(++R, ++C) : false;
+  }
+}

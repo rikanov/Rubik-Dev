@@ -31,6 +31,7 @@
 #define OUT(x) std::cout<<x;
 #define NL std::endl
 #define NL_ std::cout<<std::endl;
+#define CUT_END(S) while(S.back()==' '||S.back()==9) S.pop_back();
 #define NIL "NIL"
 #define TRUE "T"
 const int CompressedArraySize=240;

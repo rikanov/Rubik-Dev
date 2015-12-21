@@ -33,10 +33,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	  continue;
 	}
 	String Get(buf);
-	while(Get.back()==' '|| Get.back()=='\t')
-	{
-	  Get.pop_back();
-	}
+	CUT_END(Get)
 	if(sign_nwln=Get.back()=='\\')
 	{
 	  Get.pop_back();
@@ -73,10 +70,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
       do
       {  
 	getline(IS, Get);
-	while(Get.back()==' '|| Get.back()=='\t')
-	{
-	  Get.pop_back();
-	}
+	CUT_END(Get)
 	if(sign_nwln=Get.back()=='\\')
 	{
 	  Get.pop_back();

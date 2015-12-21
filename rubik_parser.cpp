@@ -86,13 +86,11 @@ String Rubik::parser(Stream & IS)
   
   trigger("assoc",       assoc)
   trigger("mapcar",     mapcar)
-  trigger("what_is",    whatIs)
-  trigger("where_is",  whereIs)
   trigger("select",     select)
   trigger("deselect", deselect)
-  trigger("solvedp",   solvedp)
-  trigger("cube",         cube)
-    
+  trigger("conc",         conc)
+  trigger("regexp",     regExp)
+  
     //=========================================//
    //  *** Seeker and auxiliary functions *** //
   //=========================================//
@@ -100,25 +98,23 @@ String Rubik::parser(Stream & IS)
   trigger("merge",                merge)
   trigger("path_finder",     pathFinder)
   trigger("brute_force", callBruteForce)
+  trigger("side_marks",     printSmarks)
   
-    //==========================================//
-   //  *** Evaluate side-effect functions ***  //
-  //==========================================// 
+    //=====================================//
+   //  *** Evaluate object functions ***  //
+  //=====================================// 
  
-  trigger   ("do",         doRotations)
-  trigger   ("align",         setAlign)
-  trigger_v ("no_suppose",   noSuppose)
-  trigger_pv("suppose",        suppose) 
-  trigger_pv("print",            print)
-  trigger   ("side_marks", printSmarks)
-  
-    //==========================================//
-   //  *** Handle the stack of cubestates ***  //
-  //==========================================// 
-   
-  trigger("store",   store)
-  trigger("revert", revert)
-   
+  trigger   ("do",       doRotations)
+  trigger   ("align",       setAlign)
+  trigger_v ("no_suppose", noSuppose)
+  trigger_pv("suppose",      suppose) 
+  trigger   ("store",          store)
+  trigger   ("revert",        revert)
+  trigger_pv("print",          print) 
+  trigger   ("solvedp",      solvedp)
+  trigger   ("cube",            cube)
+  trigger   ("what_is",       whatIs)
+  trigger   ("where_is",     whereIs)
     //===========================================//
    //  *** Look for user-defined variables ***  //
   //===========================================//  

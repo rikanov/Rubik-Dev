@@ -1,2 +1,6 @@
-defvar solved deselect -> cube
-defvar changes select -> cube
+defvar changed \
+  regexp *->*
+defvar solved \
+  deselect changed cube
+defvar changes \
+  select changed cube

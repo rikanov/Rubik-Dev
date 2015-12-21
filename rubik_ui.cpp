@@ -1,6 +1,7 @@
 #include"globals.h"
 #include"rubik.h"
 
+#define boolean(X) return (X) ? TRUE : NIL;
 UI_rfunc(progn)
 {
   String Result;
@@ -12,15 +13,13 @@ UI_rfunc(progn)
 }
 UI_rfunc(defun)
 {
-  String fName;
-  IS>>fName;
+  GET(fName)
   Var_space[fName]=fName+'&';
   fName.push_back('&');
   Var_space[fName]="";
   while(IS.good())
   {
-    String S;
-    IS >> S;
+    GET(S)
     Var_space[fName]+=S+(IS.good() ? " " : "");
   }
   return fName;
@@ -28,15 +27,13 @@ UI_rfunc(defun)
 
 UI_rfunc(defvar)
 {
-  String fName;
-  IS>>fName;
+  GET(fName)
   String former=Var_space[fName];
   Var_space[fName]="";
   while(IS.good())
   {
-    String S;
-    IS>>S;
-    if(variableEquality(S,fName))
+    GET(S)
+    if(S==fName)
     {
       S=former;
     }
@@ -52,19 +49,24 @@ UI_rfunc(nilEquality)
 
 UI_rfunc(variableEquality)
 {
-  String A,B;
-  IS>>A; IS>>B;
-  return variableEquality(A,B) ? TRUE : NIL;
+  GET2(A,B)
+  boolean(variableEquality(A,B))
 }
 
 UI_rfunc(parsingEquality)
 {
-  String A; String B;
-  IS>>A;IS>>B;
+  GET2(A,B);
   Stream sA(A); Stream sB(B);
   A=list(sA);
   B=(B=="list") ? list(IS) : list(sB);
-  return A==B ? TRUE : NIL;
+  boolean(A==B)
+}
+
+UI_rfunc(regExp)
+{
+  GET2(R,S);
+  String Simplified;
+  boolean(auxiliary::regExp(auxiliary::regSimplifier(R,Simplified).c_str(),S.c_str()))
 }
 UI_rfunc(store)
 {
@@ -134,6 +136,12 @@ UI_rfunc(echo)
   return (it!=Var_space.end() ? it->second : read_in)+' ';
 }
 
+UI_rfunc(conc)
+{
+  String A,B;
+  IS>>A,IS>>B;
+  return A+B;
+}
 UI_rfunc(list)
 {
   String Result,read_in;
@@ -214,6 +222,7 @@ UI_rfunc(cube)
     S<<Sidemarks(index).c_str()<<' '<<Sidemarks(*b).c_str();
     Result+=assoc(S)+' ';
   }
+  CUT_END(Result)
   return Result;
 }
 

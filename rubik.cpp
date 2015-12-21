@@ -105,21 +105,22 @@ bool Rubik::variableEquality(String& A, const String& B) const
 
 void Rubik::select(Stream& IS, String& Result, const bool & Inv)
 {
-  String head;
-  IS>>head;
+  GET(head)
   String Reault="";
-  Stream SS(parser(IS));
+  Stream SS(parser(IS)); OUT_(SS.str())
   while(SS.good())
   {
-    String next;
-    next=="";
-    SS>>next;
-    if((Inv && next.find(head)==STR_END) ||
-      (!Inv && next.find(head)!=STR_END) )
+    Stream next;
+    String query;
+    SS>>query;
+    next << head << ' ' << query; OUT_(next.str())
+    if((Inv && parser(next)==NIL) ||
+      (!Inv && parser(next)!=NIL) )
     {
-      Result+=next+' ';
+      Result+=query+' ';
     }
   }
+  CUT_END(Result)
 }
 
 void Rubik::variable(Stream& IS, String& R)
@@ -142,6 +143,7 @@ String Rubik::functionResolver(Stream& IS,const String & R)
     Result+= (read_in=="&") ? arg : read_in;
     Result.push_back(' ');
   }
+  CUT_END(Result)
   return Result;
 }
 

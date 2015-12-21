@@ -6,6 +6,8 @@
 
 #define UI_func(X) String X(Stream& IS);
 #define UI_rfunc(X) String Rubik::X(Stream& IS)
+#define GET(A) String A; IS>>A;
+#define GET2(A,B) String A,B; IS>>A; IS>>B; 
 
 using namespace auxiliary;
 
@@ -38,29 +40,34 @@ class Rubik
     //  *** User Interface ***  //
    //==========================//
   UI_func(parser)
+  
+  UI_func(progn)
   UI_func(list)
   UI_func(defvar)
   UI_func(defun)
   UI_func(nilEquality)
   UI_func(variableEquality)
   UI_func(parsingEquality)
+  UI_func(assoc)
+  UI_func(select)
+  UI_func(deselect)
+  UI_func(mapcar)
+  UI_func(conc)
+  UI_func(regExp)
+  UI_func(echo)
+    
+  UI_func(merge)
+  UI_func(pathFinder)
+  UI_func(callBruteForce)
+  
   UI_func(whatIs)
+  UI_func(whereIs)
+  UI_func(cube)
   UI_func(solvedp)
   UI_func(doRotations)
   UI_func(store)
   UI_func(revert)
-  UI_func(whereIs)
-  UI_func(mapcar)
-  UI_func(echo)
-  UI_func(assoc)
-  UI_func(select)
-  UI_func(deselect)
-  UI_func(pathFinder)
-  UI_func(merge)
-  UI_func(cube)
-  UI_func(callBruteForce)
   UI_func(setAlign)
-  UI_func(progn)
   UI_func(printSmarks)
   
 public:

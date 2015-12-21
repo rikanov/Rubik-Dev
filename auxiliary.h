@@ -64,6 +64,8 @@ namespace auxiliary
   String mergeSimplePaths(const std::string& wA, const std::string& wB);
   int * nestedLoop(int * Array,int depth, const int & UpperBound, const int & LowerBound=0);
   void imbueStream(Stream& IS, const String & V);
+  String& regSimplifier(const String& R, String& S);
+  bool regExp(const char *R, const char *C);
 
 }
 
