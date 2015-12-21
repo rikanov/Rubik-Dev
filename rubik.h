@@ -8,6 +8,8 @@
 #define UI_rfunc(X) String Rubik::X(Stream& IS)
 #define GET(A) String A; IS>>A;
 #define GET2(A,B) String A,B; IS>>A; IS>>B; 
+#define PARSER(A) String A=parser(IS);
+#define PARSER2(A,B) PARSER(A) PARSER(B)
 
 using namespace auxiliary;
 
@@ -48,6 +50,10 @@ class Rubik
   UI_func(nilEquality)
   UI_func(variableEquality)
   UI_func(parsingEquality)
+  UI_func(logicalOr)
+  UI_func(logicalXor)
+  UI_func(logicalAnd)
+  
   UI_func(assoc)
   UI_func(select)
   UI_func(deselect)

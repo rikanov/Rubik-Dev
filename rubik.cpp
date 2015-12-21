@@ -107,13 +107,13 @@ void Rubik::select(Stream& IS, String& Result, const bool & Inv)
 {
   GET(head)
   String Reault="";
-  Stream SS(parser(IS)); OUT_(SS.str())
+  Stream SS(parser(IS));
   while(SS.good())
   {
     Stream next;
     String query;
     SS>>query;
-    next << head << ' ' << query; OUT_(next.str())
+    next << head << ' ' << query;
     if((Inv && parser(next)==NIL) ||
       (!Inv && parser(next)!=NIL) )
     {

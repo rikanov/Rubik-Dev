@@ -62,6 +62,24 @@ UI_rfunc(parsingEquality)
   boolean(A==B)
 }
 
+UI_rfunc(logicalOr)
+{
+  PARSER2(A,B)
+  boolean(A!=NIL || B!=NIL)
+}
+
+UI_rfunc(logicalXor)
+{
+  PARSER2(A,B)
+  boolean((A!=NIL) != (B!=NIL))
+}
+
+UI_rfunc(logicalAnd)
+{
+  PARSER2(A,B)
+  boolean(A!=NIL && B!=NIL)
+}
+
 UI_rfunc(regExp)
 {
   GET2(R,S);
