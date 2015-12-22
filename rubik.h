@@ -9,7 +9,7 @@
 #define GET2(A,B) String A,B; IS>>A; IS>>B; 
 #define PARSER(A) String A=parser(IS);
 #define PARSER2(A,B) PARSER(A) PARSER(B)
-#define GETLINE(L) getline(IS,L,';');
+#define GETLINE(L) String L;getline(IS,L,';');
 
 using namespace auxiliary;
 
@@ -35,6 +35,7 @@ class Rubik
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
   bool variableEquality(String& A, const String& B) const;
   void variable(Stream& IS, String& R);
+  void macro(Stream& IS, String& R);
   String functionResolver(Stream& IS, const String& R);
   void select(Stream& IS, String& Result, const bool & Inv);
   
@@ -47,6 +48,7 @@ class Rubik
   UI_func(list)
   UI_func(defvar)
   UI_func(defun)
+  UI_func(defmacro)
   UI_func(nilEquality)
   UI_func(variableEquality)
   UI_func(parsingEquality)

@@ -69,13 +69,14 @@ String Rubik::parser(Stream & IS)
   trigger("and",         logicalAnd) 
   
     //========================================//
-   //  *** User declarations, variables ***  //
+   //  *** User-space functions, macros ***  //
   //========================================//
   
-  trigger("defun",   defun)
-  trigger("defvar", defvar)
-  trigger("define", defvar)
-  trigger("echo",     echo)
+  trigger("defun",       defun)
+  trigger("defvar",     defvar)
+  trigger("define",     defvar)
+  trigger("defmacro", defmacro)
+  trigger("echo",         echo)
 
     //==========================================//
    //  *** Swap REPL to a new file stream ***  //
@@ -93,7 +94,7 @@ String Rubik::parser(Stream & IS)
   trigger("deselect",     deselect)
   trigger("conc",             conc)
   trigger("replace", stringReplace)
-  trigger("regexp",         regExp)
+  trigger("regex",          regExp)
   
     //=========================================//
    //  *** Seeker and auxiliary functions *** //
@@ -119,11 +120,13 @@ String Rubik::parser(Stream & IS)
   trigger   ("cube",            cube)
   trigger   ("what_is",       whatIs)
   trigger   ("where_is",     whereIs)
-    //===========================================//
-   //  *** Look for user-defined variables ***  //
-  //===========================================//  
+  
+    //========================================//
+   //  *** Look for matching user-space ***  //
+  //========================================//  
   else
   {
+    macro(IS,read_in);
     variable(IS,read_in);
   }
   nil_return(read_in);

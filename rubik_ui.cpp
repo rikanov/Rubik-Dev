@@ -20,9 +20,22 @@ UI_rfunc(defun)
   while(IS.good())
   {
     GET(S)
-    Var_space[fName]+=S+(IS.good() ? " " : "");
+    Var_space[fName]+=S+' ';
   }
+  TRIM_END(Var_space[fName]);
   return fName;
+}
+
+UI_rfunc(defmacro)
+{
+  GET(macro); OUT_(macro)
+  Regex macro_syntax(MACRO_SYNTAX); // $1: macro-name $2: macro-argument
+  String macro_name(FIND(macro,macro_syntax,"$1")); OUT_(macro_name)
+  String macro_arg (FIND(macro,macro_syntax,"$2")); OUT_(macro_arg)
+  GETLINE(def)
+  Stream eval("@ "+macro_arg+' '+def);
+  Var_space[macro_name]=stringReplace(eval);
+  return macro_name;
 }
 
 UI_rfunc(defvar)
@@ -82,9 +95,18 @@ UI_rfunc(logicalAnd)
 
 UI_rfunc(regExp)
 {
+  using std::regex_error;
   PARSER2(Reg,Test);
-  String Simplified;
-  boolean(MATCH(Test,Regex(Reg)))
+  try
+  {
+    boolean(MATCH(Test,Regex(Reg)))
+  }
+  catch (regex_error e) 
+  {
+     OUT_(e.what())
+     OUT_("CODE IS: " << e.code())
+     return NIL;
+  } 
 }
 UI_rfunc(store)
 {
@@ -162,7 +184,7 @@ UI_rfunc(conc)
 UI_rfunc(stringReplace)
 {
   GET2(arg,lambda)
-  GET(pattern)
+  GETLINE(pattern)
   Regex R(lambda);
   return REPLACE(pattern,R,arg)
 }
@@ -247,7 +269,7 @@ UI_rfunc(cube)
     S<<Sidemarks(index).c_str()<<' '<<Sidemarks(*b).c_str();
     Result+=assoc(S)+' ';
   }
-  CUT_END(Result)
+  TRIM_END(Result)
   return Result;
 }
 

@@ -120,7 +120,22 @@ void Rubik::select(Stream& IS, String& Result, const bool & Inv)
       Result+=query+' ';
     }
   }
-  CUT_END(Result)
+  TRIM_END(Result)
+}
+
+void Rubik::macro(Stream& IS, String& R)
+{
+  Regex test(MACRO_SYNTAX);
+  String try_name(FIND(R,test,"$1"));
+  if(try_name!="")
+  {
+    GET(input)
+    Stream eval(FIND(R,test,"$2")+" @ "+Var_space[try_name]);
+    eval.str(input+" & "+stringReplace(eval));
+    eval.clear();
+    imbueStream(IS,stringReplace(eval));
+    R=parser(IS);
+  }
 }
 
 void Rubik::variable(Stream& IS, String& R)
@@ -135,16 +150,9 @@ void Rubik::variable(Stream& IS, String& R)
 
 String Rubik::functionResolver(Stream& IS,const String & R)
 {
-  String arg,Result,read_in;
-  IS>>arg;
-  Stream buffer(Var_space.at(R));
-  while(buffer>>read_in)
-  {
-    Result+= (read_in=="&") ? arg : read_in;
-    Result.push_back(' ');
-  }
-  CUT_END(Result)
-  return Result;
+  GET(arg);
+  Stream buffer(arg+" & "+Var_space.at(R));
+  return stringReplace(buffer);
 }
 
 String Rubik::file_open(const char * F)

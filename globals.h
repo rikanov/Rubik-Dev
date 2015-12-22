@@ -15,6 +15,7 @@
 #define Stream std::stringstream
 #define Regex std::regex
 #define REPLACE(X,R,A) std::regex_replace(X,R,A);
+#define FIND(X,R,n) std::regex_replace(X,R,n,std::regex_constants::format_no_copy)
 #define MATCH(X,R) std::regex_match(X,R)
 #define STR_END std::string::npos
 #define FOR_STR(S,it) for(std::string::iterator it=S.begin();it!=S.end();++it)
@@ -36,9 +37,11 @@
 #define OUT(x) std::cout<<x;
 #define NL std::endl
 #define NL_ std::cout<<std::endl;
-#define CUT_END(S) while(S.back()==' '||S.back()==9) S.pop_back();
+#define TRIM_END(S) while(!S.empty() && (S.back()<=32||S.back()>=127)) S.pop_back();
+#define TRIM(S) TRIM_END(S) while(!S.empty() && (S.front()<=32||S.front()>=127)) S=S.substr(1);
 #define NIL "NIL"
 #define TRUE "T"
+const String MACRO_SYNTAX="([^ ]+)\\(([^ ]+)\\)";
 const int CompressedArraySize=240;
 const int NumberOfSideMarks=78;	// = 8*3! + 12*2! 
 const int IdentityMap[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,\
