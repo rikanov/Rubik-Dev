@@ -1,6 +1,6 @@
-defvar changed \
-  regexp *->*
+defvar base::changed \
+  regexp (.*)(->)(.*)
 defvar solved \
-  deselect changed cube
+  deselect base::changed cube
 defvar changes \
-  select changed cube
+  select base::changed cube

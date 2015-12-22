@@ -5,12 +5,17 @@
 #include <sstream>
 #include <fstream>
 #include <cstring>
+#include <regex>
+#include <map>
 
 //#define SILENT
 
 #define SKIP ;
 #define String std::string
 #define Stream std::stringstream
+#define Regex std::regex
+#define REPLACE(X,R,A) std::regex_replace(X,R,A);
+#define MATCH(X,R) std::regex_match(X,R)
 #define STR_END std::string::npos
 #define FOR_STR(S,it) for(std::string::iterator it=S.begin();it!=S.end();++it)
 #define C_FOR_STR(S,it) for(std::string::const_iterator it=S.begin();it!=S.end();++it)

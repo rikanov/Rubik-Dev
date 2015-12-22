@@ -82,9 +82,9 @@ UI_rfunc(logicalAnd)
 
 UI_rfunc(regExp)
 {
-  GET2(R,S);
+  PARSER2(Reg,Test);
   String Simplified;
-  boolean(auxiliary::regExp(auxiliary::regSimplifier(R,Simplified).c_str(),S.c_str()))
+  boolean(MATCH(Test,Regex(Reg)))
 }
 UI_rfunc(store)
 {
@@ -148,18 +148,25 @@ UI_rfunc(assoc)
 
 UI_rfunc(echo)
 {
-  String read_in;
-  IS>>read_in;
+  GET(read_in)
   std::map<String,String>::const_iterator it=Var_space.find(read_in);
-  return (it!=Var_space.end() ? it->second : read_in)+' ';
+  return (it!=Var_space.end() ? it->second : read_in);
 }
 
 UI_rfunc(conc)
 {
-  String A,B;
-  IS>>A,IS>>B;
+  GET2(A,B)
   return A+B;
 }
+
+UI_rfunc(stringReplace)
+{
+  GET2(arg,lambda)
+  GET(pattern)
+  Regex R(lambda);
+  return REPLACE(pattern,R,arg)
+}
+
 UI_rfunc(list)
 {
   String Result,read_in;

@@ -8,14 +8,14 @@ auxiliary::Sidemarks::Sidemarks(const int& In):
   
 }
 
-auxiliary::Sidemarks::Sidemarks(const char* C): Sidemarks(C)
+auxiliary::Sidemarks::Sidemarks(const char* C): Sidemarks(String(C))
 {
 
 }
 
-auxiliary::Sidemarks::Sidemarks(const std::string& S): 
+auxiliary::Sidemarks::Sidemarks(const String& S): 
   Index(Topology::getIndex(S)),
-  std::string(S),
+  String(S),
   eigenvalue(Topology::getEigenvalue(Index))
 {
   

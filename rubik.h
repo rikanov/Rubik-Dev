@@ -2,7 +2,6 @@
 #define RUBIK_CLASS
 
 #include"auxiliary.h"
-#include<map>
 
 #define UI_func(X) String X(Stream& IS);
 #define UI_rfunc(X) String Rubik::X(Stream& IS)
@@ -10,6 +9,7 @@
 #define GET2(A,B) String A,B; IS>>A; IS>>B; 
 #define PARSER(A) String A=parser(IS);
 #define PARSER2(A,B) PARSER(A) PARSER(B)
+#define GETLINE(L) getline(IS,L,';');
 
 using namespace auxiliary;
 
@@ -59,6 +59,7 @@ class Rubik
   UI_func(deselect)
   UI_func(mapcar)
   UI_func(conc)
+  UI_func(stringReplace)
   UI_func(regExp)
   UI_func(echo)
     

@@ -87,12 +87,13 @@ String Rubik::parser(Stream & IS)
    //  *** Evaluate built-in functions ***  //
   //=======================================//
   
-  trigger("assoc",       assoc)
-  trigger("mapcar",     mapcar)
-  trigger("select",     select)
-  trigger("deselect", deselect)
-  trigger("conc",         conc)
-  trigger("regexp",     regExp)
+  trigger("assoc",           assoc)
+  trigger("mapcar",         mapcar)
+  trigger("select",         select)
+  trigger("deselect",     deselect)
+  trigger("conc",             conc)
+  trigger("replace", stringReplace)
+  trigger("regexp",         regExp)
   
     //=========================================//
    //  *** Seeker and auxiliary functions *** //
