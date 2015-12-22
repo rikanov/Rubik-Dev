@@ -108,6 +108,14 @@ UI_rfunc(regExp)
      return NIL;
   } 
 }
+
+UI_rfunc(regExpFast)
+{
+  PARSER2(pattern, word);
+  String Simplifier;
+  boolean(auxiliary::regExp(regSimplifier(pattern,Simplifier).c_str(),word.c_str()))
+}
+
 UI_rfunc(store)
 {
   String Result;

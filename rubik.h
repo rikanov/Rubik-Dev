@@ -63,6 +63,7 @@ class Rubik
   UI_func(conc)
   UI_func(stringReplace)
   UI_func(regExp)
+  UI_func(regExpFast)
   UI_func(echo)
     
   UI_func(merge)
