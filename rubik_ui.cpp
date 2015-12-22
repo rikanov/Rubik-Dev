@@ -30,8 +30,8 @@ UI_rfunc(defmacro)
 {
   GET(macro); OUT_(macro)
   Regex macro_syntax(MACRO_SYNTAX); // $1: macro-name $2: macro-argument
-  String macro_name(FIND(macro,macro_syntax,"$1")); OUT_(macro_name)
-  String macro_arg (FIND(macro,macro_syntax,"$2")); OUT_(macro_arg)
+  String macro_name(FIND(macro,macro_syntax,"$1"));
+  String macro_arg (FIND(macro,macro_syntax,"$2"));
   GETLINE(def)
   Stream eval("@ "+macro_arg+' '+def);
   Var_space[macro_name]=stringReplace(eval);

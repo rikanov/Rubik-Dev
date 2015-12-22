@@ -66,6 +66,8 @@ namespace auxiliary
   void imbueStream(Stream& IS, const String & V);
   String& regSimplifier(const String& R, String& S);
   bool regExp(const char *R, const char *C);
+  String putInString(const String& arg, const char& sig,const String& text);
+  String putInString(const String& arg1, const char& sig1, const String& arg2, const char& sig2, const String& text);
 
 }
 

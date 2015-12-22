@@ -125,17 +125,17 @@ void Rubik::select(Stream& IS, String& Result, const bool & Inv)
 
 void Rubik::macro(Stream& IS, String& R)
 {
-  Regex test(MACRO_SYNTAX);
-  String try_name(FIND(R,test,"$1"));
-  if(try_name!="")
+  const size_t n=R.find('(');
+  if(n==STR_END)
   {
-    GET(input)
-    Stream eval(FIND(R,test,"$2")+" @ "+Var_space[try_name]);
-    eval.str(input+" & "+stringReplace(eval));
-    eval.clear();
-    imbueStream(IS,stringReplace(eval));
-    R=parser(IS);
+    return;
   }
+  const String mnemonic=R.substr(0,n);
+  const String arg=R.substr(n+1,R.size()-n-2);
+  GET(input)
+  String eval(auxiliary::putInString(arg,'@',input,'&',Var_space[mnemonic]));
+  imbueStream(IS,eval);
+  R=parser(IS); 
 }
 
 void Rubik::variable(Stream& IS, String& R)
@@ -151,8 +151,7 @@ void Rubik::variable(Stream& IS, String& R)
 String Rubik::functionResolver(Stream& IS,const String & R)
 {
   GET(arg);
-  Stream buffer(arg+" & "+Var_space.at(R));
-  return stringReplace(buffer);
+  return auxiliary::putInString(arg,'&',Var_space.at(R));
 }
 
 String Rubik::file_open(const char * F)

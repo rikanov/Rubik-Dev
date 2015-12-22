@@ -281,3 +281,41 @@ bool auxiliary::regExp(const char* R, const char* C)
       return (*R)==(*C) ? regExp(++R, ++C) : false;
   }
 }
+
+String auxiliary::putInString(const std::string& arg, const char& sig, const String& text)
+{
+  String Result;
+  C_FOR_STR(text,t)
+  {
+    if(*t!=sig)
+    {
+      Result.push_back(*t);
+    }
+    else
+    {
+      Result.append(arg);
+    }
+  }
+  return Result;
+}
+
+std::string auxiliary::putInString(const std::string& arg1, const char& sig1, const std::string& arg2, const char& sig2, const std::string& text)
+{
+  String Result;
+  C_FOR_STR(text,t)
+  {
+    if(*t==sig1)
+    {
+      Result.append(arg1);
+    }
+    else if(*t==sig2)
+    {
+      Result.append(arg2);
+    }
+    else
+    {
+      Result.push_back(*t);
+    }
+  }
+  return Result;
+}
