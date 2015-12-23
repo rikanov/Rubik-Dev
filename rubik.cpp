@@ -19,18 +19,19 @@ Rubik::Rubik(Rubik* R): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW
 
 bool Rubik::is_solved(const int* Cubes, const int & Limit) const
 { 
-  const int * b=B_map;
-  C_EACH_FUNC(Cubes,c, index)
+  const int * b=IdentityMap;
+  C_EACH_FUNC(A_map,a, index)
   {
     if(index==Limit)
     {
       break;
     }
-    if(*c!=*(b++))
+    if(*a!=*(b++))
     {
       return false;
     }
   }
+  // TODO
   return true;
 }
 

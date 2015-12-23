@@ -68,10 +68,7 @@ UI_rfunc(variableEquality)
 
 UI_rfunc(parsingEquality)
 {
-  GET2(A,B);
-  Stream sA(A); Stream sB(B);
-  A=list(sA);
-  B=(B=="list") ? list(IS) : list(sB);
+  PARSER2(A,B);
   boolean(A==B)
 }
 
@@ -160,13 +157,23 @@ UI_rfunc(whereIs)
 
 UI_rfunc(solvedp)
 {
-  // TODO
+  boolean(is_solved());
 }
 
 UI_rfunc(doRotations)
 {
-  (*this) << parser(IS);
-  return "do";
+  int counter=0;
+  const PARSER(DO);
+  GETLINE(UNTIL);
+  Stream test;
+  do
+  {
+    ++counter;
+    (*this) << DO;
+    test.str(UNTIL);
+    test.clear();
+  }while (parser(test)!=NIL);
+  return std::to_string(counter);
 }
   
 UI_rfunc(assoc)

@@ -5,7 +5,7 @@
 
 void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {
-  if(IS==std::cin)
+  if(&IS==&std::cin)
   {
     OUT_("\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems");
     while(true)

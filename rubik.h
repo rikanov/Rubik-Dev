@@ -29,7 +29,7 @@ class Rubik
 
   std::map<String, String> Var_space;
   
-  bool is_solved(const int* Cubes, const int& Limit) const;
+  bool is_solved(const int* Cubes=IdentityMap, const int& Limit=NumberOfSideMarks) const;
   void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, const Line& Solutions, std::list< t_state >& Seeking) const;
   int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
