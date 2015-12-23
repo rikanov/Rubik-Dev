@@ -53,6 +53,7 @@ class Rubik
   UI_func(variableEquality)
   UI_func(listEquality)
   UI_func(parsingEquality)
+  UI_func(condition)
   UI_func(logicalOr)
   UI_func(logicalXor)
   UI_func(logicalAnd)

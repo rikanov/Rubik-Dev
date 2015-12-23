@@ -20,9 +20,9 @@ String Rubik::parser(Stream & IS)
     auxiliary::imbueStream(IS,read_in=parser(IS));
   }
   
-    //===========================================//
-   //  *** Catch the whole line in one line *** //
-  //===========================================//
+    //=============================================//
+   //  *** Catch the whole line by one string *** //
+  //=============================================//
   if(read_in.front()=='#')
   {
     getline(IS,read_in);
@@ -89,6 +89,7 @@ String Rubik::parser(Stream & IS)
    //  *** Evaluate built-in functions ***  //
   //=======================================//
   
+  trigger("if",          condition)
   trigger("assoc",           assoc)
   trigger("mapcar",         mapcar)
   trigger("select",         select)

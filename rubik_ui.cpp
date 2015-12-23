@@ -109,6 +109,17 @@ UI_rfunc(logicalAnd)
   boolean(A!=NIL && B!=NIL)
 }
 
+UI_rfunc(condition)
+{
+  PARSER(A)
+  if(A!=NIL)
+  {
+    return parser(IS);
+  }
+  GETLINE(rest_to_throw)
+  return NIL;
+}
+
 UI_rfunc(regExp)
 {
   using std::regex_error;
