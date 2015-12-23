@@ -51,6 +51,7 @@ class Rubik
   UI_func(defmacro)
   UI_func(nilEquality)
   UI_func(variableEquality)
+  UI_func(listEquality)
   UI_func(parsingEquality)
   UI_func(logicalOr)
   UI_func(logicalXor)

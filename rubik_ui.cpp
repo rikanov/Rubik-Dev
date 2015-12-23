@@ -66,6 +66,25 @@ UI_rfunc(variableEquality)
   boolean(variableEquality(A,B))
 }
 
+UI_rfunc(listEquality)
+{
+  String A[2];
+  for(int i=0;i<2;++i)
+  {
+    IS>>A[i];
+    if(A[i]=="list")
+    {
+      A[i]=list(IS);
+    }
+    else
+    {
+      Stream eval(A[i]);
+      A[i]=list(eval);
+    }
+  }
+  boolean(A[0]==A[1])
+}
+
 UI_rfunc(parsingEquality)
 {
   PARSER2(A,B);
@@ -207,14 +226,14 @@ UI_rfunc(stringReplace)
 UI_rfunc(list)
 {
   String Result,read_in;
-  while(IS.good())
+  GETLINE(L)
+  Stream buffer(L);
+  while(buffer.good())
   {
-    Result+=parser(IS);
-    if(IS.good())
-    {
-      Result.push_back(' ');
-    }
+    Result+=parser(buffer);
+    Result.push_back(' ');
   }
+  TRIM_END(Result);
   return Result;
 }
 

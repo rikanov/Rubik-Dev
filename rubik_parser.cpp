@@ -63,6 +63,7 @@ String Rubik::parser(Stream & IS)
   
   trigger("nil",        nilEquality)
   trigger("eq",    variableEquality)
+  trigger("eql",       listEquality)
   trigger("equalp", parsingEquality)
   trigger("or",           logicalOr)
   trigger("xor",         logicalXor)
