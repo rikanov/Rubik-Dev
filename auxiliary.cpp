@@ -42,20 +42,20 @@ auxiliary::Sidemarks& auxiliary::Sidemarks::operator<<(const std::string& S)
   const bool real_moves= S.front()=='@';
   C_FOR_STR(S,s)
   {
+    const bool middle=(s+1)!=S.end() && *(s+1)=='|'; 
     const int side=Topology::sideDigit(*s)-1;
-    if(side==-1)
+    if(side<0 || (!real_moves && !is_acting(*s,middle)))
     {
       continue;
     }
-    if(!real_moves || Topology::onTheSide(Index,side))
+    const bool inv=(s+1)!=S.end() && *(s+1)=='\''; 
+    const bool dub=((s+1)!=S.end() && *(s+1)=='2') || (middle && (s+2)!=S.end() && *(s+2)=='|');
+    Index=Topology::rotation(Index,side,inv);
+    if(dub)
     {
-      bool Invert= (s+1!=S.end() && *(s+1)=='\'');
-      Index=Topology::rotation(Index,side,Invert);
-      if(s+1!=S.end() && *(s+1)=='2')
-      {
-	Index=Topology::rotation(Index,side,false); 
-      }
+      Index=Topology::rotation(Index,side);
     }
+    s+=middle+inv+dub;
   }
   return operator=(Index);
 }
@@ -90,6 +90,11 @@ int auxiliary::Sidemarks::type() const
   return Index>0 ? String::size() : 0;
 }
 
+bool auxiliary::Sidemarks::is_acting(const char& C, const bool& middle) const
+{
+  const size_t n=find(C);
+  return middle ? n==STR_END && find(Topology::oppositeSide(C))==STR_END : n!=STR_END;
+}
 
 ///=====================================================================
 

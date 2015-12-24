@@ -61,13 +61,13 @@ String Rubik::parser(Stream & IS)
    //  *** LISP equality predicates ***  //
   //====================================//
   
-  trigger("nil",        nilEquality)
-  trigger("eq",    variableEquality)
-  trigger("eql",       listEquality)
-  trigger("equalp", parsingEquality)
-  trigger("or",           logicalOr)
-  trigger("xor",         logicalXor)
-  trigger("and",         logicalAnd) 
+  trigger("nil",     nilEquality)
+  trigger("eq", variableEquality)
+  trigger("eql",    listEquality)
+  trigger("eqp", parsingEquality)
+  trigger("or",        logicalOr)
+  trigger("xor",      logicalXor)
+  trigger("and",      logicalAnd) 
   
     //========================================//
    //  *** User-space functions, macros ***  //

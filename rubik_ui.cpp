@@ -289,15 +289,22 @@ UI_rfunc(pathFinder)
   String Result;
   GETLINE(L)
   CALL_BACK(SS,list,L)
+  bool middle=false;
   String From, To;
-  SS>>From; SS>>To;
+  SS>>From; 
+  if(From=="-ext")
+  {
+    middle=true;
+    SS>>From;
+  }
+  SS>>To;
   while(SS.good())
   {
-    Result+=findPath(From,To);
+    Result+=findPath(From,To,middle);
     From=To;
     SS>>To;
   }
-  return Result+findPath(From,To);
+  return Result+findPath(From,To,middle);
 }
 
 UI_rfunc(merge) 

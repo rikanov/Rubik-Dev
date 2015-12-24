@@ -156,7 +156,7 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
   return std::pair<int,String>(0,"");
 }
 
-String Rubik::findPath(const Sidemarks& From, const Sidemarks& To)
+String Rubik::findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle)
 {
   if(From==To  || From.type()!= To.type() || From.getEigenvalue()!=To.getEigenvalue())
   {
@@ -171,14 +171,14 @@ String Rubik::findPath(const Sidemarks& From, const Sidemarks& To)
     String path=Trace.front().second;
     const char last_sign=path.back();
     const char last_move= isletter(last_sign) ? last_sign : path[path.length()-2];
-    const String sides(next_pos);
+    const String sides(AllowMiddle ? "FRUBLD" : next_pos);
     C_FOR_STR(sides,s)
     {
       if(*s==last_move)
       {
 	continue;
       }
-      for(int mode=0;mode<3;++mode)
+      for(int mode=0;mode<3+(2*AllowMiddle);++mode)
       {
 	String op;
 	op.push_back(*s);
@@ -189,6 +189,12 @@ String Rubik::findPath(const Sidemarks& From, const Sidemarks& To)
 	    break;
 	  case 2:  // double
 	    op.push_back('2');
+	    break;
+	  case 3:
+	    op.push_back('|'); // middle side 
+	    break;
+	  case 4:
+	    op.append("||");
 	    break;
 	  default:
 	    SKIP

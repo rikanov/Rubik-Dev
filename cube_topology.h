@@ -85,5 +85,6 @@ public:
   static void inverse(const int* Q, int* Result);
   static void inverse(int* Q);
   static void actOn(int * Q, const int * R);
+  static char oppositeSide(const char& C);
 };
 #endif

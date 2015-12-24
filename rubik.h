@@ -91,7 +91,7 @@ public:
   Rubik(Rubik * R);
   ~Rubik();
   
-  static String findPath(const Sidemarks& From, const Sidemarks& To);
+  static String findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle);
   
   void noSuppose();
   void suppose(const Sidemarks & S);

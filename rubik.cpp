@@ -44,14 +44,14 @@ void Rubik::noSuppose()
 void Rubik::suppose(const Sidemarks& S)
 {
   noSuppose();
-  Topology::defOperation(Sup_inv,findPath(S,whatIs(S)),Topology::AllCubes,Topology::NotDefined);
+  Topology::defOperation(Sup_inv,findPath(S,whatIs(S),false),Topology::AllCubes,Topology::NotDefined);
   Topology::inverse(Sup_inv,Sup_map);
 }
 
 void Rubik::align(const Sidemarks& A, const Sidemarks& B)
 {
   EMPTY(Act)
-  Topology::defOperation(Act,findPath(A,B));
+  Topology::defOperation(Act,findPath(A,B,false));
   Topology::actOn(A_map,Act);
   Topology::inverse(A_map,B_map);
   Topology::actOn(B_map,Act);

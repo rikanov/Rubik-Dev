@@ -27,7 +27,7 @@ void OrientedPath::iterate()
     const int *next=Indices;
     for(int i=0;i<Checkpoints;++i,++next)
     {
-      const String seq=Rubik::findPath(From,*next);
+      const String seq=Rubik::findPath(From,*next,true);
       if(seq=="" && From!=*next)
       {
 	iterate();
@@ -36,7 +36,7 @@ void OrientedPath::iterate()
       Add=auxiliary::mergeSimplePaths(Add,seq);
       From=*next;
     }
-    Add=auxiliary::mergeSimplePaths(Add, Rubik::findPath(From,End));
+    Add=auxiliary::mergeSimplePaths(Add, Rubik::findPath(From,End,true));
     insert(Add);
     iterate();
   }

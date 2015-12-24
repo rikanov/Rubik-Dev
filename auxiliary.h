@@ -25,6 +25,7 @@ namespace auxiliary
     int type() const;
     operator int() const {return Index;}
     const int & getEigenvalue() const {return eigenvalue;}
+    bool is_acting(const char& C, const bool& middle) const;
  };
  std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
  std::istream & operator>>(std::istream& is, auxiliary::Sidemarks& sm);

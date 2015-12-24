@@ -237,7 +237,7 @@ const std::string& Topology::sideMarksOf(const int& Index)
 
 int Topology::sideDigit(const char& C)
 {
-  return Singleton->SideDigits[C];
+  return String(SideMarks).find(C)!=STR_END ? Singleton->SideDigits[C] : -1;
 }
 void Topology::operateOnRestrictedSpace(int* Q, const int* R, const int& Rot, const bool & Invert)
 {
@@ -417,6 +417,11 @@ void Topology::actOn(int* Q, const int* R)
     *q=R[*q];
     ++q;
   }
+}
+
+char Topology::oppositeSide(const char& C)
+{
+  return SideMarks[7-(String(SideMarks).find(C))];
 }
 
 Topology::~Topology()
