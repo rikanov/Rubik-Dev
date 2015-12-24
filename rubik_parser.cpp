@@ -104,6 +104,7 @@ String Rubik::parser(Stream & IS)
    //  *** Seeker and auxiliary functions *** //
   //=========================================//
   
+  trigger("same_cubes",       sameCubes)
   trigger("merge",                merge)
   trigger("path_finder",     pathFinder)
   trigger("brute_force", callBruteForce)

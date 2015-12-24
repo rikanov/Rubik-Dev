@@ -17,3 +17,6 @@ mapcar u-boost X
 path_finder X
 # align
 align X
+
+do FRUR'U'F'
+brute_force URF UR UF UL UB 3 FU FR FD FL *

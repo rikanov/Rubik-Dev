@@ -32,7 +32,7 @@ class Rubik
   std::map<String, String> Var_space;
   
   bool is_solved(const int* Cubes=IdentityMap, const int& Limit=NumberOfSideMarks) const;
-  void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, const Line& Solutions, std::list< t_state >& Seeking) const;
+  void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, Stream& IS, std::list< t_state >& Seeking) const;
   int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
   std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
   bool variableEquality(String& A, const String& B) const;
@@ -71,6 +71,7 @@ class Rubik
   UI_func(regExpFast)
   UI_func(echo)
     
+  UI_func(sameCubes)
   UI_func(merge)
   UI_func(pathFinder)
   UI_func(callBruteForce)
@@ -101,7 +102,7 @@ public:
   
   void print(const String & C ) const;
 
-  String bruteForce(const Line& Solutions, const std::string& AS) const;
+  String bruteForce(Stream& IS, const String& AS) const;
   Rubik & operator << (const String & Rot);
   
   void REPL(std::istream & IS, std::ostream & OS);

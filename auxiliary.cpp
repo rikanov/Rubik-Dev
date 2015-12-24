@@ -96,64 +96,22 @@ bool auxiliary::Sidemarks::is_acting(const char& C, const bool& middle) const
   return middle ? n==STR_END && find(Topology::oppositeSide(C))==STR_END : n!=STR_END;
 }
 
-///=====================================================================
-
-
-const std::string auxiliary::Line::DefaultSeparators=" \t\n;";
-
-auxiliary::Line& auxiliary::Line::fill_up(const String& Read, const String & Separator)
+bool auxiliary::Sidemarks::sameCubes(const auxiliary::Sidemarks& A, const auxiliary::Sidemarks& B)
 {
-  push_back("");
-  for(char a: Read)
+  if(A.type()!=B.type())
   {
-    if(Separator.find(a)!=String::npos)
+    return false;
+  }
+  C_FOR_STR(A,a)
+  {
+    if(B.find(*a)==STR_END)
     {
-      if(back()!="")
-      {
-	push_back("");
-      }
-      continue;
+      return false;
     }
-    back().push_back(a);
   }
-  if(back()=="")
-  {
-    pop_back();
-  }
-  return *this;
+  return true;
 }
-
-auxiliary::Line::Line(std::istream& IS)
-{
-  String A;
-  while(IS>>A)
-  {
-    push_back(A);
-  }
-}
-
-auxiliary::Line::Line(const String & Read, const String & Separator)
-{
-  fill_up(Read,Separator);
-}
-
-std::ostream& auxiliary::operator<<(std::ostream& os, const auxiliary::Line& line)
-{
-  for(const std::string S : line)
-    os << S<<'('<<S.length()<<')';
-  return os;
-}
-
-std::istream & auxiliary::operator>>(std::istream & is, auxiliary::Line & line)
-{
-  line.clear();
-  std::string Read; is >> Read;
-  line.push_back(Read);
-  //line.fill_up(Read, Line::DefaultSeparators);
-  return is;
-}
-
-///=================================================================================
+///=====================================================================
 
 int auxiliary::t_state::order=1;
 auxiliary::t_state::t_state(const int* S, const int& L, const std::string& P): 
@@ -304,7 +262,7 @@ String auxiliary::putInString(const std::string& arg, const char& sig, const Str
   return Result;
 }
 
-std::string auxiliary::putInString(const std::string& arg1, const char& sig1, const std::string& arg2, const char& sig2, const std::string& text)
+String auxiliary::putInString(const String& arg1, const char& sig1, const String& arg2, const char& sig2, const String& text)
 {
   String Result;
   C_FOR_STR(text,t)
@@ -323,4 +281,16 @@ std::string auxiliary::putInString(const std::string& arg1, const char& sig1, co
     }
   }
   return Result;
+}
+
+unsigned int auxiliary::countWords(Stream& IS)
+{
+  Stream SS(IS.str());
+  return std::distance(std::istream_iterator<String>(SS), std::istream_iterator<String>());
+}
+
+unsigned int auxiliary::countWords(const String& S)
+{
+  Stream str(S);
+  return std::distance(std::istream_iterator<std::string>(str), std::istream_iterator<std::string>());
 }

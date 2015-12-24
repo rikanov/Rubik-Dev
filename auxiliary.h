@@ -26,26 +26,10 @@ namespace auxiliary
     operator int() const {return Index;}
     const int & getEigenvalue() const {return eigenvalue;}
     bool is_acting(const char& C, const bool& middle) const;
+    static bool sameCubes(const auxiliary::Sidemarks& A, const auxiliary::Sidemarks& B);
  };
  std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
  std::istream & operator>>(std::istream& is, auxiliary::Sidemarks& sm);
-  //============================================================================
-  
-  class Line: public std::list<String>
-  {
-    static const std::string DefaultSeparators;
-    Line & fill_up(const std::string & Read, const String & Separator);
-    
-  public:
-    Line()=default;
-    Line(std::istream& IS);
-    Line(const std::string & Read, const String & Separator=DefaultSeparators);
-    
-  friend std::ostream & operator<<(std::ostream & os, const Line & line);
-  friend std::istream & operator>>(std::istream & is, Line & line);
-  };
-  std::istream & operator>>(std::istream & is, Line & line);
-  
   //============================================================================
   
   struct t_state
@@ -69,7 +53,8 @@ namespace auxiliary
   bool regExp(const char *R, const char *C);
   String putInString(const String& arg, const char& sig,const String& text);
   String putInString(const String& arg1, const char& sig1, const String& arg2, const char& sig2, const String& text);
-
+  unsigned int countWords(Stream& IS);
+  unsigned int countWords(const String& S);
 }
 
 #endif

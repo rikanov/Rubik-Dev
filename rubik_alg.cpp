@@ -1,13 +1,13 @@
 #include"rubik.h"
 
-String Rubik::bruteForce(const auxiliary::Line & Solutions, const String & AS) const
+String Rubik::bruteForce(Stream& IS, const String & AS) const
 {
-  const int SizeS=Solutions.size();
-  int SolutionIdices[SizeS+1];
-  int SolvedState[NumberOfSideMarks];
-  int InitialState[NumberOfSideMarks];
+  const int SizeS=auxiliary::countWords(IS);
+  int SolutionIdices[SizeS+1]={};
+  int SolvedState[NumberOfSideMarks]={};
+  int InitialState[NumberOfSideMarks]={};
   std::list<t_state> Seeking;
-  setConditions(SolutionIdices,SolvedState,InitialState,Solutions,Seeking);
+  setConditions(SolutionIdices,SolvedState,InitialState,IS,Seeking);
   
   const String allowed_sides= (AS=="ALL" || AS=="All" || AS=="all") ? "FURBDL" : AS;
   int allowed[allowed_sides.length()+1];
@@ -38,21 +38,38 @@ String Rubik::bruteForce(const auxiliary::Line & Solutions, const String & AS) c
   return Result.second;
 }
 
-void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * InitialState, const Line& Solutions, std::list<t_state> & Seeking) const
+void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * InitialState, Stream& IS, std::list<t_state> & Seeking) const
 {
   int *sp=SolutionIdices,sp_end=0;
-  for(String s: Solutions)
+  int seq_counter=0;
+  String s; 
+  while(IS>>s)
   {
     if(s=="*")
     {
-      *(sp++)=-1;
+      if(seq_counter)
+      {
+	*(sp++)=-seq_counter;
+	seq_counter=0;
+      }
       continue;
     }
+    if(isdigit(s.front()))
+    {
+      if(seq_counter)
+      {
+	*(sp++)=-stoi(s);
+	seq_counter=0;
+      }
+      continue;
+    }
+    ++seq_counter;
     const int Solved=Topology::getIndex(s);
+    // it works like a set. If its index is not found add the new unique member (Solved) into SolvedState
     int index=0;
     for(; index<sp_end;++index)
     {
-      if(SolvedState[index]==Solved)
+      if(Sidemarks::sameCubes(SolvedState[index],Solved))
       {
 	break;
       }
@@ -65,7 +82,11 @@ void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * Initial
       ++sp_end; 
     }
   } 
-  *sp=-2;  // the end sign of testing
+  if(*(sp-1)>=0)
+  {
+    *(sp++)=-seq_counter; // auto-finish
+  }
+  *sp=-256;  // the end sign of testing
   InitialState[sp_end]=-1; // end of inner state
   auxiliary::t_state::order=sp_end+1;
   Seeking.push_back(t_state(InitialState,-1,""));
@@ -74,24 +95,27 @@ void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * Initial
 int Rubik::checkConditions(const int *State, const int * SolvedState, const int * Conditions) const
 {
   int Result=1;
-  bool cond=true;
-  for(const int *c=Conditions; *c!=-2; ++c)
+  int cond=0;
+  bool found=false;
+  for(const int *c=Conditions; *c!=-256; ++c)
   {
-    if(*c==-1)
+    if(*c<0)
     {
-      if(cond)
+      if(cond>=-(*c))
       {
+	found=true;
 	break;
       }
       else
-      {
-	cond=true;
+      {	
+	cond=0;
 	++Result;
+	continue;
       }
     }
-    cond&=(State[*c]==SolvedState[*c]);
+    cond+=(State[*c]==SolvedState[*c]);
   }
-  return cond;
+  return found ? Result : 0;
 }
 
 std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * SolvedState, 

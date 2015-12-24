@@ -307,6 +307,11 @@ UI_rfunc(pathFinder)
   return Result+findPath(From,To,middle);
 }
 
+UI_rfunc(sameCubes)
+{
+  PARSER2(A,B)
+  boolean(Sidemarks::sameCubes(A,B))
+}
 UI_rfunc(merge) 
 {
   String A=parser(IS),B=parser(IS);
@@ -342,12 +347,9 @@ UI_rfunc(setAlign)
 UI_rfunc(callBruteForce)
 {
   String As=parser(IS);
-  String Result;
-  while(IS.good())
-  {
-    Result+=parser(IS)+' ';
-  }
-  return bruteForce(Result,As);
+  GETLINE(results_list)
+  CALL_BACK(results_stream,list,results_list);
+  return bruteForce(results_stream,As);
 }
 
 UI_rfunc(file_open)
