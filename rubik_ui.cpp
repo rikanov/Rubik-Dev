@@ -68,21 +68,9 @@ UI_rfunc(variableEquality)
 
 UI_rfunc(listEquality)
 {
-  String A[2];
-  for(int i=0;i<2;++i)
-  {
-    IS>>A[i];
-    if(A[i]=="list")
-    {
-      A[i]=list(IS);
-    }
-    else
-    {
-      Stream eval(A[i]);
-      A[i]=list(eval);
-    }
-  }
-  boolean(A[0]==A[1])
+  GETLIST(A)
+  GETLIST(B)
+  boolean(A==B)
 }
 
 UI_rfunc(parsingEquality)
@@ -118,6 +106,21 @@ UI_rfunc(condition)
   }
   GETLINE(rest_to_throw)
   return NIL;
+}
+
+UI_rfunc(forLoop)
+{
+  String Result;
+  GETLIST(A);
+  Stream ForIn(A);
+  GETLINE(core)
+  while(ForIn>>A)
+  {
+    Stream eval(auxiliary::putInString(A,'&',core));
+    Result+=parser(eval)+' ';
+  }
+  TRIM_END(Result)
+  return Result;
 }
 
 UI_rfunc(regExp)
@@ -263,6 +266,7 @@ UI_rfunc(mapcar)
     Stream evaluate(lambda+' '+read_in);
     Result+=parser(evaluate)+' ';
   }
+  TRIM_END(Result)
   return Result;
 }
 
@@ -282,21 +286,18 @@ UI_rfunc(deselect)
 
 UI_rfunc(pathFinder)
 {
-  String Result, From=parser(IS), To=parser(IS), last_tag;
-  while(IS.good())
+  String Result;
+  GETLINE(L)
+  CALL_BACK(SS,list,L)
+  String From, To;
+  SS>>From; SS>>To;
+  while(SS.good())
   {
-    String segment=findPath(From,To);
-    if(segment=="" && From != To)
-    {
-      Result="";
-      break;
-    }
-    Result+=segment;
+    Result+=findPath(From,To);
     From=To;
-    To=parser(IS);
+    SS>>To;
   }
-  last_tag=findPath(From,To);
-  return last_tag=="" ? NIL : Result+findPath(From,To);
+  return Result+findPath(From,To);
 }
 
 UI_rfunc(merge) 

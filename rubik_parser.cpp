@@ -90,6 +90,7 @@ String Rubik::parser(Stream & IS)
   //=======================================//
   
   trigger("if",          condition)
+  trigger("for_in",        forLoop)
   trigger("assoc",           assoc)
   trigger("mapcar",         mapcar)
   trigger("select",         select)

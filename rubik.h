@@ -5,8 +5,10 @@
 
 #define UI_func(X) String X(Stream& IS);
 #define UI_rfunc(X) String Rubik::X(Stream& IS)
+#define CALL_BACK(SN,F,A) Stream SN; {Stream eval__(A);SN.str(F(eval__));}
 #define GET(A) String A; IS>>A;
-#define GET2(A,B) String A,B; IS>>A; IS>>B; 
+#define GET2(A,B) String A,B; IS>>A; IS>>B;
+#define GETLIST(L) GET(L) if(L=="list"){L=list(IS);}else{Stream eval__(L); L=list(eval__);}
 #define PARSER(A) String A=parser(IS);
 #define PARSER2(A,B) PARSER(A) PARSER(B)
 #define GETLINE(L) String L;getline(IS,L,';');
@@ -54,6 +56,7 @@ class Rubik
   UI_func(listEquality)
   UI_func(parsingEquality)
   UI_func(condition)
+  UI_func(forLoop)
   UI_func(logicalOr)
   UI_func(logicalXor)
   UI_func(logicalAnd)
