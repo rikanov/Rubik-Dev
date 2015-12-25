@@ -1,6 +1,5 @@
 #include"globals.h"
 #include"rubik.h"
-
 #define boolean(X) return (X) ? TRUE : NIL;
 
 UI_rfunc(REPL)

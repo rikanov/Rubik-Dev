@@ -1,6 +1,8 @@
 #ifndef RUBIK_CLASS
 #define RUBIK_CLASS
 
+#include<readline/readline.h>
+#include<readline/history.h>
 #include"auxiliary.h"
 
 #define UI_func(X) String X(Stream& IS);
@@ -17,7 +19,10 @@ using namespace auxiliary;
 
 class Rubik 
 {
-  static std::map<String, Rubik*> * Collection;
+  static std::map<String, Rubik*> * Collection; 
+  static std::list<const char*> * InnerCommands;
+  static char ** commandCompletion ( const char * stem_text , int start , int end );
+  static char * getCommands(const char * stem_text ,int state );
   static Rubik* Global;
   const String Object;
   
@@ -36,6 +41,7 @@ class Rubik
   std::map<String, String> Var_space;
   
   void initStack();
+  void initCommandComp();
   void printCollection() const;
   bool is_solved(const int* Cubes=IdentityMap, const int& Limit=NumberOfSideMarks) const;
   void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, Stream& IS, std::list< t_state >& Seeking) const;
@@ -45,13 +51,20 @@ class Rubik
   void variable(Stream& IS, String& R);
   void macro(Stream& IS, String& R);
   String functionResolver(Stream& IS, const String& R);
-  void select(Stream& IS, String& Result, const bool & Inv);
+  void select(Stream& IS, String& Result, const bool & Inv); 
+  void noSuppose();
+  void suppose(const Sidemarks & S);
+  void align(const Sidemarks & A, const Sidemarks & B);
+  Sidemarks whatIs(const Sidemarks & S) const;
+  Sidemarks locationOf(const Sidemarks& S) const;
+  String bruteForce(Stream& IS, const String& AS) const;
   
      //==========================//
     //  *** User Interface ***  //
    //==========================//
   UI_func(REPL)
   UI_func(parser)
+  UI_func(file_open)
   
   UI_func(progn)
   UI_func(list)
@@ -100,23 +113,13 @@ public:
   Rubik(const String& Name);
   ~Rubik();
   
-  Rubik& operator=(const Rubik& R)=default;
-  
+  static void setAutocomp(const char* A);
   static String findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle);
   
-  void noSuppose();
-  void suppose(const Sidemarks & S);
-  void align(const Sidemarks & A, const Sidemarks & B);
-  Sidemarks whatIs(const Sidemarks & S) const;
-  Sidemarks locationOf(const Sidemarks& S) const;
-  
+  Rubik& operator=(const Rubik& R)=default;
   void print(const String & C ) const;
-
-  String bruteForce(Stream& IS, const String& AS) const;
-  Rubik & operator << (const String & Rot);
-  
+  Rubik & operator << (const String & Rot); 
   void REPL(std::istream & IS=std::cin, std::ostream & OS=std::cout);
-  String file_open(Stream& IS);
   String file_open(const char * F);
 };
 #endif

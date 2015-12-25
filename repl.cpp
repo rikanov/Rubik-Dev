@@ -1,13 +1,16 @@
-#include<readline/readline.h>
-#include<readline/history.h>
 #include"globals.h"
 #include"rubik.h"
+
 
 void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {
   if(&IS==&std::cin)
   {
     OUT_("\nTo log out from REPL::"<<Object<<", press Ctrl-D or Ctrl-Z on Windows systems");
+    // Use tab for auto completion
+    rl_bind_key ('\t', rl_complete) ;
+    // Use our function for auto - complete
+    rl_attempted_completion_function = commandCompletion ;
     while(true)
     {
       Stream toParse;

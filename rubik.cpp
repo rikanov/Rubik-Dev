@@ -1,38 +1,5 @@
 #include"rubik.h"
 #include"cube_topology.h"
-#define NEW (new int[NumberOfSideMarks])
-
-Rubik* Rubik::Global=nullptr;
-std::map<String, Rubik*> * Rubik::Collection=new std::map<String, Rubik*>;
-Rubik::Rubik(): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, Object("global")
-{
-  Topology::singleton();
-  initStack();
-  Global=this;
-  CPY_FUNC(A_map,IdentityMap)
-  CPY_FUNC(B_map,IdentityMap)
-  noSuppose();
-}
-
-Rubik::Rubik(const String& name): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, Var_space(Global->Var_space), Object(name)
-{
-  delete (*Collection)[Object];
-  (*Collection)[Object]=this;
-  initStack();
-  CPY_FUNC(A_map,IdentityMap)
-  CPY_FUNC(B_map,IdentityMap)
-  noSuppose();
-}
-
-void Rubik::initStack()
-{
-  Stack=new int* [MaximumStackDepth];
-  FOR_FUNC(index)
-  {
-    Stack[index]=new int[NumberOfSideMarks];
-  }
-
-}
 
 void Rubik::printCollection() const
 {
@@ -111,6 +78,11 @@ Rubik& Rubik::operator<<(const String & Rot)
     Topology::inverse(B_map,A_map);
   }
   return *this;
+}
+
+void Rubik::setAutocomp(const char* A)
+{
+  InnerCommands->push_back(A);
 }
 
 bool Rubik::variableEquality(String& A, const String& B) const
