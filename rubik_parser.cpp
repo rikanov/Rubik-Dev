@@ -44,7 +44,18 @@ String Rubik::parser(Stream & IS)
   {
     SKIP
   }
-    
+    //=====================================//
+   //  *** New Rubik's cube instance ***  //
+  //=====================================//
+  
+  trigger("REPL", REPL)
+  
+    //=================================//
+   //  *** Collection management ***  //
+  //=================================//
+  
+  trigger_v("collection_view", printCollection)
+  
     //=======================================//
    //  *** Make a new list from input  ***  //
   //=======================================//

@@ -17,6 +17,10 @@ using namespace auxiliary;
 
 class Rubik 
 {
+  static std::map<String, Rubik*> * Collection;
+  static Rubik* Global;
+  const String Object;
+  
 		// Let I the index of a certain side mark in the current state 
 		// of the Rubik's Cube. Then, let:
   int * A_map; 	// indices of side marks what we need here, 
@@ -26,11 +30,13 @@ class Rubik
   int * Sup_inv;  // by default they both are identical mappings. (no supposation)  
 
   static const int MaximumStackDepth=256;
-  int Stack[MaximumStackDepth][NumberOfSideMarks];
+  int ** Stack;
   int stack_pointer=0;
 
   std::map<String, String> Var_space;
   
+  void initStack();
+  void printCollection() const;
   bool is_solved(const int* Cubes=IdentityMap, const int& Limit=NumberOfSideMarks) const;
   void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, Stream& IS, std::list< t_state >& Seeking) const;
   int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
@@ -44,6 +50,7 @@ class Rubik
      //==========================//
     //  *** User Interface ***  //
    //==========================//
+  UI_func(REPL)
   UI_func(parser)
   
   UI_func(progn)
@@ -89,8 +96,11 @@ class Rubik
 public:
   
   Rubik();
-  Rubik(Rubik * R);
+  Rubik(const Rubik&) =default;
+  Rubik(const String& Name);
   ~Rubik();
+  
+  Rubik& operator=(const Rubik& R)=default;
   
   static String findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle);
   
@@ -105,7 +115,7 @@ public:
   String bruteForce(Stream& IS, const String& AS) const;
   Rubik & operator << (const String & Rot);
   
-  void REPL(std::istream & IS, std::ostream & OS);
+  void REPL(std::istream & IS=std::cin, std::ostream & OS=std::cout);
   String file_open(Stream& IS);
   String file_open(const char * F);
 };

@@ -2,13 +2,39 @@
 #include"rubik.h"
 
 #define boolean(X) return (X) ? TRUE : NIL;
+
+UI_rfunc(REPL)
+{
+  GET(object)
+  if(object=="")
+  {
+    object=Object;
+    REPL();
+  }
+  else if(object=="global")
+  {
+    Global->REPL();
+  }
+  else if(Collection->find(object)!=Collection->end())
+  {
+    (*Collection)[object]->REPL();
+  }
+  else
+  {
+    Rubik* Obj=new Rubik(object);
+    Obj->REPL();
+    delete Obj;
+  }
+  return object;
+}
+
 UI_rfunc(progn)
 {
   String Result;
   while(IS.good())
-    {
-      Result=parser(IS);
-    }
+  {
+    Result=parser(IS);
+  }
   return Result;
 }
 UI_rfunc(defun)

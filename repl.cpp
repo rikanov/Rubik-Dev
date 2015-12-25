@@ -7,7 +7,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {
   if(&IS==&std::cin)
   {
-    OUT_("\nTo log out from REPL, press Ctrl-D or Ctrl-Z on Windows systems");
+    OUT_("\nTo log out from REPL::"<<Object<<", press Ctrl-D or Ctrl-Z on Windows systems");
     while(true)
     {
       Stream toParse;
@@ -20,7 +20,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	char *buf;
 	if((buf=readline(prompt))==NULL)
 	{
-	  OUT_("\nREPL mode has been closed.\n");
+	  OUT("\nREPL mode has been closed for: ");
 	  free(buf);
 	  return;
 	}

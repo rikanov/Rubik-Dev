@@ -2,19 +2,50 @@
 #include"cube_topology.h"
 #define NEW (new int[NumberOfSideMarks])
 
-Rubik::Rubik(): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW
+Rubik* Rubik::Global=nullptr;
+std::map<String, Rubik*> * Rubik::Collection=new std::map<String, Rubik*>;
+Rubik::Rubik(): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, Object("global")
 {
   Topology::singleton();
+  initStack();
+  Global=this;
   CPY_FUNC(A_map,IdentityMap)
   CPY_FUNC(B_map,IdentityMap)
   noSuppose();
 }
 
-Rubik::Rubik(Rubik* R): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW
+Rubik::Rubik(const String& name): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, Var_space(Global->Var_space), Object(name)
 {
-  CPY_FUNC(A_map,R->A_map)
-  CPY_FUNC(B_map,R->B_map)
+  delete (*Collection)[Object];
+  (*Collection)[Object]=this;
+  initStack();
+  CPY_FUNC(A_map,IdentityMap)
+  CPY_FUNC(B_map,IdentityMap)
   noSuppose();
+}
+
+void Rubik::initStack()
+{
+  Stack=new int* [MaximumStackDepth];
+  FOR_FUNC(index)
+  {
+    Stack[index]=new int[NumberOfSideMarks];
+  }
+
+}
+
+void Rubik::printCollection() const
+{
+  NL_
+  OUT((Global==this ? " * " : "   "))
+  OUT_("global \t"<<Global->stack_pointer)
+  for(std::map<String, Rubik*>::iterator it=Collection->begin();it!=Collection->end();++it)
+  {
+    String P(it->second->Object);
+    OUT((P==Object ? " * " : "   "))
+    OUT_(P<<" \t"<<it->second->stack_pointer)
+  } 
+  NL_ NL_
 }
 
 bool Rubik::is_solved(const int* Cubes, const int & Limit) const
@@ -173,5 +204,19 @@ String Rubik::file_open(const char * F)
 
 Rubik::~Rubik()
 {
-  delete[] A_map, B_map, Sup_map, Sup_inv;
+  delete[] A_map, B_map, Sup_map, Sup_inv, Stack;
+  if(Object=="global")
+  {
+    for(std::map<String, Rubik*>::iterator it=Collection->begin();it!=Collection->end();++it)
+    {
+      delete it->second;
+    }
+    delete Collection;
+    OUT_("exit with success...")
+    exit(EXIT_SUCCESS);
+  } 
+  else
+  {
+    Collection->erase(Object);
+  }
 }
