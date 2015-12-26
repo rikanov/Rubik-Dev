@@ -38,7 +38,7 @@ class Rubik
   int ** Stack;
   int stack_pointer=0;
 
-  std::map<String, String> Var_space;
+  std::map<const String, String> Var_space;
   
   void initStack();
   void initCommandComp();
@@ -57,7 +57,7 @@ class Rubik
   void align(const Sidemarks & A, const Sidemarks & B);
   Sidemarks whatIs(const Sidemarks & S) const;
   Sidemarks locationOf(const Sidemarks& S) const;
-  String bruteForce(Stream& IS, const String& AS) const;
+  String bruteForce(Stream& IS, const String& AS);
   
      //==========================//
     //  *** User Interface ***  //
