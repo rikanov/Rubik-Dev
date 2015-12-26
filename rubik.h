@@ -57,7 +57,7 @@ class Rubik
   void align(const Sidemarks & A, const Sidemarks & B);
   Sidemarks whatIs(const Sidemarks & S) const;
   Sidemarks locationOf(const Sidemarks& S) const;
-  String bruteForce(Stream& IS, const String& AS);
+  String bruteForce(Stream& IS, const String& AS) const;
   
      //==========================//
     //  *** User Interface ***  //
