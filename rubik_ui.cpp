@@ -39,15 +39,15 @@ UI_rfunc(progn)
 UI_rfunc(defun)
 {
   GET(fName)
-  Var_space[fName]=fName+'&';
+  (*Var_space)[fName]=fName+'&';
   fName.push_back('&');
-  Var_space[fName]="";
+  (*Var_space)[fName]="";
   while(IS.good())
   {
     GET(S)
-    Var_space[fName]+=S+' ';
+    (*Var_space)[fName]+=S+' ';
   }
-  TRIM_END(Var_space[fName]);
+  TRIM_END((*Var_space)[fName]);
   return fName;
 }
 
@@ -59,15 +59,15 @@ UI_rfunc(defmacro)
   String macro_arg (FIND(macro,macro_syntax,"$2"));
   GETLINE(def)
   Stream eval("@ "+macro_arg+' '+def);
-  Var_space[macro_name]=stringReplace(eval);
+  (*Var_space)[macro_name]=stringReplace(eval);
   return macro_name;
 }
 
 UI_rfunc(defvar)
 {
   GET(fName)
-  String former=Var_space[fName];
-  Var_space[fName]="";
+  String former=(*Var_space)[fName];
+  (*Var_space)[fName]="";
   while(IS.good())
   {
     GET(S)
@@ -75,7 +75,7 @@ UI_rfunc(defvar)
     {
       S=former;
     }
-    Var_space[fName]+=S+(IS.good() ? " " : "");
+    (*Var_space)[fName]+=S+(IS.good() ? " " : "");
   }
   return fName;
 }
@@ -244,8 +244,8 @@ UI_rfunc(assoc)
 UI_rfunc(echo)
 {
   GET(read_in)
-  std::map<String,String>::const_iterator it=Var_space.find(read_in);
-  return (it!=Var_space.end() ? it->second : read_in);
+  std::map<String,String>::const_iterator it=Var_space->find(read_in);
+  return (it!=Var_space->end() ? it->second : read_in);
 }
 
 UI_rfunc(conc)
@@ -281,7 +281,7 @@ UI_rfunc(mapcar)
   String Result, read_in;
   String lambda;
   IS>>lambda;
-  if(Var_space[lambda]==String(lambda+'&'))
+  if((*Var_space)[lambda]==String(lambda+'&'))
   {
     lambda.push_back('&');
   }
@@ -379,10 +379,8 @@ UI_rfunc(callBruteForce)
 
 UI_rfunc(file_open)
 {
-  String F;
-  IS >> F;
-  file_open(F.c_str());
-  return F;
+  PARSER(F)
+  return file_open(F.c_str());
 }
 
 UI_rfunc(printSmarks)

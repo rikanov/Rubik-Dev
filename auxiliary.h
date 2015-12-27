@@ -47,6 +47,7 @@ namespace auxiliary
   
   bool checkSimplePath(const String & A);
   String mergeSimplePaths(const std::string& wA, const std::string& wB);
+  String findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle);
   int * nestedLoop(int * Array,int depth, const int & UpperBound, const int & LowerBound=0);
   void imbueStream(Stream& IS, const String & V);
   String& regSimplifier(const String& R, String& S);
@@ -55,6 +56,7 @@ namespace auxiliary
   String putInString(const String& arg1, const char& sig1, const String& arg2, const char& sig2, const String& text);
   unsigned int countWords(Stream& IS);
   unsigned int countWords(const String& S);
+ 
 }
 
 #endif

@@ -20,10 +20,14 @@ using namespace auxiliary;
 class Rubik 
 {
   static std::map<String, Rubik*> * Collection; 
-  static std::list<const char*> * InnerCommands;
-  static char ** commandCompletion ( const char * stem_text , int start , int end );
-  static char * getCommands(const char * stem_text ,int state );
+  static std::map<String, String> * Var_space;
+  
+  static char ** commandCompletion (const char * stem_text , int start , int end );
+  static char *  getCommands       (const char * stem_text ,int state ); 
+  static void    setAutocomp       (const char * Add_text);
+  
   static Rubik* Global;
+  
   const String Object;
   
 		// Let I the index of a certain side mark in the current state 
@@ -38,26 +42,90 @@ class Rubik
   int ** Stack;
   int stack_pointer=0;
 
-  std::map<const String, String> Var_space;
+  void 
+  initStack		();
   
-  void initStack();
-  void initCommandComp();
-  void printCollection() const;
-  bool is_solved(const int* Cubes=IdentityMap, const int& Limit=NumberOfSideMarks) const;
-  void setConditions(int* SolutionIdices, int* SolvedState, int* InitialState, Stream& IS, std::list< t_state >& Seeking) const;
-  int checkConditions(const int *State, const int * SolvedState, const int * Conditions) const;
-  std::pair<int,String> seeker(std::list< t_state >& Trace, const int* SolvedState, const int* Conditions, const int* AllowedSides) const;
-  bool variableEquality(String& A, const String& B) const;
-  void variable(Stream& IS, String& R);
-  void macro(Stream& IS, String& R);
-  String functionResolver(Stream& IS, const String& R);
-  void select(Stream& IS, String& Result, const bool & Inv); 
-  void noSuppose();
-  void suppose(const Sidemarks & S);
-  void align(const Sidemarks & A, const Sidemarks & B);
-  Sidemarks whatIs(const Sidemarks & S) const;
-  Sidemarks locationOf(const Sidemarks& S) const;
-  String bruteForce(Stream& IS, const String& AS) const;
+  void 
+  initCommandComp	();
+  
+  void 
+  printCollection	() const;
+  
+  bool 
+  is_solved		(const int * Cubes = IdentityMap, 
+			 const int & Limit = NumberOfSideMarks) const;
+			 
+  void 
+  setConditions		(
+			int * SolutionIdices, 
+			int * SolvedState, 
+			int * InitialState, 
+			Stream& IS, 
+			std::list< t_state >& Seeking) const;
+			
+  int 
+  checkConditions	(
+			const int * State, 
+			const int * SolvedState, 
+			const int * Conditions) const;
+  
+  std::pair<int,String> 
+  seeker		(
+			std::list< t_state >& Trace, 
+			const int * SolvedState, 
+			const int * Conditions, 
+			const int * AllowedSides) const;
+			
+  bool 
+  variableEquality	(
+			String & A, 
+			const 
+			String & B) const;
+  void 
+  variable		(
+			Stream & IS, 
+			String & R);
+  void 
+  macro			(
+			Stream & IS, 
+			String & R);
+  
+  String 
+  functionResolver	(
+			Stream & IS, 
+			const String & R);
+  
+  void 
+  select		(
+			Stream & IS, 
+			String & Result, 
+			const bool & Inv); 
+  
+  void 
+  noSuppose		();
+  
+  void 
+  suppose		(
+			const 
+			Sidemarks & S);
+  
+  void 
+  align			(
+			const Sidemarks & A, 
+			const Sidemarks & B);
+  
+  Sidemarks 
+  whatIs		(
+			const Sidemarks & S) const;
+			
+  Sidemarks 
+  locationOf		(
+			const Sidemarks & S) const;
+			
+  String 
+  bruteForce		(
+			Stream& IS, 
+			const String& AS) const;
   
      //==========================//
     //  *** User Interface ***  //
@@ -108,18 +176,17 @@ class Rubik
   
 public:
   
-  Rubik();
-  Rubik(const Rubik&) =default;
-  Rubik(const String& Name);
-  ~Rubik();
-  
-  static void setAutocomp(const char* A);
-  static String findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle);
-  
-  Rubik& operator=(const Rubik& R)=default;
-  void print(const String & C ) const;
+  Rubik  ();
+  Rubik  (const Rubik&) =default;
+  Rubik  (const String& Name);
+  ~Rubik ();
+ 
+  Rubik & operator =  (const Rubik& R)=default;
   Rubik & operator << (const String & Rot); 
-  void REPL(std::istream & IS=std::cin, std::ostream & OS=std::cout);
+  
+  void print(const String & C ) const;
+  void REPL (std::istream & IS=std::cin, std::ostream & OS=std::cout);
+  
   String file_open(const char * F);
 };
 #endif

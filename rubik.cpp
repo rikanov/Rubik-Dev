@@ -82,7 +82,7 @@ Rubik& Rubik::operator<<(const String & Rot)
 
 void Rubik::setAutocomp(const char* A)
 {
-  InnerCommands->push_back(A);
+  (*Var_space)[A];
 }
 
 bool Rubik::variableEquality(String& A, const String& B) const
@@ -94,9 +94,9 @@ bool Rubik::variableEquality(String& A, const String& B) const
   }
   else
   {
-    while(Var_space.find(A)!=Var_space.end())
+    while(Var_space->find(A)!=Var_space->end())
     {
-      A=Var_space.at(A);
+      A=Var_space->at(A);
       if(A==B)
       {
 	Result=true;
@@ -137,16 +137,16 @@ void Rubik::macro(Stream& IS, String& R)
   const String mnemonic=R.substr(0,n);
   const String arg=R.substr(n+1,R.size()-n-2);
   GET(input)
-  String eval(auxiliary::putInString(arg,'@',input,'&',Var_space[mnemonic]));
+  String eval(auxiliary::putInString(arg,'@',input,'&',(*Var_space)[mnemonic]));
   imbueStream(IS,eval);
   R=parser(IS); 
 }
 
 void Rubik::variable(Stream& IS, String& R)
 {
-  if(Var_space.find(R)!=Var_space.end())
+  if(Var_space->find(R)!=Var_space->end())
   {
-    const String arg= (R.back()=='&') ? functionResolver(IS,R) : Var_space.at(R);
+    const String arg= (R.back()=='&') ? functionResolver(IS,R) : Var_space->at(R);
     auxiliary::imbueStream(IS,arg);
     R=parser(IS);
   }
@@ -155,15 +155,16 @@ void Rubik::variable(Stream& IS, String& R)
 String Rubik::functionResolver(Stream& IS,const String & R)
 {
   GET(arg);
-  return auxiliary::putInString(arg,'&',Var_space.at(R));
+  return auxiliary::putInString(arg,'&',Var_space->at(R));
 }
 
 String Rubik::file_open(const char * F)
 {
   std::ifstream ifs(F,std::ifstream::in);
+  Stream OS;
   if(ifs.is_open())
   {
-    REPL(ifs,std::cout);
+    REPL(ifs,OS);
   }
   else
   {
@@ -171,7 +172,7 @@ String Rubik::file_open(const char * F)
   }
   OUT_(NL<<"The file "<<F<<" has been closed.\n");
   ifs.close();
-  return F;
+  return OS.str();
 }
 
 Rubik::~Rubik()

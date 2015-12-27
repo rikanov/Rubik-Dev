@@ -3,20 +3,20 @@
 #define NEW (new int[NumberOfSideMarks])
 
 Rubik* Rubik::Global=nullptr;
-std::list<const char*> * Rubik::InnerCommands=nullptr;
 std::map<String, Rubik*> * Rubik::Collection=new std::map<String, Rubik*>;
+std::map<String, String> * Rubik::Var_space =new std::map<String, String>;
 Rubik::Rubik(): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, Object("global")
 {
   Topology::singleton();
   initStack();
-  initCommandComp();OUT_(InnerCommands->size())
+  initCommandComp();
   Global=this;
   CPY_FUNC(A_map,IdentityMap)
   CPY_FUNC(B_map,IdentityMap)
   noSuppose();
 }
 
-Rubik::Rubik(const String& name): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, Var_space(Global->Var_space), Object(name)
+Rubik::Rubik(const String& name): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, Object(name)
 {
   delete (*Collection)[Object];
   (*Collection)[Object]=this;
@@ -41,8 +41,6 @@ void Rubik::initStack()
 
 void Rubik::initCommandComp()
 {
-  InnerCommands=new std::list<const char*>;
-  
     //=================================//
    //  *** Collection management ***  //
   //=================================//
