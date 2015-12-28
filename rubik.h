@@ -13,7 +13,7 @@
 #define GETLIST(L) GET(L) if(L=="list"){L=list(IS);}else{Stream eval__(L); L=list(eval__);}
 #define PARSER(A) String A=parser(IS);
 #define PARSER2(A,B) PARSER(A) PARSER(B)
-#define GETLINE(L) String L;getline(IS,L,';');
+#define GETLINE(L) String L;getline(IS,L,';');{String ToEnd; getline(IS,ToEnd); if(ToEnd!="") {IS.str(ToEnd);IS.clear();}}
 
 using namespace auxiliary;
 

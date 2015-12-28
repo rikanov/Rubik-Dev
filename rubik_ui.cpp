@@ -53,7 +53,7 @@ UI_rfunc(defun)
 
 UI_rfunc(defmacro)
 {
-  GET(macro); OUT_(macro)
+  GET(macro);
   Regex macro_syntax(MACRO_SYNTAX); // $1: macro-name $2: macro-argument
   String macro_name(FIND(macro,macro_syntax,"$1"));
   String macro_arg (FIND(macro,macro_syntax,"$2"));
@@ -75,8 +75,9 @@ UI_rfunc(defvar)
     {
       S=former;
     }
-    (*Var_space)[fName]+=S+(IS.good() ? " " : "");
+    (*Var_space)[fName]+=S+' ';
   }
+  TRIM_END((*Var_space)[fName])
   return fName;
 }
 
@@ -321,14 +322,12 @@ UI_rfunc(pathFinder)
     middle=true;
     SS>>From;
   }
-  SS>>To;
-  while(SS.good())
+  while(SS>>To)
   {
     Result+=findPath(From,To,middle);
     From=To;
-    SS>>To;
   }
-  return Result+findPath(From,To,middle);
+  return Result;
 }
 
 UI_rfunc(sameCubes)
