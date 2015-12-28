@@ -17,7 +17,7 @@ char * Rubik::getCommands (const char * stem_text,int state)
   const int len=strlen(stem_text);
   while(cit!=Var_space->end())
   {
-    if(strncmp ((cit->first).c_str(),stem_text,len) == 0) 
+    if((cit->first).back()!='&' && (cit->first).back()!='@' && strncmp ((cit->first).c_str(),stem_text,len) == 0) 
     {
       return strdup ((cit++)->first.c_str()) ;
     }
