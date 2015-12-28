@@ -110,13 +110,11 @@ bool Rubik::variableEquality(String& A, const String& B) const
 void Rubik::select(Stream& IS, String& Result, const bool & Inv)
 {
   GET(head)
-  String Reault="";
   Stream SS(parser(IS));
   while(SS.good())
   {
     Stream next;
-    String query;
-    SS>>query;
+    GET(query)
     next << head << ' ' << query;
     if((Inv && parser(next)==NIL) ||
       (!Inv && parser(next)!=NIL) )

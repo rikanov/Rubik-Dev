@@ -279,8 +279,7 @@ UI_rfunc(list)
 UI_rfunc(mapcar)
 {
   String Result, read_in;
-  String lambda;
-  IS>>lambda;
+  GET(lambda)
   if((*Var_space)[lambda]==String(lambda+'&'))
   {
     lambda.push_back('&');
@@ -374,6 +373,10 @@ UI_rfunc(callBruteForce)
   String As=parser(IS);
   GETLINE(results_list)
   CALL_BACK(results_stream,list,results_list);
+  if(results_stream.str()==NIL)
+  {
+    return NIL;
+  }
   return bruteForce(results_stream,As);
 }
 

@@ -65,9 +65,7 @@ class Rubik
 			
   int 
   checkConditions	(
-			const int * State, 
-			const int * SolvedState, 
-			const int * Conditions) const;
+			     const int* State, const int* SolvedState, const int* Conditions, int& best_choice) const;
   
   std::pair<int,String> 
   seeker		(
@@ -79,8 +77,7 @@ class Rubik
   bool 
   variableEquality	(
 			String & A, 
-			const 
-			String & B) const;
+			const String & B) const;
   void 
   variable		(
 			Stream & IS, 
@@ -105,9 +102,7 @@ class Rubik
   noSuppose		();
   
   void 
-  suppose		(
-			const 
-			Sidemarks & S);
+  suppose		(const Sidemarks & S);
   
   void 
   align			(
@@ -115,12 +110,10 @@ class Rubik
 			const Sidemarks & B);
   
   Sidemarks 
-  whatIs		(
-			const Sidemarks & S) const;
+  whatIs		(const Sidemarks & S) const;
 			
   Sidemarks 
-  locationOf		(
-			const Sidemarks & S) const;
+  locationOf		(const Sidemarks & S) const;
 			
   String 
   bruteForce		(

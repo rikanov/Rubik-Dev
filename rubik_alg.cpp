@@ -3,11 +3,11 @@
 String Rubik::bruteForce(Stream& IS, const String & AS) const
 {
   const int SizeS=auxiliary::countWords(IS);
-  int SolutionIdices[SizeS+1]={};
+  int SolutionIndices[SizeS+1]={};
   int SolvedState[NumberOfSideMarks]={};
   int InitialState[NumberOfSideMarks]={};
   std::list<t_state> Seeking;
-  setConditions(SolutionIdices,SolvedState,InitialState,IS,Seeking);
+  setConditions(SolutionIndices,SolvedState,InitialState,IS,Seeking);
   
   const String allowed_sides= (AS=="ALL" || AS=="All" || AS=="all") ? "FURBDL" : AS;
   int allowed[allowed_sides.length()+1];
@@ -16,7 +16,7 @@ String Rubik::bruteForce(Stream& IS, const String & AS) const
     allowed[i]=Topology::sideDigit(allowed_sides[i])-1;
   }
   allowed[allowed_sides.length()]=-1;
-  std::pair<int,String> Result=seeker(Seeking,SolvedState,SolutionIdices,allowed);
+  std::pair<int,String> Result=seeker(Seeking,SolvedState,SolutionIndices,allowed);
 #ifndef SILENT
   NL_
   if(Result.first)
@@ -35,6 +35,8 @@ String Rubik::bruteForce(Stream& IS, const String & AS) const
     OUT_("Not found." );
   }
 #endif
+  (*Var_space)["bf-success"]=Result.first ? std::to_string(Result.first) : "NIL";
+  (*Var_space)["bf-result"] =Result.second;
   return Result.second;
 }
 
@@ -92,7 +94,7 @@ void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * Initial
   Seeking.push_back(t_state(InitialState,-1,""));
 }
 
-int Rubik::checkConditions(const int *State, const int * SolvedState, const int * Conditions) const
+int Rubik::checkConditions(const int *State, const int * SolvedState, const int * Conditions, int & best_choice) const
 {
   int Result=1;
   int cond=0;
@@ -108,6 +110,10 @@ int Rubik::checkConditions(const int *State, const int * SolvedState, const int 
       }
       else
       {	
+	if(cond>best_choice)
+	{
+	  best_choice=cond;
+	}
 	cond=0;
 	++Result;
 	continue;
@@ -121,18 +127,23 @@ int Rubik::checkConditions(const int *State, const int * SolvedState, const int 
 std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * SolvedState, 
 				    const int * Conditions, const int * AllowedSides) const			       
 {
-  const int pre_check=checkConditions(Trace.front().State,SolvedState,Conditions);
+  static const char mode_sign[]={'x','\'','2'};
+  
+  int best_choice=0;
+  String part_solution;
+  const int pre_check=checkConditions(Trace.front().State,SolvedState,Conditions, best_choice);
   if(pre_check)
   {
     return std::pair<int,String>(pre_check,"");
   }
-  const int step=2000;
-  String A="",B="----------------------------";
-  const char mode_sign[]={'x','\'','2'};
+  const int step=3000;
+  String A="",B="-------------------------------";
   int nstate[auxiliary::t_state::order];
-  while(true) // the exit condition what will be never happened :-)
+  int Result=0;
+  bool seek_for=true;
+  while(seek_for) // the exit condition what will be never happened :-)
   {
-    for(const int *a=AllowedSides; *a!=-1; ++a)
+    for(const int *a=AllowedSides; seek_for && *a!=-1; ++a)
     {
       if(*a==Trace.front().LastSide)
       {
@@ -152,14 +163,24 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
 	{
 	  npath.push_back(mode_sign[mode]);
 	}
-	const int result=checkConditions(nstate,SolvedState,Conditions);
+	int test=best_choice;
+	const int result=checkConditions(nstate,SolvedState,Conditions,test);
+	if(test>best_choice)
+	{
+	  best_choice=test;
+	  part_solution=npath;
+	}
 	if(result)
 	{
 	  if(Trace.size()>=step)
 	  {
 	    NL_
 	  }
-	  return std::pair<int,String>(result,npath);
+	  Result=result;
+	  part_solution=npath;
+	  seek_for=false;
+	  break;
+	  //return std::pair<int,String>(result,npath);
 	}
 	Trace.push_back(t_state(nstate,*a,npath));
 	if(Trace.size()%step==0)
@@ -167,7 +188,10 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
 	  if(B.empty())
 	  {
 	    NL_
-	    return std::pair<int,String>(0,"");
+	    Result=0;
+	    seek_for=false;
+	    break;
+	    //return std::pair<int,String>(0,"");
 	  }
 	  A.push_back('=');
 	  B.pop_back();
@@ -177,5 +201,5 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
     }
       Trace.pop_front();
   }
-  return std::pair<int,String>(0,"");
+  return std::pair<int,String>(Result,part_solution);
 }
