@@ -114,7 +114,8 @@ void Rubik::select(Stream& IS, String& Result, const bool & Inv)
   while(SS.good())
   {
     Stream next;
-    GET(query)
+    String query;
+    SS>>query;
     next << head << ' ' << query;
     if((Inv && parser(next)==NIL) ||
       (!Inv && parser(next)!=NIL) )

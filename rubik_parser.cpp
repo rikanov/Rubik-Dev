@@ -109,7 +109,7 @@ String Rubik::parser(Stream & IS)
   trigger("conc",             conc)
   trigger("replace", stringReplace)
   trigger("regex",          regExp)
-  trigger("regex_fast", regExpFast)
+  trigger("reg_fast", regExpFast)
   
     //=========================================//
    //  *** Seeker and auxiliary functions *** //
