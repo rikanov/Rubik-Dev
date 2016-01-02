@@ -73,7 +73,7 @@ UI_rfunc(defvar)
     GET(S)
     if(S==fName)
     {
-      S=former;
+      S="list "+former+";";
     }
     (*Var_space)[fName]+=S+' ';
   }
