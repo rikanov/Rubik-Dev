@@ -137,15 +137,29 @@ UI_rfunc(condition)
 UI_rfunc(forLoop)
 {
   String Result;
+  GET(token)
   GETLIST(A);
   Stream ForIn(A);
-  GETLINE(core)
-  while(ForIn>>A)
-  {
-    Stream eval(auxiliary::putInString(A,'&',core));
-    Result+=parser(eval)+' ';
+  if(IS.good())
+  { 
+    while(ForIn>>A)
+    {
+      Stream eval;
+      Stream repeat(IS.str());
+      String next;
+      while(repeat>>next)
+      {
+	if(next==token)
+	{
+	  next=A;
+	}
+	eval<<next<<' ';
+      }
+      Result+=parser(eval)+ ' ';
+    }
+    getline(IS,A);
+    TRIM_END(Result)
   }
-  TRIM_END(Result)
   return Result;
 }
 

@@ -283,6 +283,23 @@ String auxiliary::putInString(const String& arg1, const char& sig1, const String
   return Result;
 }
 
+String auxiliary::putInString(const String& arg, const String& token, const String& text)
+{
+  size_t f=text.find(token);
+  if(f!=STR_END)
+  {
+    String modded(text);
+    modded.replace(f,token.length(),arg);
+    putInString(arg,token,modded);
+    return modded;
+  }
+  else
+  {
+    return text;
+  }
+}
+
+
 unsigned int auxiliary::countWords(Stream& IS)
 {
   Stream SS(IS.str());

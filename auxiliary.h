@@ -6,7 +6,7 @@
 
 namespace auxiliary 
 {
-  class Sidemarks: public std::string
+  class Sidemarks: public String
   {
     int Index;
     int eigenvalue;
@@ -14,10 +14,10 @@ namespace auxiliary
   public:
     Sidemarks()=default;
     Sidemarks(const int & In); 
-    Sidemarks(const std::string & S);
+    Sidemarks(const String & S);
     Sidemarks(const char * C);
     Sidemarks & operator = (const Sidemarks & S)=default;
-    Sidemarks & operator = (const std::string & S);
+    Sidemarks & operator = (const String & S);
     Sidemarks & operator = (const int & In);
     Sidemarks operator + (const String & S) const;
     Sidemarks & operator << (const String & S);
@@ -46,7 +46,7 @@ namespace auxiliary
   };
   
   bool checkSimplePath(const String & A);
-  String mergeSimplePaths(const std::string& wA, const std::string& wB);
+  String mergeSimplePaths(const String& wA, const String& wB);
   String findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle);
   int * nestedLoop(int * Array,int depth, const int & UpperBound, const int & LowerBound=0);
   void imbueStream(Stream& IS, const String & V);
@@ -54,6 +54,7 @@ namespace auxiliary
   bool regExp(const char *R, const char *C);
   String putInString(const String& arg, const char& sig,const String& text);
   String putInString(const String& arg1, const char& sig1, const String& arg2, const char& sig2, const String& text);
+  String putInString(const String& arg, const String& token, const String& text);
   unsigned int countWords(Stream& IS);
   unsigned int countWords(const String& S);
  
