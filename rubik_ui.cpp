@@ -265,8 +265,15 @@ UI_rfunc(echo)
 
 UI_rfunc(conc)
 {
-  GET2(A,B)
-  return A+B;
+  String Result;
+  GETLIST(A)
+  Stream Conc(A);
+  while(Conc>>A)
+  {
+    Stream eval(A);
+    Result+=parser(eval);
+  }
+  return Result;
 }
 
 UI_rfunc(stringReplace)
