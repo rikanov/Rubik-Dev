@@ -10,11 +10,11 @@
 #define CALL_BACK(SN,F,A) Stream SN; {Stream eval__(A);SN.str(F(eval__));}
 #define GET(A) String A; IS>>A;
 #define GET2(A,B) String A,B; IS>>A; IS>>B;
-#define GETLIST(L) GET(L) if(L=="list"){L=list(IS);}else{Stream eval__(L); L=list(eval__);}
+#define GETLIST(L) Stream L(list(IS));
 #define PARSER(A) String A=parser(IS);
 #define PARSER2(A,B) PARSER(A) PARSER(B)
 #define GETLINE(L) String L;getline(IS,L,';');{String ToEnd; getline(IS,ToEnd); if(ToEnd!="") {IS.str(ToEnd);IS.clear();}}
-
+#define OUTSPREAD(O) String O; getline(IS,O);
 using namespace auxiliary;
 
 class Rubik 
