@@ -96,7 +96,7 @@ UI_rfunc(listEquality)
 {
   GETLIST(A)
   GETLIST(B)
-  boolean(A==B)
+  boolean(A.str()==B.str())
 }
 
 UI_rfunc(parsingEquality)
@@ -138,28 +138,20 @@ UI_rfunc(forLoop)
 {
   String Result;
   GET(token)
-  GETLIST(A);
-  Stream ForIn(A);
-  if(IS.good())
-  { 
-    while(ForIn>>A)
+  GETLIST(ForIn)
+  OUTSPREAD(core)
+  String Next;
+  while(ForIn>>Next)
+  {
+    (*Var_space)[token]=Next;
+    Stream eval(core);
+    Result+=parser(eval)+' ';
+    if(!ForIn.good())
     {
-      Stream eval;
-      Stream repeat(IS.str());
-      String next;
-      while(repeat>>next)
-      {
-	if(next==token)
-	{
-	  next=A;
-	}
-	eval<<next<<' ';
-      }
-      Result+=parser(eval)+ ' ';
+      IS.str(eval.str());
     }
-    getline(IS,A);
-    TRIM_END(Result)
   }
+  TRIM_END(Result)
   return Result;
 }
 
