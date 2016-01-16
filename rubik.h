@@ -132,6 +132,7 @@ class Rubik
   UI_func(defvar)
   UI_func(defun)
   UI_func(defmacro)
+  UI_func(delete_var)
   UI_func(nilEquality)
   UI_func(variableEquality)
   UI_func(listEquality)

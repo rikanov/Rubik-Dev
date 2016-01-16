@@ -88,6 +88,7 @@ String Rubik::parser(Stream & IS)
   trigger("defvar",     defvar)
   trigger("define",     defvar)
   trigger("defmacro", defmacro)
+  trigger("delete", delete_var)
   trigger("echo",         echo)
 
     //==========================================//

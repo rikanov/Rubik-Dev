@@ -81,6 +81,21 @@ UI_rfunc(defvar)
   return fName;
 }
 
+UI_rfunc(delete_var)
+{
+  GET(name)
+  std::map<String, String>::iterator it=Var_space->find(name);
+  if(it == Var_space->end())
+  {
+    return NIL;
+  }
+  else
+  {
+    Var_space->erase(it);
+    return TRUE;
+  }
+}
+
 UI_rfunc(nilEquality)
 {
   return parser(IS)==NIL ? TRUE : NIL;
@@ -229,6 +244,10 @@ UI_rfunc(doRotations)
 {
   int counter=0;
   const PARSER(DO);
+  if(DO==NIL)
+  {
+    return NIL;
+  }
   GETLINE(UNTIL);
   Stream test;
   do
@@ -257,15 +276,8 @@ UI_rfunc(echo)
 
 UI_rfunc(conc)
 {
-  String Result;
-  GETLIST(A)
-  Stream Conc(A);
-  while(Conc>>A)
-  {
-    Stream eval(A);
-    Result+=parser(eval);
-  }
-  return Result;
+  GET2(A,B)
+  return A+B;
 }
 
 UI_rfunc(stringReplace)
