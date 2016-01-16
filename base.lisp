@@ -1,3 +1,5 @@
+defvar is_true nil nil
+
 defvar base::changed \
   reg_fast *->*
 defvar solved \
