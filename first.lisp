@@ -1,3 +1,8 @@
+defvar loop-stack
+
+# brute_force all all-cubes
+# if bf-success do bf-result
+
 brute_force all UR UL UF UB 4 \
 		DR DL DF DB 4 \
 		RU RB RD RF 4 \
