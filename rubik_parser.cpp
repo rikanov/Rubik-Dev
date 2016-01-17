@@ -6,7 +6,7 @@
 #define trigger_pv(X,Y) else if(read_in==X) {Y(parser(IS));}
 #define nil_return(X) return(((X)=="" || (X)=="NIL") ? NIL : (X))
 
-String Rubik::parser(Stream & IS)
+UI_rfunc(parser)
 { 
   String read_in;
   
@@ -135,8 +135,8 @@ String Rubik::parser(Stream & IS)
   trigger_pv("print",          print) 
   trigger   ("solvedp",      solvedp)
   trigger   ("cube",            cube)
-  trigger   ("what_is",       whatIs)
-  trigger   ("where_is",     whereIs)
+  trigger   ("what_is",      what_is)
+  trigger   ("where_is",    where_is)
   
     //========================================//
    //  *** Look for matching user-space ***  //

@@ -6,8 +6,8 @@ String Rubik::bruteForce(Stream& IS, const String & AS) const
   int SolutionIndices[SizeS+1]={};
   int SolvedState[NumberOfSideMarks]={};
   int InitialState[NumberOfSideMarks]={};
-  std::list<t_state> Seeking;
-  setConditions(SolutionIndices,SolvedState,InitialState,IS,Seeking);
+  setConditions(SolutionIndices,SolvedState,InitialState,IS);
+  t_state InitSeeking=t_state(InitialState,-1,"");
   
   const String allowed_sides= (AS=="ALL" || AS=="All" || AS=="all") ? "FURBDL" : AS;
   int allowed[allowed_sides.length()+1];
@@ -16,7 +16,7 @@ String Rubik::bruteForce(Stream& IS, const String & AS) const
     allowed[i]=Topology::sideDigit(allowed_sides[i])-1;
   }
   allowed[allowed_sides.length()]=-1;
-  std::pair<int,String> Result=seeker(Seeking,SolvedState,SolutionIndices,allowed);
+  std::pair<int,String> Result=seeker(InitSeeking,SolvedState,SolutionIndices,allowed);
 #ifndef SILENT
   NL_
   if(Result.first)
@@ -40,7 +40,7 @@ String Rubik::bruteForce(Stream& IS, const String & AS) const
   return Result.second;
 }
 
-void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * InitialState, Stream& IS, std::list<t_state> & Seeking) const
+void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * InitialState, Stream& IS) const
 {
   int *sp=SolutionIdices,sp_end=0;
   int seq_counter=0;
@@ -91,7 +91,6 @@ void Rubik::setConditions(int * SolutionIdices, int * SolvedState, int * Initial
   *sp=-256;  // the end sign of testing
   InitialState[sp_end]=-1; // end of inner state
   auxiliary::t_state::order=sp_end+1;
-  Seeking.push_back(t_state(InitialState,-1,""));
 }
 
 int Rubik::checkConditions(const int *State, const int * SolvedState, const int * Conditions, int & best_choice) const
@@ -124,20 +123,25 @@ int Rubik::checkConditions(const int *State, const int * SolvedState, const int 
   return found ? Result : 0;
 }
 
-std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * SolvedState, 
+std::pair<int,String> Rubik::seeker(t_state & InitTrace, const int * SolvedState, 
 				    const int * Conditions, const int * AllowedSides) const			       
 {
   static const char mode_sign[]={'x','\'','2'};
   
   int best_choice=0;
   String part_solution;
-  const int pre_check=checkConditions(Trace.front().State,SolvedState,Conditions, best_choice);
+  const int pre_check=checkConditions(InitTrace.State,SolvedState,Conditions, best_choice);
   if(pre_check)
   {
     return std::pair<int,String>(pre_check,"");
   }
-  const int step=3000;
-  String A="",B="-------------------------------";
+  const int step=400000;
+  String A="",B="---------------------------------";
+  t_state * Trace=new t_state [step*(B.length()+3)];
+  t_state * trace_start=Trace;
+  t_state * trace_end=trace_start+1;
+  int trace_length=1;
+  *trace_start=InitTrace;
   int nstate[auxiliary::t_state::order];
   int Result=0;
   bool seek_for=true;
@@ -145,20 +149,20 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
   {
     for(const int *a=AllowedSides; seek_for && *a!=-1; ++a)
     {
-      if(*a==Trace.front().LastSide)
+      if(*a==trace_start->LastSide)
       {
 	continue;
       }
       for(int mode=0; mode<3;++mode)
       {
-	Topology::operateOnRestrictedSpace(nstate,Trace.front().State,*a,mode==1);
+	Topology::operateOnRestrictedSpace(nstate,trace_start->State,*a,mode==1);
 	if(mode==2)
 	{
 	  EMPTY(double_move);
 	  CPY_FUNC(double_move,nstate);
 	  Topology::operateOnRestrictedSpace(nstate,double_move,*a,false);
 	}
-	String npath=Trace.front().Path+Topology::sideMarksOf(*a);
+	String npath=trace_start->Path+Topology::sideMarksOf(*a);
 	if(mode)
 	{
 	  npath.push_back(mode_sign[mode]);
@@ -172,7 +176,7 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
 	}
 	if(result)
 	{
-	  if(Trace.size()>=step)
+	  if(trace_length>=step)
 	  {
 	    NL_
 	  }
@@ -182,8 +186,9 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
 	  break;
 	  //return std::pair<int,String>(result,npath);
 	}
-	Trace.push_back(t_state(nstate,*a,npath));
-	if(Trace.size()%step==0)
+	*(trace_end++)=t_state(nstate,*a,npath);
+	++trace_length;
+	if(trace_length%step==0)
 	{
 	  if(B.empty())
 	  {
@@ -199,7 +204,8 @@ std::pair<int,String> Rubik::seeker(std::list<t_state> & Trace, const int * Solv
 	}
       }
     }
-      Trace.pop_front();
+      ++trace_start;
   }
+  delete[] Trace; 
   return std::pair<int,String>(Result,part_solution);
 }

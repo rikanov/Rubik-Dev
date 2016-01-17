@@ -1,5 +1,7 @@
 defvar is_true nil nil
 
+defvar upside UR UF UL UB URF ULF BRU BLU
+
 defvar base::changed \
   reg_fast *->*
 defvar solved \

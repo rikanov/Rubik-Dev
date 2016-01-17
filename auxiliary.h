@@ -39,6 +39,7 @@ namespace auxiliary
     int LastSide;
     String Path;
     
+    t_state(): State(nullptr) {}
     t_state(const t_state& T);
     t_state(const int * S, const int & L, const String & P);
     ~t_state();

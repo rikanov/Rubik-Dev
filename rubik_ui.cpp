@@ -223,13 +223,13 @@ UI_rfunc(revert)
   }
   return Result;
 }
-UI_rfunc(whatIs)
+UI_rfunc(what_is)
 {
   Sidemarks S(parser(IS));
   return S.valid() ? whatIs(S) : NIL;
 }
 
-UI_rfunc(whereIs)
+UI_rfunc(where_is)
 {
   Sidemarks S(parser(IS));
   return S.valid() ? locationOf(S) : NIL;
@@ -243,7 +243,8 @@ UI_rfunc(solvedp)
 UI_rfunc(doRotations)
 {
   int counter=0;
-  const PARSER(DO);
+  GETLINE(core)
+  String DO=parser(core);
   if(DO==NIL)
   {
     return NIL;
@@ -253,7 +254,9 @@ UI_rfunc(doRotations)
   do
   {
     ++counter;
+    String DO=parser(core);
     (*this) << DO;
+    LOOP_STACK+=DO;
     test.str(UNTIL);
     test.clear();
   }while (parser(test)!=NIL);
@@ -387,6 +390,7 @@ UI_rfunc(setAlign)
   if(Sidemarks(A).type()==2 && Sidemarks(B).type()==2)
   {
     Result=A+"->"+B; // assoc(A,B)
+    LOOP_STACK+=("["+Result+"]");
     align(A,B);
   }
   return Result;
