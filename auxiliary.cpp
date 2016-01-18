@@ -114,20 +114,13 @@ bool auxiliary::Sidemarks::sameCubes(const auxiliary::Sidemarks& A, const auxili
 ///=====================================================================
 
 int auxiliary::t_state::order=1;
+
 auxiliary::t_state::t_state(const int* S, const int& L, const std::string& P): 
   State(new int[order]), 
   LastSide(L), 
   Path(P)
 {
   memcpy(State,S,order*sizeof(int));
-}
-
-auxiliary::t_state::t_state(const auxiliary::t_state& T): 
-  State(new int[order]), 
-  LastSide(T.LastSide), 
-  Path(T.Path) 
-{
-  memcpy(State,T.State,order*sizeof(int)); 
 }
 
 auxiliary::t_state& auxiliary::t_state::operator=(const auxiliary::t_state& T)
@@ -146,6 +139,14 @@ auxiliary::t_state::~t_state()
 {
   delete State;
   State=nullptr;
+}
+
+void auxiliary::t_state::set(const int* S, const int& L, const std::string& P)
+{
+  State=new int [order];
+  LastSide=L;
+  Path=P;
+  memcpy(State,S,order*sizeof(int));
 }
 
 int * auxiliary::nestedLoop(int* Array, int depth, const int& UpperBound, const int& LowerBound )
