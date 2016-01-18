@@ -120,6 +120,7 @@ UI_rfunc(parser)
   trigger("merge",                merge)
   trigger("path_finder",     pathFinder)
   trigger("brute_force", callBruteForce)
+  trigger("random",              random)
   trigger("side_marks",     printSmarks)
   
     //=====================================//

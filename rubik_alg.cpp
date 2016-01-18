@@ -1,5 +1,16 @@
 #include"rubik.h"
 
+String Rubik::random()
+{
+  String Result;
+  Result.push_back(Topology::SideMarks[1+rand()%6]);
+  if(rand()%2)
+  {
+    Result.push_back('\'');
+  }
+  return Result;
+}
+
 String Rubik::bruteForce(Stream& IS, const String & AS) const
 {
   const int SizeS=auxiliary::countWords(IS);
@@ -186,7 +197,7 @@ std::pair<int,String> Rubik::seeker(t_state & InitTrace, const int * SolvedState
 	  break;
 	  //return std::pair<int,String>(result,npath);
 	}
-	*(trace_end++)=t_state(nstate,*a,npath);
+	(trace_end++)->set(nstate,*a,npath);
 	++trace_length;
 	if(trace_length%step==0)
 	{

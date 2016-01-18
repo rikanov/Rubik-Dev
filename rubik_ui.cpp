@@ -408,6 +408,11 @@ UI_rfunc(callBruteForce)
   return bruteForce(results_stream,As);
 }
 
+UI_rfunc(random)
+{
+  return random();
+}
+
 UI_rfunc(file_open)
 {
   PARSER(F)

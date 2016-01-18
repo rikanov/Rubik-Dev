@@ -44,6 +44,9 @@ class Rubik
   int stack_pointer=0;
 
   void 
+  initRubik		();
+  
+  void 
   initStack		();
   
   void 
@@ -119,6 +122,9 @@ class Rubik
   bruteForce		(
 			Stream& IS, 
 			const String& AS) const;
+			
+  static String
+  random		();
   
      //==========================//
     //  *** User Interface ***  //
@@ -157,6 +163,7 @@ class Rubik
   UI_func(merge)
   UI_func(pathFinder)
   UI_func(callBruteForce)
+  UI_func(random)
   
   UI_func(what_is)
   UI_func(where_is)
