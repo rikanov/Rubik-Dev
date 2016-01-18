@@ -1,4 +1,3 @@
-#include <time.h>
 #include "rubik.h"
 #define auto_comp(X) setAutocomp(X);
 #define NEW (new int[NumberOfSideMarks])
@@ -9,8 +8,9 @@ std::map<String, String> * Rubik::Var_space =new std::map<String, String>;
 Rubik::Rubik(): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, Object("global")
 {
   Topology::singleton();
-  initCommandComp();
   Global=this;
+  initCommandComp();
+  initStack();
   initRubik();
 }
 
@@ -18,16 +18,18 @@ Rubik::Rubik(const String& name): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW
 {
   delete (*Collection)[Object];
   (*Collection)[Object]=this;
+  initStack();
   initRubik();
 }
 
 void Rubik::initRubik()
 {
-  initStack();
+  LOOP_STACK="";
+  BF_SUCCESS="";
+  BF_RESULT ="";
   CPY_FUNC(A_map,IdentityMap)
   CPY_FUNC(B_map,IdentityMap)
   noSuppose();
-  srand(time(NULL));
 }
 
 void Rubik::initStack()
@@ -116,6 +118,7 @@ void Rubik::initCommandComp()
   auto_comp("path_finder")
   auto_comp("brute_force")
   auto_comp("random"     )
+  auto_comp("reset"      )
   auto_comp("side_marks" )
   
     //=====================================//

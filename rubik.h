@@ -16,6 +16,9 @@
 #define GETLINE(L) String L;getline(IS,L,';');TRIM_END(L);{String ToEnd; getline(IS,ToEnd); if(ToEnd!="") {IS.str(ToEnd);IS.clear();}}
 #define OUTSPREAD(O) String O; getline(IS,O);
 #define LOOP_STACK (*Var_space)["loop-stack"]
+#define BF_SUCCESS (*Var_space)["brute-force-success"]
+#define BF_RESULT  (*Var_space)["brute-force-result"]
+
 using namespace auxiliary;
 
 class Rubik 

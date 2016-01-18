@@ -23,7 +23,10 @@ Topology::Cube::Cube()
 void Topology::singleton()
 {
   if(Singleton==nullptr)
+  {
     Singleton=new Topology;
+    srand(time(NULL));
+  }
 }
 
 

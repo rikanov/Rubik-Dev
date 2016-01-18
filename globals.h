@@ -7,6 +7,7 @@
 #include <cstring>
 #include <regex>
 #include <map>
+#include <time.h>
 
 //#define SILENT
 

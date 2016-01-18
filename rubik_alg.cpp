@@ -46,8 +46,8 @@ String Rubik::bruteForce(Stream& IS, const String & AS) const
     OUT_("Not found." );
   }
 #endif
-  (*Var_space)["bf-success"]=Result.first ? std::to_string(Result.first) : "NIL";
-  (*Var_space)["bf-result"] =Result.second;
+  BF_SUCCESS=Result.first ? std::to_string(Result.first) : "NIL";
+  BF_RESULT =Result.second;
   return Result.second;
 }
 

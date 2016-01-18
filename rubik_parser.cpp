@@ -129,6 +129,7 @@ UI_rfunc(parser)
  
   trigger   ("do",       doRotations)
   trigger   ("align",       setAlign)
+  trigger_v ("reset",      initRubik)
   trigger_v ("no_suppose", noSuppose)
   trigger_pv("suppose",      suppose) 
   trigger   ("store",          store)
