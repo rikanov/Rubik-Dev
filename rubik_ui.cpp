@@ -256,7 +256,7 @@ UI_rfunc(doRotations)
     ++counter;
     String DO=parser(core);
     (*this) << DO;
-    LOOP_STACK+=DO;
+    LOOP_STACK=mergeSimplePaths(LOOP_STACK,DO);
     test.str(UNTIL);
     test.clear();
   }while (parser(test)!=NIL);
