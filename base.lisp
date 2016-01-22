@@ -22,3 +22,6 @@ defmacro base::orientation_test(Xside) \
   reg_fast Xside*->!Xside* &
 defun same_colors \
   nil select base::orientation_test(&) cube
+  
+defun randomize & \
+  do random; nil eqp UR what_is &

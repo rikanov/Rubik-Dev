@@ -1,13 +1,12 @@
 defvar loop-stack
 
-brute_force all UR UL UF UB 4 \
+do brute_force all UR UL UF UB 4 \
 		DR DL DF DB 4 \
 		RU RB RD RF 4 \
 		LU LB LD LF 4 \
 		BU BR BD BL 4 \
-		FU FR FD FL 4
-
-		do brute-force-result
+		FU FR FD FL 4;\
+		nil brute-force-success
 		
 if eqp brute-force-success 2 align DF UF
 if eqp brute-force-success 3 align RF UF

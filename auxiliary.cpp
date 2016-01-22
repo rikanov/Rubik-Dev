@@ -369,3 +369,64 @@ String auxiliary::findPath(const Sidemarks& From, const Sidemarks& To, const boo
     Trace.pop_front();
   }
 }
+
+std::string auxiliary::mirror(const std::string& a, const char& c)
+{
+    static const String facets="FURBLD";
+    static String Plane[3];
+    Plane['X'-'X']="RL";
+    Plane['Y'-'X']="UD";
+    Plane['Z'-'X']="FB";
+    bool cuttingSide[6];
+    for(int i=0;i<6;++i)
+    {
+        cuttingSide[i]=(Plane[c-'X'].find(facets[i])==String::npos);
+    }
+    String Result;
+    for(String::const_iterator it=a.begin();it!=a.end();++it)
+    {
+        String add, side;
+	const int low_case=IS_LOWCASE(*it);
+        const int pos= facets.find(UPCASE(*it));
+        const char I = *it;
+        if(cuttingSide[pos])
+        {
+            side.push_back(I);
+        }
+        else
+        {
+            side=facets[(pos+3)%6]; /* opposite side */
+        }
+        side|=low_case;
+        if(it+1!=a.end())
+        {
+            switch(*(it+1))
+            {
+            case '\'':
+                add=side;
+                ++it;
+                break;
+
+            case '|':
+                add.push_back(I);
+                add.push_back('|');
+                ++it;
+                break;
+
+            case '2':
+                add=side+"2";
+                ++it;
+                break;
+
+            default:
+                add=side+"'";
+            }
+        }
+        else
+        {
+            add=side+"'";
+        }
+        Result+=add;
+    }
+    return Result;
+}

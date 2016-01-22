@@ -25,7 +25,7 @@
 #define isletter(x) ('A'<=((x)&95)<='Z')
 #define IS_FACET(X) (X=='F'||X=='U'||X=='R'||X=='B'||X=='D'||X=='L')
 #define UPCASE(x) ((x)&95)
-#define IS_UPCASE(x) ((x)&32)
+#define IS_LOWCASE(x) ((x)&32)
 #define FUNCTOR(x) int x[NumberOfSideMarks]; \
 		    memcpy(x,IdentityMap,sizeof IdentityMap);
 #define EMPTY(x) int x[NumberOfSideMarks]; 

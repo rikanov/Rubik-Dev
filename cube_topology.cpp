@@ -361,7 +361,7 @@ bool Topology::defOperation(int* Q, const std::string& Operations, const int & I
 	Rot=C;
     }
     const int R=Singleton->SideDigits[UPCASE(Rot)]-1;
-    int Modifier= IS_UPCASE(C) ? Block : SingleSide;
+    int Modifier= IS_LOWCASE(C) ? Block : SingleSide;
     if( it+1 !=Operations.end())
     {
       switch(*(it+1))
