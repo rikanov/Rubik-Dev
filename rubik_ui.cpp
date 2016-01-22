@@ -366,6 +366,8 @@ UI_rfunc(sameCubes)
 UI_rfunc(merge) 
 {
   String A=parser(IS),B=parser(IS);
+  NONILL(A);
+  NONILL(B);
   return mergeSimplePaths(A,B);
 }
 

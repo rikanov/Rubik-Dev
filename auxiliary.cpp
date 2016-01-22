@@ -397,7 +397,7 @@ std::string auxiliary::mirror(const std::string& a, const char& c)
         {
             side=facets[(pos+3)%6]; /* opposite side */
         }
-        side|=low_case;
+        side[0]|=low_case;
         if(it+1!=a.end())
         {
             switch(*(it+1))

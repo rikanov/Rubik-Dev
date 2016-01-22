@@ -40,6 +40,7 @@
 #define NL_ std::cout<<std::endl;
 #define TRIM_END(S) while(!S.empty() && (S.back()<=32||S.back()>=127)) S.pop_back();
 #define TRIM(S) TRIM_END(S) while(!S.empty() && (S.front()<=32||S.front()>=127)) S=S.substr(1);
+#define NONILL(X) if(X=="NIL") {X="";}
 #define NIL "NIL"
 #define TRUE "T"
 const String MACRO_SYNTAX="([^ ]+)\\(([^ ]+)\\)";
