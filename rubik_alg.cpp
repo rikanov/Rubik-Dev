@@ -146,7 +146,7 @@ std::pair<int,String> Rubik::seeker(t_state & InitTrace, const int * SolvedState
   {
     return std::pair<int,String>(pre_check,"");
   }
-  const int step=40000;
+  const int step=50000;
   String A="",B="---------------------------------";
   t_state * Trace=new t_state [step*(B.length()+3)];
   t_state * trace_start=Trace;

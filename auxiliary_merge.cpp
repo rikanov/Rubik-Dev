@@ -44,11 +44,13 @@ bool auxiliary::checkSimplePath(const String& S)
 }
 String auxiliary::mergeSimplePaths(const String & wA,const String & wB)
 {
-  if(wA==""||wB=="")
+  String A(wA), B(wB);
+  NONILL(A);
+  NONILL(B);
+  if(A==""||B=="")
   {
     return wA+wB;
   }
-  String A(wA), B(wB);
   const char sideB=B.front();
   B.erase(B.begin());
   const int a_op=modifierIssue(A.back());

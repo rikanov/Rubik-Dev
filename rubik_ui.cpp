@@ -244,17 +244,16 @@ UI_rfunc(doRotations)
 {
   int counter=0;
   GETLINE(core)
-  String DO=parser(core);
-  if(DO==NIL)
-  {
-    return NIL;
-  }
   GETLINE(UNTIL);
   Stream test;
   do
   {
-    ++counter;
     String DO=parser(core);
+    if(DO==NIL)
+    {
+      break;
+    }
+    ++counter;
     (*this) << DO;
     LOOP_STACK=mergeSimplePaths(LOOP_STACK,DO);
     test.str(UNTIL);
@@ -366,8 +365,6 @@ UI_rfunc(sameCubes)
 UI_rfunc(merge) 
 {
   String A=parser(IS),B=parser(IS);
-  NONILL(A);
-  NONILL(B);
   return mergeSimplePaths(A,B);
 }
 
