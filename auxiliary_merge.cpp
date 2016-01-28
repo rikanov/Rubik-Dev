@@ -49,7 +49,7 @@ String auxiliary::mergeSimplePaths(const String & wA,const String & wB)
   NONILL(B);
   if(A==""||B=="")
   {
-    return wA+wB;
+    return A+B;
   }
   const char sideB=B.front();
   B.erase(B.begin());

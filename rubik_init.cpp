@@ -82,6 +82,7 @@ void Rubik::initCommandComp()
    //  *** User-space functions, macros ***  //
   //========================================//
   
+  auto_comp("get"     )
   auto_comp("defun"   )
   auto_comp("defvar"  )
   auto_comp("define"  )

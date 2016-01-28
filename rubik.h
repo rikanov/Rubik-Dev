@@ -138,6 +138,7 @@ class Rubik
   
   UI_func(progn)
   UI_func(list)
+  UI_func(getValue)
   UI_func(defvar)
   UI_func(defun)
   UI_func(defmacro)

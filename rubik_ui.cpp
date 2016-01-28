@@ -36,6 +36,14 @@ UI_rfunc(progn)
   }
   return Result;
 }
+
+UI_rfunc(getValue)
+{
+  GET(fName)
+  (*Var_space)[fName]=list(IS);
+  return fName;
+}
+
 UI_rfunc(defun)
 {
   GET(fName)

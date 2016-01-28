@@ -84,6 +84,7 @@ UI_rfunc(parser)
    //  *** User-space functions, macros ***  //
   //========================================//
   
+  trigger("get",      getValue)
   trigger("defun",       defun)
   trigger("defvar",     defvar)
   trigger("define",     defvar)
