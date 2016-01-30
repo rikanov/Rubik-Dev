@@ -1,5 +1,7 @@
 defvar is_true nil nil
 
+defvar brute-force-width 200000
+
 defvar upside    UR UF UL UB URF ULF BRU BLU
 defvar downside  DR DF DL DB DRF DLF BRD BLD
 defvar rightside RU RB RD RF URF BRU BRD DRF

@@ -23,7 +23,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	char *buf;
 	if((buf=readline(prompt))==NULL)
 	{
-	  OUT("\nREPL mode has been closed for: ");
+	  OUT("\nREPL mode has been closed for: "<<Object);
 	  free(buf);
 	  return;
 	}

@@ -32,20 +32,29 @@ namespace auxiliary
  std::istream & operator>>(std::istream& is, auxiliary::Sidemarks& sm);
   //============================================================================
   
+  struct Description
+  {
+    int * AllowedSides;
+    int * SolvedState;
+    int * SolutionIdices;
+    mutable int * State;
+  };
+
   struct t_state
   {
     static int order;
-    int * State;
-    int LastSide;
-    String Path;
-    
-    t_state(): State(nullptr) {}
-    t_state(const int * S, const int & L, const String & P);
-    ~t_state();
-    void set(const int * S, const int & L, const String & P);
-    t_state& operator= (const t_state& T);
+    const t_state * parent;
+    int * state;
+    int Op;
+    t_state(): parent(nullptr), state(nullptr) {}
+    String path() const;
+    ~t_state()
+    {
+      delete state;
+      state=nullptr;
+      parent=nullptr;
+    }
   };
-  
   bool checkSimplePath(const String & A);
   String mergeSimplePaths(const String& wA, const String& wB);
   String findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle);
@@ -59,6 +68,7 @@ namespace auxiliary
   unsigned int countWords(Stream& IS);
   unsigned int countWords(const String& S);
   String mirror(const String & a, const char & c);
+  void drawBarLine(const int & bar, const int & barLength);
  
 }
 

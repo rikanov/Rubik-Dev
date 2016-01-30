@@ -76,9 +76,14 @@ UI_rfunc(defvar)
   GET(fName)
   String former=(*Var_space)[fName];
   (*Var_space)[fName]="";
-  while(IS.good())
+  for(bool End=false;IS.good() && !End;)
   {
     GET(S)
+    while(!S.empty() && S.back()==';')
+    {
+      S.pop_back();
+      End=true;
+    }
     if(S==fName)
     {
       S="list "+former+";";

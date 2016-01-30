@@ -114,39 +114,19 @@ bool auxiliary::Sidemarks::sameCubes(const auxiliary::Sidemarks& A, const auxili
 ///=====================================================================
 
 int auxiliary::t_state::order=1;
-
-auxiliary::t_state::t_state(const int* S, const int& L, const std::string& P): 
-  State(new int[order]), 
-  LastSide(L), 
-  Path(P)
+std::string auxiliary::t_state::path() const
 {
-  memcpy(State,S,order*sizeof(int));
-}
-
-auxiliary::t_state& auxiliary::t_state::operator=(const auxiliary::t_state& T)
-{
-  if(this==&T)
+  String last;
+  last.push_back(Topology::SideMarks[Op&7]);
+  if(Op&8)
   {
-    return *this;
+    last.push_back('\'');
   }
-  State=new int[order]; 
-  LastSide=T.LastSide; 
-  Path=T.Path;
-  memcpy(State,T.State,order*sizeof(int)); 
-}
-
-auxiliary::t_state::~t_state()
-{
-  delete State;
-  State=nullptr;
-}
-
-void auxiliary::t_state::set(const int* S, const int& L, const std::string& P)
-{
-  State=new int [order];
-  LastSide=L;
-  Path=P;
-  memcpy(State,S,order*sizeof(int));
+  else if(Op&16)
+  {
+    last.push_back('2');
+  }
+  return parent ? parent->path()+last : "";
 }
 
 int * auxiliary::nestedLoop(int* Array, int depth, const int& UpperBound, const int& LowerBound )
@@ -429,4 +409,15 @@ std::string auxiliary::mirror(const std::string& a, const char& c)
         Result+=add;
     }
     return Result;
+}
+
+void auxiliary::drawBarLine(const int& bar, const int& barLength)
+{
+  String BAR="[";
+  for(int i=0;i<bar;++i) 
+    BAR.push_back('=');
+  for(int i=bar;i<=barLength;++i)
+    BAR.push_back('-');
+  BAR.push_back(']');
+  OUT('\r'<<BAR);
 }

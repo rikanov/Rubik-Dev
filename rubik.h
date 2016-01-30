@@ -18,6 +18,7 @@
 #define LOOP_STACK (*Var_space)["loop-stack"]
 #define BF_SUCCESS (*Var_space)["brute-force-success"]
 #define BF_RESULT  (*Var_space)["brute-force-result"]
+#define BF_WIDTH   std::max(atoi((*Var_space)["brute-force-width"].c_str()),10000)
 
 using namespace auxiliary;
 
@@ -71,15 +72,29 @@ class Rubik
 			
   int 
   checkConditions	(
-			     const int* State, const int* SolvedState, const int* Conditions, int& best_choice) const;
+                        const Description& desc, 
+			int& best_choice, 
+			bool& foundBetter) const;
   
   std::pair<int,String> 
-  seeker		(
-			t_state & Trace, 
-			const int * SolvedState, 
-			const int * Conditions, 
-			const int * AllowedSides) const;
-			
+  seeker		(const Description & desc) const;
+  
+  void 
+  extendNode		(
+			t_state*& trace_start, 
+			t_state*& trace_end, 
+			const int* AllowedSides,
+			int * nstate,
+			const int & state_size) const;
+  int
+  examineNode		(
+                        const Description& desc,
+			t_state * trace_start,
+			t_state & betterState,
+                        int& best_choice, 
+			int * nstate,
+			const int & state_size
+			) const;
   bool 
   variableEquality	(
 			String & A, 
