@@ -242,16 +242,41 @@ int Topology::sideDigit(const char& C)
 {
   return String(SideMarks).find(C)!=STR_END ? Singleton->SideDigits[C] : -1;
 }
-void Topology::operateOnRestrictedSpace(int* Q, const int* R, const int& Rot, const bool & Invert)
+
+//TODO törölni ha nem kell már!!!
+void Topology::operateOnRestrictedSpace(int* Q, const int& Rot, const bool & Invert, const bool & Double)
 {
-  int *q=Q;
-  for(const int * r=R; *r!=-1; ++r)
+  if(Double)
   {
-    *(q++)= Singleton->Cubes[*r].OnTheSide[Rot] ?
-	    Singleton->Rotation[Invert ? OPPOSITE(Rot):Rot][*r] :
-	    *r;
+    for(int *q=Q; *q!=-1; ++q)
+    {
+      if(Singleton->Cubes[*q].OnTheSide[Rot])
+      {
+	*q = Singleton->Rotation[Rot][*q];
+	*q = Singleton->Rotation[Rot][*q];
+      }
+    }    
   }
-  *q=-1;
+  else
+  {
+    for(int *q=Q;*q!=-1;++q)
+    {
+      if(Singleton->Cubes[*q].OnTheSide[Rot])
+      {
+	*q= Singleton->Rotation[Invert ? OPPOSITE(Rot):Rot][*q];
+      }
+    }
+  }
+}
+
+void Topology::operateOnRestrictedSpace(int* Q, const int* R, const int& Rot)
+{
+  for(; *R!=-1; ++R)
+  {
+    *(Q++)= Singleton->Cubes[*R].OnTheSide[Rot] ?
+	    Singleton->Rotation[Rot][*R] : *R;
+  }
+  *Q=-1;
 }
 
 int Topology::rotation(const int& Index, const int& Rot, const bool & Invert)

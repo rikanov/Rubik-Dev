@@ -22,8 +22,10 @@
 
 using namespace auxiliary;
 
+class Rubik_BF;
 class Rubik 
 {
+  friend class Rubik_BF;
   static std::map<String, Rubik*> * Collection; 
   static std::map<String, String> * Var_space;
   
@@ -63,38 +65,6 @@ class Rubik
   is_solved		(const int * Cubes = IdentityMap, 
 			 const int & Limit = NumberOfSideMarks) const;
 			 
-  void 
-  setConditions		(
-			int * SolutionIdices, 
-			int * SolvedState, 
-			int * InitialState, 
-			Stream& IS) const;
-			
-  int 
-  checkConditions	(
-                        const Description& desc, 
-			int& best_choice, 
-			bool& foundBetter) const;
-  
-  std::pair<int,String> 
-  seeker		(const Description & desc) const;
-  
-  void 
-  extendNode		(
-			t_state*& trace_start, 
-			t_state*& trace_end, 
-			const int* AllowedSides,
-			int * nstate,
-			const int & state_size) const;
-  int
-  examineNode		(
-                        const Description& desc,
-			t_state * trace_start,
-			t_state & betterState,
-                        int& best_choice, 
-			int * nstate,
-			const int & state_size
-			) const;
   bool 
   variableEquality	(
 			String & A, 
@@ -209,4 +179,31 @@ public:
   
   String file_open(const char * F);
 };
+
+class Rubik_BF
+{
+  int seekerStep;
+  int seekerSize;
+  int best_choice;
+  bool foundBetter;
+  const Rubik * RubikBase;
+  int * AllowedSides;
+  int * InitialState;
+  int * SolvedState;
+  int * SolutionIndices;
+  t_state * Solution;
+  t_state * Trace, * trace_start, * trace_end, * toTest;
+  const int barLength;
+  
+public:
+  Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
+  void initStates(const int & SizeS);
+  void initTrace();
+  void setConditions(Stream & IS);
+    int checkConditions();
+  std::pair<int,String> start();
+  void extendNode();
+    int examineNode();
+};
+
 #endif

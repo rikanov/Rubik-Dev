@@ -81,7 +81,8 @@ public:
   static bool defOperation(int* Q, const String& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
   static bool operate(int * Q, const int & Rot, const int & A);
   static void operate(const int * Q, const int * R, int * Result);
-  static void operateOnRestrictedSpace(int* Q, const int* R, const int& Rot, const bool& Invert);
+  static void operateOnRestrictedSpace(int* Q, const int& Rot, const bool & Invert, const bool & Double);
+  static void operateOnRestrictedSpace(int* Q, const int* R, const int& Rot);
   static void inverse(const int* Q, int* Result);
   static void inverse(int* Q);
   static void actOn(int * Q, const int * R);

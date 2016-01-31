@@ -32,14 +32,6 @@ namespace auxiliary
  std::istream & operator>>(std::istream& is, auxiliary::Sidemarks& sm);
   //============================================================================
   
-  struct Description
-  {
-    int * AllowedSides;
-    int * SolvedState;
-    int * SolutionIdices;
-    mutable int * State;
-  };
-
   struct t_state
   {
     static int order;
@@ -55,6 +47,7 @@ namespace auxiliary
       parent=nullptr;
     }
   };
+
   bool checkSimplePath(const String & A);
   String mergeSimplePaths(const String& wA, const String& wB);
   String findPath(const Sidemarks& From, const Sidemarks& To, const bool& AllowMiddle);

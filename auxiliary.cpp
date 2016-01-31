@@ -120,11 +120,11 @@ std::string auxiliary::t_state::path() const
   last.push_back(Topology::SideMarks[Op&7]);
   if(Op&8)
   {
-    last.push_back('\'');
+    last.push_back('2');
   }
   else if(Op&16)
   {
-    last.push_back('2');
+    last.push_back('\'');
   }
   return parent ? parent->path()+last : "";
 }
