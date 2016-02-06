@@ -205,3 +205,17 @@ int Rubik_BF::examineNode()
 {
  
 }
+
+Rubik_BF::~Rubik_BF()
+{
+  for(trace_start=Trace; trace_start!=trace_end;++trace_start)
+  {
+    trace_start->dealloc();
+  }
+  delete[] Trace;
+  Trace=nullptr;
+  trace_start=nullptr;
+  trace_end=nullptr;
+  Solution=nullptr;
+  toTest=nullptr;
+}

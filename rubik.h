@@ -197,19 +197,7 @@ class Rubik_BF
   
 public:
   Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
-  ~Rubik_BF() 
-  {
-    for(trace_start=Trace; trace_start!=trace_end;++trace_start)
-    {
-      trace_start->dealloc();
-    }
-    delete[] Trace;
-    Trace=nullptr;
-    trace_start=nullptr;
-    trace_end=nullptr;
-    Solution=nullptr;
-    toTest=nullptr;
-  }
+  ~Rubik_BF();
   void initStates(const int & SizeS);
   void initTrace();
   void setConditions(Stream & IS);
