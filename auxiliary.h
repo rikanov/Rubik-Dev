@@ -40,12 +40,9 @@ namespace auxiliary
     int Op;
     t_state(): parent(nullptr), state(nullptr) {}
     String path() const;
-    ~t_state()
-    {
-      delete state;
-      state=nullptr;
-      parent=nullptr;
-    }
+    t_state* alloc();
+    void dealloc();
+    void copy(const int* C);
   };
 
   bool checkSimplePath(const String & A);

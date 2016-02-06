@@ -1,6 +1,7 @@
 #include"rubik.h"
 
 Rubik_BF::Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth):
+Trace(nullptr),
 RubikBase(R),
 seekerStep(bfWidth),
 barLength(60)
@@ -37,7 +38,7 @@ void Rubik_BF::initTrace()
   Trace=new t_state[seekerSize];
   trace_start=Trace;
   trace_end=trace_start+1;
-  trace_start->state=InitialState;
+  trace_start->alloc()->copy(InitialState);
   best_choice=0;
 }
 
@@ -127,8 +128,9 @@ int Rubik_BF::checkConditions()
 
 std::pair< int, std::string > Rubik_BF::start()
 {
-  int trace_length=1; 
+  int trace_length=16; 
   int result=0;
+  int bar=0;
   for(foundBetter=false; trace_length<seekerSize;++trace_start)
   {
     toTest=trace_start;
@@ -148,13 +150,16 @@ std::pair< int, std::string > Rubik_BF::start()
       extendNode();
     }
   }
-  int bar=0;
   while(++trace_start!=trace_end)
   {
+#ifndef SILENT
     if(--trace_length % seekerStep ==0)
     {
       auxiliary::drawBarLine(bar++, barLength);
     }
+#elif
+    --trace_length;
+#endif
     toTest=trace_start;
     result=checkConditions();
     if(result)
@@ -167,7 +172,8 @@ std::pair< int, std::string > Rubik_BF::start()
       Solution=trace_start;
     }
   }
-  return std::pair<int,String> (result,Solution->path());
+  String Result=Solution->path();
+  return std::pair<int,String> (result,Result);
 }
 
 void Rubik_BF::extendNode()
@@ -179,14 +185,14 @@ void Rubik_BF::extendNode()
       continue;
     }
     const int A=*a-1;
-    trace_end->state=new int[t_state::order];
+    trace_end->alloc();
     Topology::operateOnRestrictedSpace(trace_end->state,trace_start->state,A);
     trace_end->parent=trace_start;
     trace_end->Op=*a;
     ++trace_end;
     for(int mode=1;mode<3;++mode)
     {
-      trace_end->state=new int[t_state::order];
+      trace_end->alloc();
       Topology::operateOnRestrictedSpace(trace_end->state,(trace_end-1)->state,A);
       trace_end->parent=trace_start;
       trace_end->Op=(*a)|(mode<<3);

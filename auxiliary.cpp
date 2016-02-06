@@ -129,6 +129,23 @@ std::string auxiliary::t_state::path() const
   return parent ? parent->path()+last : "";
 }
 
+  auxiliary::t_state * auxiliary::t_state::alloc()
+  {
+    state=new int[order];
+    return this;
+  }
+  void auxiliary::t_state::dealloc()
+  {
+    delete state;
+    state=nullptr;
+  }
+  void auxiliary::t_state::copy(const int* C)
+  {
+    alloc();
+    memcpy(state,C,order*sizeof(int));
+  }
+///=====================================================================
+
 int * auxiliary::nestedLoop(int* Array, int depth, const int& UpperBound, const int& LowerBound )
 {
   int *i=Array;
