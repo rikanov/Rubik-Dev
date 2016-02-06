@@ -24,9 +24,9 @@ void Topology::singleton()
 {
   if(Singleton==nullptr)
   {
-    Singleton=new Topology;
-    srand(time(NULL));
+    Singleton=new Topology; 
   }
+    srand(time(NULL));
 }
 
 
@@ -59,16 +59,7 @@ Topology::Topology()
   makeConnectionBetween(4,0,2);
  
   setHash(); 
-  
-  for(Digit=0; Digit<6; ++Digit)
-  {
-    int * R=new int[NumberOfSideMarks];
-    FOR_FUNC(index)
-    {
-      R[index]=computeRotate(Cubes[index],Digit);
-    }
-    Rotation[Digit]=R;
-  }
+  buildRotations();
 }
 
 int Topology::hash(const int& r2, const int& r1, const int& r0)
@@ -243,210 +234,6 @@ int Topology::sideDigit(const char& C)
   return String(SideMarks).find(C)!=STR_END ? Singleton->SideDigits[C] : -1;
 }
 
-//TODO törölni ha nem kell már!!!
-void Topology::operateOnRestrictedSpace(int* Q, const int& Rot, const bool & Invert, const bool & Double)
-{
-  if(Double)
-  {
-    for(int *q=Q; *q!=-1; ++q)
-    {
-      if(Singleton->Cubes[*q].OnTheSide[Rot])
-      {
-	*q = Singleton->Rotation[Rot][*q];
-	*q = Singleton->Rotation[Rot][*q];
-      }
-    }    
-  }
-  else
-  {
-    for(int *q=Q;*q!=-1;++q)
-    {
-      if(Singleton->Cubes[*q].OnTheSide[Rot])
-      {
-	*q= Singleton->Rotation[Invert ? OPPOSITE(Rot):Rot][*q];
-      }
-    }
-  }
-}
-
-void Topology::operateOnRestrictedSpace(int* Q, const int* R, const int& Rot)
-{
-  for(; *R!=-1; ++R)
-  {
-    *(Q++)= Singleton->Cubes[*R].OnTheSide[Rot] ?
-	    Singleton->Rotation[Rot][*R] : *R;
-  }
-  *Q=-1;
-}
-
-int Topology::rotation(const int& Index, const int& Rot, const bool & Invert)
-{
-  return Singleton->Rotation[Invert ? OPPOSITE(Rot):Rot][Index];
-}
-
-
-bool Topology::operate(int* Q, const int& Rot, const int& A)
-{
-  bool Result=false;
-  if(A & AllCubes)
-  {
-    if(A & DoubleMove)
-    {
-      EACH_FUNC(Q,q,index)
-      {
-	  *q=Singleton->Rotation[Rot][*q];
-	  *q=Singleton->Rotation[Rot][*q];
-      }
-      
-    }	
-    else
-    {
-      EACH_FUNC(Q,q,index)
-      {
-	  *q=Singleton->Rotation[A&Inverter ? OPPOSITE(Rot) : Rot][*q]; 
-      }
-    }
-    Result=true;
-  }
-  else
-  {
-    EACH_FUNC(Q,q,index)
-    {
-      const Cube C=Singleton->Cubes[*q];
-      bool Acting=false;
-      const bool Invert=A>Inverter;
-      switch(A)
-      {
-	case InvertSide:
-	case DoubleSide:  
-	case SingleSide:
-	  Acting= C.OnTheSide[Rot]; 
-	  break;
-	//----------------
-	  
-	case InvertMiddle:
-	case DoubleMiddle:
-	case Middle:
-	  Acting= ! C.OnTheSide[Rot] && ! C.OnTheSide[OPPOSITE(Rot)]; 
-	  break;
-	//----------------
-	  
-	case InvertBlock:
-	case DoubleBlock:
-	case Block:
-	  Acting= ! C.OnTheSide[OPPOSITE(Rot)]; 
-	  break;
-	//----------------
-	  
-	default:
-	  break; // an exception should be thrown from here
-      }
-      if(Acting)
-      {
-	Result=true;
-	*q=Singleton->Rotation[Invert ? OPPOSITE(Rot) : Rot][*q]; 
-	if( !Invert && (A & DoubleMove))
-	{
-	  *q=Singleton->Rotation[Rot][*q];
-	}	  
-      }
-    }
-  }
-  return Result;
-}
-
-void Topology::operate(const int* Q, const int* R, int* S) // Group operation: QR -> S
-{
-  FOR_FUNC(index)
-  {
-    S[index]=R[Q[index] ];
-  }
-}
-
-bool Topology::defOperation(int* Q, const std::string& Operations, const int & Including, const int & Restriction)
-{
-  bool Result=false;
-  CPY_FUNC(Q,IdentityMap)
-  for(std::string::const_iterator it=Operations.begin(); it!=Operations.end(); ++it)
-  {
-    const char C=*it;
-    char Rot;
-    switch(C)
-    {
-      case 'X':
-	Rot='R';
-	break;
-      case 'Y':
-	Rot='U';
-	break;
-      case 'Z':
-	Rot='F';
-	break;
-      default:
-	Rot=C;
-    }
-    const int R=Singleton->SideDigits[UPCASE(Rot)]-1;
-    int Modifier= IS_LOWCASE(C) ? Block : SingleSide;
-    if( it+1 !=Operations.end())
-    {
-      switch(*(it+1))
-      {
-	case '\'':
-	  Modifier|=Inverter;
-	  ++it;
-	  break;
-	case '|':
-	  Modifier^=SingleSide;
-	  Modifier|=Middle;
-	  ++it;
-	  if(it+1==Operations.end() || (*(it+1)!='2' && *(it+1)!='|'))
-	  {
-	    break;
-	  } // don't break if middle block rotation is doubled!
-	case '2':
-	  Modifier|=DoubleMove; 
-	  ++it; 
-	  break;
-	default:
-	  break;
-      }
-    }
-    if((Modifier&Restriction)==Restriction)
-    {
-      Result=operate(Q,R,Modifier|Including);
-    }
-  }
-  return Result;
-}
-
-void Topology::inverse(const int* Q, int* Result)
-{
-  C_EACH_FUNC(Q,q,index)
-  {
-    Result[*q]=index;
-  }
-}
-
-void Topology::inverse(int* Q)
-{
-  EMPTY(temp)
-  CPY_FUNC(temp, Q) 
-  C_EACH_FUNC(temp,t,index)
-  {
-    Q[*t]=index;
-  }
-}
-
-void Topology::actOn(int* Q, const int* R)
-{
-  int *q=Q;
-  FOR_FUNC(index)
-  {
-    *q=R[*q];
-    ++q;
-  }
-}
-
 char Topology::oppositeSide(const char& C)
 {
   return SideMarks[7-(String(SideMarks).find(C))];
@@ -456,7 +243,7 @@ Topology::~Topology()
 {
   Side ** S=Sides;
   const int ** R=Rotation;
-  for(int digit=0;digit<6;++digit)
+  for(int digit=0;digit<256;++digit)
   {
     delete *(S++);
     delete *(R++);    

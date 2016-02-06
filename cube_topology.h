@@ -36,13 +36,15 @@ private:
   int SideDigits[90]={};
   int Hash_In[CompressedArraySize]={};
   int Hash_Out[NumberOfSideMarks]={};
-  const int * Rotation[6];
+  const int * Rotation[256]={};
   
   static int hash(const int & r2, const int & r1, const int & r0);
   void setHash();
   void makeConnectionBetween(Topology::Side* A, Topology::Side* B, const int& RotatingSide);
   void makeConnectionBetween(const int& A, const int& B, const int& RotatingSide);
   int computeRotate(const Cube& C, const int& R);
+  void buildRotations();
+  bool createRotation(int* R, const int & side, const int & mod);
   
   Topology();
   ~Topology();
@@ -71,6 +73,8 @@ public:
     AllCubes=16
   } Modifiers;
   
+  static int token(String S);
+  static String token(const int& R);
   static const bool& onTheSide(const int& In, const int& S);
   static int getIndex(const String & SMarks);
   static int getIndex(const int & x, const int & y, const int & z);
@@ -79,7 +83,7 @@ public:
   static int sideDigit(const char & C);
   static int rotation(const int& Index, const int& Rot, const bool& Invert=false);
   static bool defOperation(int* Q, const String& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
-  static bool operate(int * Q, const int & Rot, const int & A);
+  static const int* operate(const int& Rot, const int& A);
   static void operate(const int * Q, const int * R, int * Result);
   static void operateOnRestrictedSpace(int* Q, const int& Rot, const bool & Invert, const bool & Double);
   static void operateOnRestrictedSpace(int* Q, const int* R, const int& Rot);

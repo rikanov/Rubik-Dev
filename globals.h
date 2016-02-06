@@ -28,7 +28,7 @@
 #define IS_LOWCASE(x) ((x)&32)
 #define FUNCTOR(x) int x[NumberOfSideMarks]; \
 		    memcpy(x,IdentityMap,sizeof IdentityMap);
-#define EMPTY(x) int x[NumberOfSideMarks]; 
+#define EMPTY(x) int x[NumberOfSideMarks]={}; 
 #define CPY_FUNC(x,y) memcpy(x,y, NumberOfSideMarks*sizeof(int)); // DON'T use sizeof y or x !!!!!!!!
 #define FOR_FUNC(x) for(int x=0;x<NumberOfSideMarks;++x)
 #define EACH_FUNC(x,y,i) for(int* y=x,i=0;i<NumberOfSideMarks;++y,++i)
