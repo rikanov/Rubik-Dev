@@ -10,14 +10,13 @@ public:
 private:
   static const Topology * Singleton;
   static const char PositiveGroup[][4];
-  
+  int SideGroup[4];
   struct Side
   {
     const char SideMark;
     const int  Digit;
     
     Side * ROT[6];
-    
     Side(const char& S, const int& D);
   } * Sides[6];
   
@@ -38,6 +37,8 @@ private:
   int Hash_Out[NumberOfSideMarks]={};
   const int * Rotation[256]={};
   
+  String tokenTrails[15]={};
+  
   static int hash(const int & r2, const int & r1, const int & r0);
   void setHash();
   void makeConnectionBetween(Topology::Side* A, Topology::Side* B, const int& RotatingSide);
@@ -45,20 +46,21 @@ private:
   int computeRotate(const Cube& C, const int& R);
   void buildRotations();
   bool createRotation(int* R, const int & side, const int & mod);
+  void createTokens();
   
   Topology();
   ~Topology();
 public:
   static void singleton();
   static void close();
-  
+  static String token(int T);
   static const enum // {0,...,15,16}
   {
     NotDefined	=0,
-    SingleSide	=1, 
-    Middle	=2,
-    DoubleMove	=4,
-    Inverter	=8,
+    DoubleMove	=1,
+    Inverter	=2,
+    SingleSide	=4, 
+    Middle	=8,
     
     Block	=SingleSide+Middle, 
     
@@ -72,9 +74,7 @@ public:
    
     AllCubes=16
   } Modifiers;
-  
-  static int token(String S);
-  static String token(const int& R);
+
   static const bool& onTheSide(const int& In, const int& S);
   static int getIndex(const String & SMarks);
   static int getIndex(const int & x, const int & y, const int & z);
@@ -82,6 +82,7 @@ public:
   static const String & sideMarksOf(const int & Index);
   static int sideDigit(const char & C);
   static int rotation(const int& Index, const int& Rot, const bool& Invert=false);
+  static const int * rotation(const int& Rot) {return Singleton->Rotation[Rot];}
   static bool defOperation(int* Q, const String& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
   static const int* operate(const int& Rot, const int& A);
   static void operate(const int * Q, const int * R, int * Result);
@@ -91,5 +92,6 @@ public:
   static void inverse(int* Q);
   static void actOn(int * Q, const int * R);
   static char oppositeSide(const char& C);
+  static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
 };
 #endif

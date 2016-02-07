@@ -192,19 +192,19 @@ class Rubik_BF
   int * SolvedState;
   int * SolutionIndices;
   t_state * Solution;
-  t_state * Trace, * trace_start, * trace_end, * toTest;
+  t_state * Trace, * trace_start, * trace_end;
   const int barLength;
-  
-public:
-  Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
-  ~Rubik_BF();
+
   void initStates(const int & SizeS);
   void initTrace();
   void setConditions(Stream & IS);
-    int checkConditions();
+  int checkConditions(const int * C=IdentityMap);
+  void extendNode(int & trace_length);
+  int examineNode();  
+public:
+  Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
   std::pair<int,String> start();
-  void extendNode();
-    int examineNode();
+  ~Rubik_BF();
 };
 
 #endif

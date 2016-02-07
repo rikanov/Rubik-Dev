@@ -1,5 +1,5 @@
 defvar loop-stack
-defvar brute-force-width 60000
+defvar brute-force-width 20000
 
 do brute_force all UR UL UF UB 4 \
                    DR DL DF DB 4 \

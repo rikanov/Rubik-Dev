@@ -3,8 +3,17 @@
 
 #include"cube_topology.h"
 
+static inline bool is_inverse(const int& A)
+{
+  return A&Topology::Inverter;
+}
+
 void Topology::buildRotations()
 {
+  SideGroup[0]=0;
+  SideGroup[1]=SingleSide;
+  SideGroup[2]=DoubleSide;
+  SideGroup[3]=InvertSide;
   for(int Digit=0; Digit<6; ++Digit)
   {
     int * R=new int[NumberOfSideMarks];
@@ -20,7 +29,7 @@ void Topology::buildRotations()
     {
       int * R=new int[NumberOfSideMarks];
       CPY_FUNC(R,IdentityMap)
-      Rotation[mod*8+side]=createRotation(R,side,mod) ? R : nullptr;
+      Rotation[mod*8+side]=createRotation(R,side,mod) ? R : IdentityMap;
     }
   }
 }
@@ -58,7 +67,7 @@ bool Topology::createRotation(int* Q, const int& Rot, const int& A)
     {
       EACH_FUNC(Q,q,index)
       {
-	  *q=Rotation[A&Inverter ? OPPOSITE(Rot) : Rot][*q]; 
+	  *q=Rotation[is_inverse(A) ? OPPOSITE(Rot) : Rot][*q]; 
       }
     }
     Result=true;
@@ -69,7 +78,7 @@ bool Topology::createRotation(int* Q, const int& Rot, const int& A)
     {
       const Cube C=Cubes[*q];
       bool Acting=false;
-      const bool Invert=A>Inverter; 
+      const bool Invert=is_inverse(A); 
       switch(A)
       {
 	case InvertSide:

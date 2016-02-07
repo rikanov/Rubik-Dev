@@ -60,6 +60,7 @@ Topology::Topology()
  
   setHash(); 
   buildRotations();
+  createTokens();
 }
 
 int Topology::hash(const int& r2, const int& r1, const int& r0)
@@ -177,6 +178,28 @@ int Topology::computeRotate(const Cube & C, const int& R)
 void Topology::makeConnectionBetween(const int& A, const int& B, const int& RotatingSide)
 {
   makeConnectionBetween(Sides[A],Sides[B],RotatingSide);
+}
+
+void Topology::createTokens()
+{
+  tokenTrails[DoubleSide]	="2";
+  tokenTrails[DoubleBlock]	="2";
+  tokenTrails[Middle]		="|";
+  tokenTrails[DoubleMiddle]	="||";
+  tokenTrails[InvertSide]	="'";
+  tokenTrails[InvertMiddle]	="|'";
+  tokenTrails[InvertBlock]	="'";
+}
+
+std::string Topology::token(int T)
+{
+  String Result;
+  char C=SideMarks[1+(T&7)];
+  T>>=3;
+  C+=((T&Block)==Block)?32:0; 
+  Result.push_back(C); 
+  Result+=Singleton->tokenTrails[T];
+  return Result;
 }
 
 void Topology::makeConnectionBetween(Topology::Side* A, Topology::Side* B, const int & RotatingSide)

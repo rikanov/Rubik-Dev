@@ -48,8 +48,8 @@ void Rubik::suppose(const Sidemarks& S)
 
 void Rubik::align(const Sidemarks& A, const Sidemarks& B)
 {
-  EMPTY(Act) OUT_("test defOperation()")
-  Topology::defOperation(Act,findPath(A,B,false),Topology::AllCubes);OUT_("done")
+  EMPTY(Act)
+  Topology::defOperation(Act,findPath(A,B,false),Topology::AllCubes);
   Topology::actOn(A_map,Act);
   Topology::inverse(A_map,B_map);
   Topology::actOn(B_map,Act);

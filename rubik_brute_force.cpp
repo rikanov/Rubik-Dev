@@ -35,7 +35,9 @@ void Rubik_BF::initTrace()
   for(const int * I=InitialState; *I!=-1; ++I,++length);
   t_state::order=length;
   seekerSize=seekerStep*barLength;
-  Trace=new t_state[seekerSize];
+  const int maximumNumberOfNodes=200; // having improved Trace lenght by this overestimated vault, we mustn't check overflow
+				     // in each iteration step. (preformance issue)
+  Trace=new t_state[seekerSize+maximumNumberOfNodes];
   trace_start=Trace;
   trace_end=trace_start+1;
   trace_start->alloc()->copy(InitialState);
@@ -94,7 +96,7 @@ void Rubik_BF::setConditions(std::stringstream& IS)
   InitialState[sp_end]=-1; // end of inner state
 }
 
-int Rubik_BF::checkConditions()
+int Rubik_BF::checkConditions(const int * Foresight)
 {
   foundBetter=false;
   int Result=1;
@@ -121,23 +123,25 @@ int Rubik_BF::checkConditions()
 	continue;
       }
     }
-    cond+=(toTest->state[*c]==SolvedState[*c]);
+    cond+=(Foresight[trace_start->state[*c]]==SolvedState[*c]);
   }
   return found ? Result : 0;
 }
 
 std::pair< int, std::string > Rubik_BF::start()
 {
-  int trace_length=16; 
+  Solution=trace_start;
+  int trace_length=1;  
   int result=0;
+  String Result;
   int bar=0;
   for(foundBetter=false; trace_length<seekerSize;++trace_start)
   {
-    toTest=trace_start;
     result=checkConditions();
     if(result)
     {
-      Solution=trace_start;
+      Solution=trace_start;  
+      Result=Solution->path();
       break;
     }
     else
@@ -145,65 +149,97 @@ std::pair< int, std::string > Rubik_BF::start()
       if(foundBetter)
       {
 	Solution=trace_start;
+	Result=Solution->path();
       }
-      trace_length+=15;
-      extendNode();
+      extendNode(trace_length);
     }
   }
-  while(++trace_start!=trace_end)
+  if(result==0)
   {
+    Solution=new t_state;
+    while(++trace_start!=trace_end)
+    { 
 #ifndef SILENT
-    if(--trace_length % seekerStep ==0)
-    {
-      auxiliary::drawBarLine(bar++, barLength);
-    }
+      if(--trace_length % seekerStep ==0)
+      {
+	auxiliary::drawBarLine(bar++, barLength);
+      }
 #elif
-    --trace_length;
+      --trace_length;
 #endif
-    toTest=trace_start;
-    result=checkConditions();
-    if(result)
-    {
-      Solution=trace_start;
-      break;
-    }
-    else if(foundBetter)
-    {
-      Solution=trace_start;
-    }
+      result=examineNode();
+      if(result||foundBetter)
+      {
+	Result=Solution->path();
+      }
+      if(result)
+      {	
+	break;
+      }
+    }  
+    delete Solution;
+    Solution=nullptr;
   }
-  String Result=Solution->path();
+  OUT_("  "<<Result);
   return std::pair<int,String> (result,Result);
 }
 
-void Rubik_BF::extendNode()
+void Rubik_BF::extendNode(int & trace_length)
 {
   for(const int *a=AllowedSides; *a!=-1; ++a)
   {
-    if(*a==((trace_start->Op)&7))
+    const int A=(*a)-1;
+    if(A==((trace_start->Op)&7))
     {
       continue;
     }
-    const int A=*a-1;
     trace_end->alloc();
     Topology::operateOnRestrictedSpace(trace_end->state,trace_start->state,A);
     trace_end->parent=trace_start;
-    trace_end->Op=*a;
-    ++trace_end;
-    for(int mode=1;mode<3;++mode)
+    trace_end->Op=A+Topology::sideGroup(1);
+    ++trace_end; ++trace_length;
+    for(int mode=2;mode<4;++mode)
     {
       trace_end->alloc();
       Topology::operateOnRestrictedSpace(trace_end->state,(trace_end-1)->state,A);
       trace_end->parent=trace_start;
-      trace_end->Op=(*a)|(mode<<3);
-      ++trace_end;
+      trace_end->Op=A+Topology::sideGroup(mode);
+      ++trace_end; ++trace_length;
     }
   }
 }
 
 int Rubik_BF::examineNode()
 {
- 
+  int result=checkConditions();
+  if(result||foundBetter)
+  {
+    Solution->parent=trace_start->parent;
+    Solution->Op=trace_start->Op;
+  }
+  for(const int *a=AllowedSides; *a!=-1 && result==0; ++a)
+  {
+    const int A=(*a)-1;
+    if(A==((trace_start->Op)&7))
+    {
+      continue;
+    }
+    for(int rot=1;rot<4;++rot)
+    {
+      const int SideRot=A+Topology::sideGroup(rot);
+      result=checkConditions(Topology::rotation(SideRot));
+      if(result||foundBetter)
+      {
+	Solution->parent=trace_start;
+	Solution->Op=SideRot;
+      }
+      if(result)
+      {
+	break;
+      }
+    }
+  }
+  return result;
 }
 
 Rubik_BF::~Rubik_BF()
@@ -213,9 +249,8 @@ Rubik_BF::~Rubik_BF()
     trace_start->dealloc();
   }
   delete[] Trace;
-  Trace=nullptr;
   trace_start=nullptr;
   trace_end=nullptr;
   Solution=nullptr;
-  toTest=nullptr;
+  Trace=nullptr;
 }
