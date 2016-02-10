@@ -182,23 +182,17 @@ public:
 
 class Rubik_BF
 {
-  int seekerStep;
   int seekerSize;
   int best_choice;
   bool foundBetter;
   const Rubik * RubikBase;
-  int * AllowedSides;
   int * InitialState;
   int * SolvedState;
-  int * SolutionIndices;
-  t_state * Solution;
-  t_state * Trace, * trace_start, * trace_end;
-  const int barLength;
 
   void initStates(const int & SizeS);
   void initTrace();
   void setConditions(Stream & IS);
-  int checkConditions(const int * C=IdentityMap);
+  int checkConditions(const int* Foresight);
   void extendNode(int & trace_length);
   int examineNode();  
 public:

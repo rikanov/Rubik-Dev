@@ -28,9 +28,43 @@ void Topology::singleton()
   }
     srand(time(NULL));
 }
+std::string Topology::t_state::path() const
+{
+  String last;
+  last.push_back(Topology::SideMarks[1+(Op&7)]);
+  if(Op&16)
+  {
+    last.push_back('\'');
+  }
+  else if(Op&8)
+  {
+    last.push_back('2');
+  }
+//  last= Op ? Topology::token(Op) : "";
+  return parent ? parent->path()+last : "";
+}
+
+Topology::t_state * Topology::t_state::alloc()
+{
+  state=new int[NumberOfSideMarks];
+  return this;
+}
+void Topology::t_state::dealloc()
+{
+  delete state;
+  state=nullptr;
+}
+void Topology::t_state::copy(const int* C)
+{
+  alloc();
+  CPY_FUNC(state,C)
+}
+
+///=====================
 
 
-Topology::Topology()
+Topology::Topology():
+Trace(new t_state[TraceSize+20])
 {
   int Digit=0;
   for(const char * p=SideMarks; *p!='\0'; ++p)
@@ -61,6 +95,7 @@ Topology::Topology()
   setHash(); 
   buildRotations();
   createTokens();
+  initTrace();
 }
 
 int Topology::hash(const int& r2, const int& r1, const int& r0)

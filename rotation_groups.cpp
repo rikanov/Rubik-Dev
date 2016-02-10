@@ -218,4 +218,48 @@ void Topology::actOn(int* Q, const int* R)
   }
 }
 
+void Topology::initTrace()
+{
+  for(int i=0;i<7;++i)
+  {
+    Extender[i]=new t_state[20]; // 3*6+1+1;
+    Extender[i]->alloc()->copy(IdentityMap); 
+    t_state *node=Extender[i]+1;
+    for(int j=0;j<6;++j)
+    {
+      if(j==i)
+      {
+	continue;
+      }
+      node->alloc()->copy(Rotation[j+SingleSide*8]);
+      for(int k=2;k<4;++k)
+      {
+	operate(node->state,Rotation[j+SingleSide*8],(node+1)->alloc()->state); 
+	(++node)->Op=j+SideGroup[k]*8;
+	node->parent=Extender[i];
+      }
+    }
+  }
+  OUT_("trace build...")
+  t_state *node=Trace, *trail=Trace;
+  int length=0;
+  for(t_state * e=Extender[6];e->state; ++e)
+  {
+    *(trail++)=*e; //TODO
+    ++length;
+  }
+  OUT_("init done..")
+  ++node;
+  while(length<TraceSize)
+  {
+    for(const t_state * e=Extender[(node->Op)&7]+1;e->state; ++e, ++length)
+    {
+      operate(node->state,e->state,(trail++)->alloc()->state);
+      trail->Op=e->Op;
+      trail->parent=node;
+    }
+    ++node;
+  }
+  OUT_("done")
+}
 #endif

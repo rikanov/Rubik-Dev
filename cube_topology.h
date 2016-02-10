@@ -30,6 +30,23 @@ private:
     
     Cube();
   } Cubes[NumberOfSideMarks];
+public: 
+  struct t_state
+  {
+    const t_state * parent;
+    int * state;
+    int Op;
+    t_state(): parent(nullptr), state(nullptr),Op(0) {}
+    String path() const;
+    t_state* alloc();
+    void dealloc();
+    void copy(const int* C);
+  };
+private:
+  const int TraceSize=1000000;
+  t_state * Trace;
+  t_state * Extender[7];
+  void initTrace();
   
   void setEigenvalue(Topology::Cube& C);
   int SideDigits[90]={};
@@ -93,5 +110,6 @@ public:
   static void actOn(int * Q, const int * R);
   static char oppositeSide(const char& C);
   static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
+  static const t_state * getTrace() {return Singleton->Trace;}
 };
 #endif
