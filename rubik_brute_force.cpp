@@ -46,71 +46,76 @@ void Rubik_BF::setConditions(std::stringstream& IS)
     }
     ++sp;
   }
+  if(s_counter)
+  {
+    *(sp++)=-s_counter;
+  }
   *sp=-256;
   FOR_FUNC(i)
   {
-    InitialState[i]=RubikBase->locationOf(i);
+    InitialState[i]=RubikBase->whatIs(i);
   }
-  for(int *s=SolvedState;*s!=-256;++s)
-  {
-    OUT((*s)<<' ')
-  }NL_
 }
 
-int Rubik_BF::checkConditions(const int * Foresight)
+int Rubik_BF::checkConditions(const int * Foresight, const int * Trail)
 {
   foundBetter=false;
-  int Result=1;
+  int Result=0;
   int cond=0;
   bool found=false;
   for(const int *c=SolvedState; *c!=-256; ++c)
   {
     if(*c<0)
     {
+      ++Result;
       if(cond>=-(*c))
       {
-	found=true; OUT_("found best")
-	break;
-      }
-      else
-      {	
-	if(cond>best_choice)
-	{
-	  best_choice=cond; OUT_("found better")
-	  foundBetter=true;
-	}
+	found=true;
 	cond=0;
-	++Result;
-	continue;
+	break;
       }
     }
     else
     {
-      cond+=(Foresight[InitialState[*c]]==*c);
+      cond+=(InitialState[*c]==Trail[Foresight[*c]]);
     }
+  }
+  if(cond>best_choice)
+  {
+    best_choice=cond; 
+    foundBetter=true;
   }
   return found ? Result : 0;
 }
 
 std::pair< int, std::string > Rubik_BF::start()
 {
+  const Topology::t_state* Trace=Topology::getTrace();
   int result=0;
   best_choice=0;
   String Result;
+  const int step=Topology::TraceSize/30;
   int bar=0;
-  for(const Topology::t_state* T=Topology::getTrace();T!=nullptr;++T)
+  for(const Topology::t_state* T=Topology::getTrace();result==0 && T->state!=nullptr;++T)
   {
-    if((bar++)%50000==0)
+    if((bar++)%step==0)
     {
-      auxiliary::drawBarLine(bar/50000,19);
+      auxiliary::drawBarLine(bar/step,30);
     }
-    result=checkConditions(T->state); 
-    if(result||foundBetter)
-    {
-      Result=T->path();
+    for(const Topology::t_state * trail=Topology::getExtender((T->Op)&7)+1;trail->state!=nullptr;++trail)
+    { 
+      result=checkConditions(T->state,trail->state); 
+      if(result||foundBetter)
+      {
+	Result=auxiliary::mergeSimplePaths(T->path(),trail->path());
+      }
+      if(result)
+      {
+	break; 
+      }
     }
   }
-  OUT_("Result:  "<<Result);
+  OUT_("Result:  "<<Result<<(result ? " result: " : " best choice: ")<<(result?result:best_choice));
   return std::pair<int,String> (result,Result);
 }
 

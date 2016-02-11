@@ -224,37 +224,44 @@ void Topology::initTrace()
   {
     Extender[i]=new t_state[20]; // 3*6+1+1;
     Extender[i]->alloc()->copy(IdentityMap); 
-    t_state *node=Extender[i]+1;
+    t_state *node=Extender[i];
     for(int j=0;j<6;++j)
     {
       if(j==i)
       {
 	continue;
       }
-      node->alloc()->copy(Rotation[j+SingleSide*8]);
+      (++node)->alloc()->copy(IdentityMap);
+      actOn(node->state,Rotation[j+SingleSide*8]);
+      node->Op=j+SingleSide*8;
+      node->parent=Extender[i];
       for(int k=2;k<4;++k)
       {
-	operate(node->state,Rotation[j+SingleSide*8],(node+1)->alloc()->state); 
-	(++node)->Op=j+SideGroup[k]*8;
+	(node+1)->alloc()->copy(node->state);
+	++node;
+	actOn(node->state,Rotation[j+SingleSide*8]);
+	node->Op=j+SideGroup[k]*8;
 	node->parent=Extender[i];
       }
     }
+    (++node)->state=nullptr;
   }
   OUT_("trace build...")
   t_state *node=Trace, *trail=Trace;
   int length=0;
-  for(t_state * e=Extender[6];e->state; ++e)
+  for(t_state * e=Extender[6];e->state; ++e, ++trail)
   {
-    *(trail++)=*e; //TODO
+    *trail=*e; //TODO
     ++length;
   }
   OUT_("init done..")
   ++node;
   while(length<TraceSize)
   {
-    for(const t_state * e=Extender[(node->Op)&7]+1;e->state; ++e, ++length)
+    for(const t_state * e=Extender[(node->Op)&7]+1;e->state; ++e,++trail, ++length)
     {
-      operate(node->state,e->state,(trail++)->alloc()->state);
+      trail->alloc()->copy(node->state);
+      actOn(trail->state,e->state);
       trail->Op=e->Op;
       trail->parent=node;
     }

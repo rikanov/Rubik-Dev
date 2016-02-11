@@ -192,7 +192,7 @@ class Rubik_BF
   void initStates(const int & SizeS);
   void initTrace();
   void setConditions(Stream & IS);
-  int checkConditions(const int* Foresight);
+  int checkConditions(const int* Foresight, const int* Trail=IdentityMap);
   void extendNode(int & trace_length);
   int examineNode();  
 public:
