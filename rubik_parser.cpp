@@ -123,6 +123,7 @@ UI_rfunc(parser)
   trigger("brute_force", callBruteForce)
   trigger("random",              random)
   trigger("side_marks",     printSmarks)
+  trigger("cat",               catFiles)
   
     //=====================================//
    //  *** Evaluate object functions ***  //

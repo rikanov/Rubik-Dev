@@ -289,6 +289,24 @@ UI_rfunc(echo)
   return (it!=Var_space->end() ? it->second : read_in);
 }
 
+UI_rfunc(catFiles)
+{
+  std::fstream f; 
+  GET(fileName)
+  f.open(fileName.c_str(), std::ios_base::in);     // open file for reading
+  const bool t=f.good();
+  if (t) 
+  {
+    String tmp;     
+    do
+    {     
+      getline(f,tmp); 
+      OUT_(tmp);
+    } while (!f.eof());
+  } 
+  return t ? TRUE : NIL;
+}
+
 UI_rfunc(conc)
 {
   GET2(A,B)
