@@ -119,6 +119,7 @@ UI_rfunc(parser)
   
   trigger("same_cubes",       sameCubes)
   trigger("merge",                merge)
+  trigger("mirror",              mirror)
   trigger("path_finder",     pathFinder)
   trigger("brute_force", callBruteForce)
   trigger("random",              random)

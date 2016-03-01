@@ -399,6 +399,12 @@ UI_rfunc(merge)
   return mergeSimplePaths(A,B);
 }
 
+UI_rfunc(mirror)
+{
+  GET2(RotC, Plane)
+  return auxiliary::mirror(RotC,UPCASE(Plane.at(0)));
+}
+
 UI_rfunc(cube)
 {
   String Result;

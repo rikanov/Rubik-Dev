@@ -151,6 +151,7 @@ class Rubik
     
   UI_func(sameCubes)
   UI_func(merge)
+  UI_func(mirror)
   UI_func(pathFinder)
   UI_func(callBruteForce)
   UI_func(random)

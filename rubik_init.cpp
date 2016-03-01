@@ -116,6 +116,7 @@ void Rubik::initCommandComp()
   
   auto_comp("same_cubes" )
   auto_comp("merge"      )
+  auto_comp("mirror"     )
   auto_comp("path_finder")
   auto_comp("brute_force")
   auto_comp("random"     )

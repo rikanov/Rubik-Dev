@@ -336,7 +336,7 @@ String auxiliary::findPath(const Sidemarks& From, const Sidemarks& To, const boo
 
 std::string auxiliary::mirror(const std::string& a, const char& c)
 {
-    static const String facets="FURBLD";
+    static const String facets="FURBDL";
     static String Plane[3];
     Plane['X'-'X']="RL";
     Plane['Y'-'X']="UD";
