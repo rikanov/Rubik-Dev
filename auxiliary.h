@@ -44,6 +44,8 @@ namespace auxiliary
   String putInString(const String& arg, const String& token, const String& text);
   unsigned int countWords(Stream& IS);
   unsigned int countWords(const String& S);
+  String permute(String P);
+  void cryptText(const String& Key1, const String& Key2, String & Text);
   String mirror(const String & a, const char & c);
   void drawBarLine(const int & bar, const int & barLength);
  

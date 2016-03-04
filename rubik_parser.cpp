@@ -42,7 +42,7 @@ UI_rfunc(parser)
   //=====================================//  
   else if(read_in==TRUE || read_in==NIL || Sidemarks(read_in).valid())
   {
-    SKIP
+    // SKIP
   }
     //=====================================//
    //  *** New Rubik's cube instance ***  //
@@ -119,9 +119,12 @@ UI_rfunc(parser)
   
   trigger("same_cubes",       sameCubes)
   trigger("merge",                merge)
+  trigger("permute",            permute)
   trigger("mirror",              mirror)
   trigger("path_finder",     pathFinder)
   trigger("brute_force", callBruteForce)
+  trigger("crypt",                crypt)
+  trigger("swap",                  swap)
   trigger("random",              random)
   trigger("side_marks",     printSmarks)
   trigger("cat",               catFiles)

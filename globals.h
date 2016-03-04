@@ -8,13 +8,13 @@
 #include <regex>
 #include <map>
 #include <time.h>
+#include <algorithm> 
 
 //#define SILENT
 
-#define SKIP ;
-#define String std::string
-#define Stream std::stringstream
-#define Regex std::regex
+typedef std::string String;
+typedef std::stringstream Stream;
+typedef std::regex Regex;
 #define REPLACE(X,R,A) std::regex_replace(X,R,A);
 #define FIND(X,R,n) std::regex_replace(X,R,n,std::regex_constants::format_no_copy)
 #define MATCH(X,R) std::regex_match(X,R)

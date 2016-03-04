@@ -388,6 +388,46 @@ UI_rfunc(pathFinder)
   return Result;
 }
 
+UI_rfunc(permute)
+{
+  GET(A)
+  return auxiliary::permute(A);
+}
+
+UI_rfunc(crypt)
+{
+  GET2(A,B)
+  if(auxiliary::regExp("?*->?*",A.c_str())==false)
+  {
+    return A;
+  }
+  const int split=A.find("->");
+  auxiliary::cryptText(A.substr(0,split),A.substr(split+2),B);
+  return B;
+}
+
+UI_rfunc(swap)
+{
+  GET2(A,B)
+  const int a=Sidemarks(A);
+  const int b=Sidemarks(B);
+  String Result=NIL;
+  if(Topology::getEigenvalue(a)==Topology::getEigenvalue(b))
+  {
+    Stream SA(permute(A));
+    String step;
+    while(SA >> step)
+    {
+      String mapped(step);
+      auxiliary::cryptText(A,B,mapped);
+      std::swap(A_map[Sidemarks(step)],A_map[Sidemarks(mapped)]);
+    }
+    Topology::inverse(A_map,B_map);
+    Result=TRUE;
+  }
+  return Result;
+}
+
 UI_rfunc(sameCubes)
 {
   PARSER2(A,B)

@@ -151,7 +151,7 @@ String& auxiliary::regSimplifier(const String& R, String& S)
 	  S.push_back('?');
 	  break;
 	case '*':
-	  SKIP
+	  ; // SKIP
 	  break;
 	default:
 	  asterisk=false;
@@ -319,7 +319,7 @@ String auxiliary::findPath(const Sidemarks& From, const Sidemarks& To, const boo
 	    op.append("||");
 	    break;
 	  default:
-	    SKIP
+	    ; // SKIP
 	}
 	Sidemarks next=next_pos+op;
 	if(next==To)
@@ -394,6 +394,38 @@ std::string auxiliary::mirror(const std::string& a, const char& c)
     }
     return Result;
 }
+
+String auxiliary::permute(String P)
+{
+  String Result;
+  std::sort(P.begin(), P.end());
+  do {
+    Result+=P+' ';
+  } while(std::next_permutation(P.begin(),P.end()));
+  TRIM(Result)
+  return Result;
+}
+
+void auxiliary::cryptText(const String& Key1, const String& Key2, String& Text)
+{
+  if(Key1.length()!=Key2.length())
+  {
+    return;
+  }
+  FOR_STR(Text, t)
+  {
+    const int pos=Key1.find(*t);
+    if(pos==STR_END)
+    {
+      continue;
+    }
+    else
+    {
+      *t=Key2[pos];
+    }
+  }
+}
+
 
 void auxiliary::drawBarLine(const int& bar, const int& barLength)
 {
