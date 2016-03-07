@@ -220,52 +220,61 @@ void Topology::actOn(int* Q, const int* R)
 
 void Topology::initTrace()
 {
-  for(int i=0;i<7;++i)
+  for(int tabu=0; tabu<7;++tabu)
   {
-    Extender[i]=new t_state[20]; // 3*6+1+1;
-    Extender[i]->alloc()->copy(IdentityMap); 
-    t_state *node=Extender[i];
+    Extender[tabu]=new t_state[20]; // 3*6+1+1;
+    Extender[tabu]->alloc()->copy(IdentityMap); 
+    t_state *node=Extender[tabu];
     for(int j=0;j<6;++j)
     {
-      if(j==i)
+      if(j==tabu)
       {
 	continue;
       }
       (++node)->alloc()->copy(IdentityMap);
       actOn(node->state,Rotation[j+SingleSide*8]);
       node->Op=j+SingleSide*8;
-      node->parent=Extender[i];
+      node->parent=Extender[tabu];
       for(int k=2;k<4;++k)
       {
 	(node+1)->alloc()->copy(node->state);
 	++node;
 	actOn(node->state,Rotation[j+SingleSide*8]);
 	node->Op=j+SideGroup[k]*8;
-	node->parent=Extender[i];
+	node->parent=Extender[tabu];
       }
     }
     (++node)->state=nullptr;
   }
   OUT_("trace build...")
-  t_state *node=Trace, *trail=Trace;
-  int length=0;
-  for(t_state * e=Extender[6];e->state; ++e, ++trail)
+  for(int tabu=0;tabu<7;++tabu)
   {
-    *trail=*e; //TODO
-    ++length;
-  }
-  OUT_("init done..")
-  ++node;
-  while(length<TraceSize)
-  {
-    for(const t_state * e=Extender[(node->Op)&7]+1;e->state; ++e,++trail, ++length)
+    t_state *node=Trace[tabu], *trail=Trace[tabu];
+    int length=0;
+    for(int next=0;next<7;++next)
     {
-      trail->alloc()->copy(node->state);
-      actOn(trail->state,e->state);
-      trail->Op=e->Op;
-      trail->parent=node;
+      if(next==tabu)
+      {
+	continue;
+      }
+      for(t_state * e=Extender[next];e->state; ++e, ++trail)
+      {
+	*trail=*e; //TODO
+	++length;
+      }
     }
     ++node;
+    while(length<TraceSize)
+    {
+      for(const t_state * e=Extender[(node->Op)&7]+1;e->state; ++e,++trail, ++length)
+      {
+	trail->alloc()->copy(node->state);
+	actOn(trail->state,e->state);
+	trail->Op=e->Op;
+	trail->parent=node;
+      }
+      ++node;
+    }
   }
   OUT_("done")
 }

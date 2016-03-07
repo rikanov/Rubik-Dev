@@ -63,8 +63,7 @@ void Topology::t_state::copy(const int* C)
 ///=====================
 
 
-Topology::Topology():
-Trace(new t_state[TraceSize+20])
+Topology::Topology()
 {
   int Digit=0;
   for(const char * p=SideMarks; *p!='\0'; ++p)
@@ -75,6 +74,11 @@ Trace(new t_state[TraceSize+20])
   for(Digit=0; Digit<6; ++Digit)
   {
     Sides[Digit]=new Side(SideMarks[Digit+1],Digit);
+  }
+  
+  for(int i=0;i<7;++i)
+  {
+    Trace[i]=new t_state[TraceSize+20];
   }
   
   makeConnectionBetween(1,2,0);

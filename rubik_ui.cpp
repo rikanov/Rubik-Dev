@@ -416,12 +416,16 @@ UI_rfunc(swap)
   {
     Stream SA(permute(A));
     String step;
+    EMPTY(temp)
+    CPY_FUNC(temp,A_map)
     while(SA >> step)
     {
       String mapped(step);
       auxiliary::cryptText(A,B,mapped);
-      std::swap(A_map[Sidemarks(step)],A_map[Sidemarks(mapped)]);
+      temp[Sidemarks(step)]=A_map[Sidemarks(mapped)];
+      temp[Sidemarks(mapped)]=A_map[Sidemarks(step)];
     }
+    CPY_FUNC(A_map,temp)
     Topology::inverse(A_map,B_map);
     Result=TRUE;
   }

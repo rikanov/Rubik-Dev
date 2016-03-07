@@ -32,7 +32,7 @@ private:
   } Cubes[NumberOfSideMarks];
 public: 
   
-  static const int TraceSize=980000;
+  static const int TraceSize=18*(15*(15*(15+1)+1)+1)+1;
   struct t_state
   {
     const t_state * parent;
@@ -45,7 +45,7 @@ public:
     void copy(const int* C);
   };
 private:
-  t_state * Trace;
+  t_state * Trace[7];
   t_state * Extender[7];
   void initTrace();
   
@@ -111,7 +111,7 @@ public:
   static void actOn(int * Q, const int * R);
   static char oppositeSide(const char& C);
   static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
-  static const t_state * getTrace() {return Singleton->Trace;}
-  static const t_state * getExtender(const int& e) {return Singleton->Extender[e];}
+  static const t_state * getTrace() {return Singleton->Trace[6]+(18*15*15+1);}
+  static const t_state * getTrace(const int& T) {return Singleton->Trace[T];}
 };
 #endif

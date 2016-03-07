@@ -96,13 +96,25 @@ std::pair< int, std::string > Rubik_BF::start()
   String Result;
   const int step=Topology::TraceSize/30;
   int bar=0;
+  for(const Topology::t_state * trail=Topology::getTrace(6);trail->state!=nullptr;++trail)
+  {
+    result=checkConditions(trail->state); 
+    if(result||foundBetter)
+    {
+      Result=trail->path();
+    }
+    if(result)
+    {
+      break; 
+    }    
+  }
   for(const Topology::t_state* T=Topology::getTrace();result==0 && T->state!=nullptr;++T)
   {
     if((bar++)%step==0)
     {
       auxiliary::drawBarLine(bar/step,30);
     }
-    for(const Topology::t_state * trail=Topology::getExtender((T->Op)&7)+1;trail->state!=nullptr;++trail)
+    for(const Topology::t_state * trail=Topology::getTrace((T->Op)&7)+1;trail->state!=nullptr;++trail)
     { 
       result=checkConditions(T->state,trail->state); 
       if(result||foundBetter)
