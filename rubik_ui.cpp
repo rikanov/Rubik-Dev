@@ -445,7 +445,7 @@ UI_rfunc(merge)
 
 UI_rfunc(mirror)
 {
-  GET2(RotC, Plane)
+  PARSER2(RotC, Plane)
   return auxiliary::mirror(RotC,UPCASE(Plane.at(0)));
 }
 
