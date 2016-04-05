@@ -255,7 +255,7 @@ void Topology::initTrace()
   {
     t_state *node=Trace[tabu], *trail=Trace[tabu];
     int length=0;
-    for(int next=0;next<7;++next)
+    for(int next=0;next<6;++next)
     {
       if(next==tabu)
       {
