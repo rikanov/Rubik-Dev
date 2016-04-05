@@ -44,10 +44,31 @@ public:
     void dealloc();
     void copy(const int* C);
   };
+  
+  struct seeker
+  {
+    t_state * fast_test;
+    t_state * head;
+    t_state * trail;
+    
+    void init();
+    const int * next();
+    String rotationMarks() const;
+    seeker(): fast_test(nullptr), head(nullptr), trail(nullptr) {}
+    ~seeker();
+    
+  private:
+    t_state * rot1, * rot2;
+    const int * combine() const;
+    
+  };
+  
 private:
+  std::map<String,seeker * > SelectGroup;
   t_state * Trace[7];
   t_state * Extender[7];
   void initTrace();
+  void initSeekers();
   
   void setEigenvalue(Topology::Cube& C);
   int SideDigits[90]={};
@@ -111,7 +132,7 @@ public:
   static void actOn(int * Q, const int * R);
   static char oppositeSide(const char& C);
   static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
-  static const t_state * getTrace() {return Singleton->Trace[6]+(18*15*15+1);}
-  static const t_state * getTrace(const int& T) {return Singleton->Trace[T];}
+  static const t_state * getTrace() {return Singleton->SelectGroup.at("all")->fast_test;}
+  static const t_state * getTrace(const int& T) {return Singleton->SelectGroup.at("all")->fast_test;}
 };
 #endif

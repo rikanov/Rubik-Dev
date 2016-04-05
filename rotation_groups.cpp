@@ -135,6 +135,7 @@ void Topology::operate(const int* Q, const int* R, int* S) // Group operation: Q
 bool Topology::defOperation(int* Q, const std::string& Operations, const int & Including, const int & Restriction)
 {
   bool Result=false;
+  int all_cubes=0;
   CPY_FUNC(Q,IdentityMap)
   for(std::string::const_iterator it=Operations.begin(); it!=Operations.end(); ++it)
   {
@@ -144,12 +145,15 @@ bool Topology::defOperation(int* Q, const std::string& Operations, const int & I
     {
       case 'X':
 	Rot='R';
+	all_cubes=AllCubes;
 	break;
       case 'Y':
 	Rot='U';
+	all_cubes=AllCubes;
 	break;
       case 'Z':
 	Rot='F';
+	all_cubes=AllCubes;
 	break;
       default:
 	Rot=C;
@@ -182,7 +186,7 @@ bool Topology::defOperation(int* Q, const std::string& Operations, const int & I
     }
     if((Modifier&Restriction)==Restriction)
     {
-      const int * op=operate(R,Modifier|Including);
+      const int * op=operate(R,Modifier|Including|all_cubes);
       actOn(Q,op);
       Result=(op!=nullptr);
     }
@@ -278,4 +282,62 @@ void Topology::initTrace()
   }
   OUT_("done")
 }
+
+void Topology::initSeekers()
+{
+  //All in 8 depths
+  seeker * all = new seeker;
+  SelectGroup["all"]=all;
+  const int length=78102; //1171601;
+  all->fast_test = new t_state[length+1];
+  all->fast_test->alloc()->copy(IdentityMap);
+  all->fast_test->Op=-1;
+  const t_state * node = all->fast_test;
+  t_state * next = all->fast_test;
+  int next_side=5; 
+  OUT_(length)
+  for(int i=0, j=0; i<length; ++i)
+  {
+    const int turn=i%3;
+    if(turn==0)
+    {
+      next_side=(next_side+1)%6;
+    }
+    if(next_side==(node->Op&7))
+    {
+      ++j;
+      if(j==18)
+      {
+	j=0;
+	++node;OUT_(i<<' '<<next->path())
+      }
+      continue;
+    }
+    ++next; ++j;
+    next->parent=node;
+    next->alloc()->copy(node->state);
+    next->Op=next_side+SideGroup[turn+1]*8;
+    actOn(next->state,Rotation[next->Op]);
+    if(j==18)
+    {
+      j=0; 
+      ++node; OUT_(i<<' '<<next->path())
+    }
+  }
+  ++next=nullptr;
+  all->head=all->fast_test+5201;
+  all->trail=all->fast_test;
+}
+
+void Topology::seeker::init()
+{
+  rot1=fast_test;
+  rot2=nullptr;
+}
+
+const int * Topology::seeker::next()
+{
+  
+}
+
 #endif

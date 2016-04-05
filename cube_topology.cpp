@@ -31,6 +31,10 @@ void Topology::singleton()
 std::string Topology::t_state::path() const
 {
   String last;
+  if(Op<0)
+  {
+    return "";
+  }
   last.push_back(Topology::SideMarks[1+(Op&7)]);
   if(Op&16)
   {
@@ -100,6 +104,7 @@ Topology::Topology()
   buildRotations();
   createTokens();
   initTrace();
+  initSeekers();
 }
 
 int Topology::hash(const int& r2, const int& r1, const int& r0)
