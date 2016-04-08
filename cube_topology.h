@@ -37,8 +37,10 @@ public:
   {
     const t_state * parent;
     int * state;
-    int Op;
-    t_state(): parent(nullptr), state(nullptr),Op(0) {}
+    int first;
+    int last;
+    int length;
+    t_state(): parent(nullptr), state(nullptr),last(0) {}
     String path() const;
     t_state* alloc();
     void dealloc();
@@ -47,14 +49,13 @@ public:
   
   struct seeker
   {
-    t_state * fast_test;
     t_state * head;
-    t_state * trail;
+    t_state ** trails;
     
     void init();
     const int * next();
     String rotationMarks() const;
-    seeker(): fast_test(nullptr), head(nullptr), trail(nullptr) {}
+    seeker(): head(nullptr), trails(nullptr) {}
     ~seeker();
     
   private:
@@ -63,12 +64,30 @@ public:
     
   };
   
+  struct seeker2
+  {
+    t_state * 	head;
+    t_state *	headFourLengthEnd;
+    t_state ** 	trails;
+    seeker2(): head(nullptr), trails(nullptr) {}
+    ~seeker2()
+    {OUT_("destructor...")
+      delete[] head;
+      for(int i=0;i<6;++i)
+      {
+	delete[] trails[i]; OUT_("branch "<<i)
+      }
+      delete[] trails; OUT_("trails deleted...")
+    }
+  } PathGenerator;
+  
 private:
   std::map<String,seeker * > SelectGroup;
   t_state * Trace[7];
   t_state * Extender[7];
   void initTrace();
   void initSeekers();
+  void initSeekers2();
   
   void setEigenvalue(Topology::Cube& C);
   int SideDigits[90]={};
@@ -132,7 +151,8 @@ public:
   static void actOn(int * Q, const int * R);
   static char oppositeSide(const char& C);
   static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
-  static const t_state * getTrace() {return Singleton->SelectGroup.at("all")->fast_test;}
-  static const t_state * getTrace(const int& T) {return Singleton->SelectGroup.at("all")->fast_test;}
+  static const t_state * getTrace() {return Singleton->PathGenerator.head;}
+  static const t_state * getTrace(const int& T) {return Singleton->PathGenerator.trails[T];}
+  static const t_state * getUntil(const int& T) {return Singleton->PathGenerator.headFourLengthEnd;}
 };
 #endif

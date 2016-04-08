@@ -423,7 +423,7 @@ UI_rfunc(swap)
       String mapped(step);
       auxiliary::cryptText(A,B,mapped);
       temp[Sidemarks(step)]=A_map[Sidemarks(mapped)];
-      temp[Sidemarks(mapped)]=A_map[Sidemarks(step)];
+      temp[Sidemarks(mapped)]=A_map[Sidemarks(step)]; 
     }
     CPY_FUNC(A_map,temp)
     Topology::inverse(A_map,B_map);

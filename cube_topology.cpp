@@ -1,4 +1,5 @@
 #include "cube_topology.h"
+#include "auxiliary.h"
 
 const char * Topology::SideMarks="@FURLDB";
 const Topology * Topology::Singleton(nullptr);
@@ -30,22 +31,13 @@ void Topology::singleton()
 }
 std::string Topology::t_state::path() const
 {
-  String last;
-  if(Op<0)
+  if(last<0)
   {
     return "";
   }
-  last.push_back(Topology::SideMarks[1+(Op&7)]);
-  if(Op&16)
-  {
-    last.push_back('\'');
-  }
-  else if(Op&8)
-  {
-    last.push_back('2');
-  }
-//  last= Op ? Topology::token(Op) : "";
-  return parent ? parent->path()+last : "";
+  String mark;
+  mark.push_back(Topology::SideMarks[last+1]);
+  return parent ? auxiliary::mergeSimplePaths(parent->path(),mark) : "";
 }
 
 Topology::t_state * Topology::t_state::alloc()
@@ -105,6 +97,7 @@ Topology::Topology()
   createTokens();
   initTrace();
   initSeekers();
+  initSeekers2();
 }
 
 int Topology::hash(const int& r2, const int& r1, const int& r0)

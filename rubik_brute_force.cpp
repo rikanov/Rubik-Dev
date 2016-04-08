@@ -94,9 +94,9 @@ std::pair< int, std::string > Rubik_BF::start()
   int result=0;
   best_choice=0;
   String Result;
-  const int step=Topology::TraceSize/30;
+  const int step=1000;
   int bar=0;
-  for(const Topology::t_state * trail=Topology::getTrace(6);trail->state!=nullptr;++trail)
+  for(const Topology::t_state * trail=Topology::getTrace();trail!=Topology::getUntil(4);++trail)
   {
     result=checkConditions(trail->state); 
     if(result||foundBetter)
@@ -107,23 +107,30 @@ std::pair< int, std::string > Rubik_BF::start()
     {
       break; 
     }    
-  }
-  for(const Topology::t_state* T=Topology::getTrace();result==0 && T->state!=nullptr;++T)
+  } OUT_("OK")
+  for(const Topology::t_state* T=Topology::getTrace();result==0 && T!=Topology::getUntil(4);++T)
   {
     if((bar++)%step==0)
     {
-      auxiliary::drawBarLine(bar/step,30);
+      auxiliary::drawBarLine((bar/step)%30,30);
     }
-    for(const Topology::t_state * trail=Topology::getTrace();trail->state!=nullptr;++trail)
-    { 
-      result=checkConditions(T->state,trail->state); 
-      if(result||foundBetter)
+    for(int side=0;side<6;++side)
+    {  
+      if(T->last==side)
       {
-	Result=auxiliary::mergeSimplePaths(T->path(),trail->path());
+	continue;
       }
-      if(result)
-      {
-	break; 
+      for(const Topology::t_state * trail=Topology::getTrace(side);trail->state!=nullptr;++trail)
+      { 
+	result=checkConditions(T->state,trail->state); 
+	if(result||foundBetter)
+	{
+	  Result=auxiliary::mergeSimplePaths(T->path(),trail->path());
+	}
+	if(result)
+	{
+	  break; 
+	}
       }
     }
   }
