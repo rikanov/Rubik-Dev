@@ -61,7 +61,7 @@ void Rubik_BF::setConditions(std::stringstream& IS)
   *sp=-256;
   FOR_FUNC(i)
   {
-    InitialState[i]=RubikBase->whatIs(i);
+    InitialState[i]=RubikBase->locationOf(i);
   }
 }
 
@@ -79,14 +79,13 @@ int Rubik_BF::checkConditions(const int * Foresight, const int * Trail)
       ++Result;
       if(cond>=-(*c))
       {
-	found=true;
+	found=true; 
 	break;
       }
-      cond=0;
     }
     else
     {
-      const int add=InitialState[*c]==Trail[Foresight[*c]];
+      const int add=Trail[Foresight[InitialState[*c]]]==*c; 
       cond+=add;
       counter+=add;
     }
