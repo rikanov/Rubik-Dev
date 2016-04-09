@@ -72,11 +72,6 @@ Topology::Topology()
     Sides[Digit]=new Side(SideMarks[Digit+1],Digit);
   }
   
-  for(int i=0;i<7;++i)
-  {
-    Trace[i]=new t_state[TraceSize+20];
-  }
-  
   makeConnectionBetween(1,2,0);
   makeConnectionBetween(2,4,0);
   makeConnectionBetween(4,3,0);
@@ -95,9 +90,7 @@ Topology::Topology()
   setHash(); 
   buildRotations();
   createTokens();
-  initTrace();
   initSeekers();
-  initSeekers2();
 }
 
 int Topology::hash(const int& r2, const int& r1, const int& r0)

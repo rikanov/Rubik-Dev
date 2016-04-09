@@ -32,7 +32,7 @@ private:
   } Cubes[NumberOfSideMarks];
 public: 
   
-  static const int TraceSize=18*(15*(15*(15+1)+1)+1)+1;
+  static const int TraceSize=976338;
   struct t_state
   {
     const t_state * parent;
@@ -40,37 +40,19 @@ public:
     int first;
     int last;
     int length;
-    t_state(): parent(nullptr), state(nullptr),last(0) {}
+    t_state(): parent(nullptr), state(nullptr),first(-1), last(-1), length(0) {}
     String path() const;
     t_state* alloc();
     void dealloc();
     void copy(const int* C);
   };
-  
+ 
   struct seeker
   {
-    t_state * head;
-    t_state ** trails;
-    
-    void init();
-    const int * next();
-    String rotationMarks() const;
-    seeker(): head(nullptr), trails(nullptr) {}
-    ~seeker();
-    
-  private:
-    t_state * rot1, * rot2;
-    const int * combine() const;
-    
-  };
-  
-  struct seeker2
-  {
     t_state * 	head;
-    t_state *	headFourLengthEnd;
     t_state ** 	trails;
-    seeker2(): head(nullptr), trails(nullptr) {}
-    ~seeker2()
+    seeker(): head(nullptr), trails(nullptr) {}
+    ~seeker()
     {OUT_("destructor...")
       delete[] head;
       for(int i=0;i<6;++i)
@@ -82,12 +64,7 @@ public:
   } PathGenerator;
   
 private:
-  std::map<String,seeker * > SelectGroup;
-  t_state * Trace[7];
-  t_state * Extender[7];
-  void initTrace();
   void initSeekers();
-  void initSeekers2();
   
   void setEigenvalue(Topology::Cube& C);
   int SideDigits[90]={};
@@ -153,6 +130,5 @@ public:
   static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
   static const t_state * getTrace() {return Singleton->PathGenerator.head;}
   static const t_state * getTrace(const int& T) {return Singleton->PathGenerator.trails[T];}
-  static const t_state * getUntil(const int& T) {return Singleton->PathGenerator.headFourLengthEnd;}
 };
 #endif

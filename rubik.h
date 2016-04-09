@@ -187,7 +187,7 @@ public:
 
 class Rubik_BF
 {
-  int seekerSize;
+  int seekerDepth;
   int best_choice;
   bool foundBetter;
   const Rubik * RubikBase;

@@ -1,2 +1,3 @@
-do RUR'L'BL
-brute_force all upside
+reset
+swap FLU URF
+brute_force +4 upside FL FR BL BR

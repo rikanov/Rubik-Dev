@@ -222,127 +222,19 @@ void Topology::actOn(int* Q, const int* R)
   }
 }
 
-void Topology::initTrace()
-{
-  for(int tabu=0; tabu<7;++tabu)
-  {
-    Extender[tabu]=new t_state[20]; // 3*6+1+1;
-    Extender[tabu]->alloc()->copy(IdentityMap); 
-    t_state *node=Extender[tabu];
-    for(int j=0;j<6;++j)
-    {
-      if(j==tabu)
-      {
-	continue;
-      }
-      (++node)->alloc()->copy(IdentityMap);
-      actOn(node->state,Rotation[j+SingleSide*8]);
-      node->last=j+SingleSide*8;
-      node->parent=Extender[tabu];
-      for(int k=2;k<4;++k)
-      {
-	(node+1)->alloc()->copy(node->state);
-	++node;
-	actOn(node->state,Rotation[j+SingleSide*8]);
-	node->last=j+SideGroup[k]*8;
-	node->parent=Extender[tabu];
-      }
-    }
-    (++node)->state=nullptr;
-  }
-  OUT_("trace build...")
-  for(int tabu=0;tabu<7;++tabu)
-  {
-    t_state *node=Trace[tabu], *trail=Trace[tabu];
-    int length=0;
-    for(int next=0;next<6;++next)
-    {
-      if(next==tabu)
-      {
-	continue;
-      }
-      for(t_state * e=Extender[next];e->state; ++e, ++trail)
-      {
-	*trail=*e; //TODO
-	++length;
-      }
-    }
-    ++node;
-    while(length<TraceSize)
-    {
-      for(const t_state * e=Extender[(node->last)&7]+1;e->state; ++e,++trail, ++length)
-      {
-	trail->alloc()->copy(node->state);
-	actOn(trail->state,e->state);
-	trail->last=e->last;
-	trail->parent=node;
-      }
-      ++node;
-    }
-  }
-  OUT_("done")
-}
-
 void Topology::initSeekers()
 {
-  //All in 8 depths
-  seeker * all = new seeker;
-  SelectGroup["all"]=all;
-  const int length=78102; //1171601;
-  all->head = new t_state[length+1];
-  all->head->alloc()->copy(IdentityMap);
-  all->head->last=-1;
-  const t_state * node = all->head;
-  t_state * next = all->head;
-  int next_side=5; 
-  OUT_(length)
-  for(int i=0, j=0; i<length; ++i)
-  {
-    const int turn=i%3;
-    if(turn==0)
-    {
-      next_side=(next_side+1)%6;
-    }
-    if(next_side==(node->last&7))
-    {
-      ++j;
-      if(j==18)
-      {
-	j=0;
-	++node;
-      }
-      continue;
-    }
-    ++next; ++j;
-    next->parent=node;
-    next->alloc()->copy(node->state);
-    next->last=next_side+SideGroup[turn+1]*8;
-    actOn(next->state,Rotation[next->last]);
-    if(j==18)
-    {
-      j=0; 
-      ++node;
-    }
-  }
-  ++next=nullptr;
-}
-
-void Topology::initSeekers2()
-{
-  PathGenerator.head = new t_state[976338]; // 976338
-  PathGenerator.headFourLengthEnd = PathGenerator.head+1;
+  PathGenerator.head = new t_state[TraceSize]; // 976338
   PathGenerator.trails = new t_state* [6];
   
   PathGenerator.head->alloc()->copy(IdentityMap);
-  PathGenerator.head->first=-1;
-  PathGenerator.head->last=-1;
-  PathGenerator.head->length=0;
   t_state * Head=PathGenerator.head;
-  int Trails[6]={0};
+  int Trails[6];
   for(int i=0;i<6;++i)
   {
-    PathGenerator.trails[i]=new t_state [151876]; // 
-    Trails[i]=0;
+    PathGenerator.trails[i]=new t_state [TraceSize/6+2]; // 
+    PathGenerator.trails[i]->alloc()->copy(IdentityMap);
+    Trails[i]=1;
   }
   
   t_state * node = Head;
@@ -373,25 +265,12 @@ void Topology::initSeekers2()
 	}
 	next->last=side;
 	next->length = next->parent->length + (rot==0);
-	if(next->length==5)
-	{
-	 PathGenerator.trails[next->first][Trails[next->first]]=*next;
-	 ++Trails[next->first];
-	}
-	else
-	{
-	  ++PathGenerator.headFourLengthEnd;
-	}
+	PathGenerator.trails[next->first][Trails[next->first]]=*next;
+	++Trails[next->first];
       }
     }
     ++node;
   }
-  PathGenerator.trails[4]->path();
-  for(t_state * T=PathGenerator.trails[0];T->state!=nullptr;++T)
-  {
-    OUT_(T->path());
-  }
-  OUT_("end teszt")
 }
 
 #endif
