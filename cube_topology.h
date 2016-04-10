@@ -32,15 +32,16 @@ private:
   } Cubes[NumberOfSideMarks];
 public: 
   
-  static const int TraceSize=976338;
+  static const int TraceSize=877032; //976338;
   struct t_state
   {
     const t_state * parent;
     int * state;
     int first;
     int last;
+    int excludeInverse;
     int length;
-    t_state(): parent(nullptr), state(nullptr),first(-1), last(-1), length(0) {}
+    t_state(): parent(nullptr), state(nullptr),first(-1), last(-1), excludeInverse(-1), length(0) {}
     String path() const;
     t_state* alloc();
     void dealloc();
