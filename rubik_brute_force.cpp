@@ -107,35 +107,63 @@ std::pair< int, std::string > Rubik_BF::start()
   const int step=Topology::TraceSize/30;
   int bar=0;
   int bar_length=0;
-  for(const Topology::t_state* T=Topology::getTrace();result==0 && T->state!=nullptr;++T)
+  const Topology::t_state* T_short=Topology::getTrace();
+  const Topology::t_state* checkPoints[6];
+  const Topology::t_state* trail[6];
+  for(int i=0;i<6;++i)
   {
-    if((bar++)%step==0)
+    trail[i]=checkPoints[i]=Topology::getTrace(i);
+  }
+  while(result==0 && T_short->length<5)
+  {
+    result=checkConditions(T_short->state);
+    if(result||foundBetter)
     {
-      auxiliary::drawBarLine(bar_length++,30);
+      Result=T_short->path();
     }
-    for(int side=0;side<6;++side)
-    {  
-      if(T->last==side)
+    if(result)
+    {
+      break; 
+    }
+    ++T_short; 
+  } 
+  
+  for(int depth=0;depth<=seekerDepth; ++depth)
+  {
+    for(const Topology::t_state* T=T_short;result==0 && T->state!=nullptr;++T)
+    {
+      if((bar++)%step==0)
       {
-	continue;
-      } 
-      const int depth=T->length==5 ? seekerDepth : 0;
-      for(const Topology::t_state * trail=Topology::getTrace(side);trail->length<=depth;++trail)
-      { 
-	result=checkConditions(T->state,trail->state);
-	if(result||foundBetter)
+	auxiliary::drawBarLine((bar_length++)%30,30);OUT(" depth: "<<(5+depth)<<" best found: "<<Result)
+      }
+      for(int side=0;side<6;++side)
+      {  
+	if(T->last==side)
 	{
-	  Result=auxiliary::mergeSimplePaths(T->path(),trail->path());
+	  continue;
 	}
-	if(result)
-	{
-	  side=6; // to escape from the outer loop too
-	  break; 
-	}
+	for(trail[side]=checkPoints[side];trail[side]->length<depth;++trail[side])
+	{ 
+	  result=checkConditions(T->state,trail[side]->state);
+	  if(result||foundBetter)
+	  {
+	    Result=auxiliary::mergeSimplePaths(T->path(),trail[side]->path());
+	  }
+	  if(result)
+	  {
+	    depth=seekerDepth+1; side=6; // to escape from the outer loops too
+	    break; 
+	  }
+	} 
       }
     }
+    for(int i=0;i<6;++i)
+    {
+      checkPoints[i]=trail[i];
+    }
   }
-  OUT_("Result:  "<<Result<<(result ? " result: " : " best choice: ")<<(result?result:best_choice));
+  auxiliary::drawBarLine((bar_length++)%30,30);
+  OUT_(" Result:  "<<Result<<(result ? " is a solution for condition: " : " best choice to solve ")<<(result?result:best_choice));
   return std::pair<int,String> (result,Result);
 }
 
