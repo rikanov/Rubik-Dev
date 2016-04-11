@@ -187,17 +187,20 @@ public:
 
 class Rubik_BF
 {
+  typedef int (Rubik_BF::*SearchEngine)(const int*,const int*);
+  
   int seekerDepth;
   int best_choice;
   bool foundBetter;
   const Rubik * RubikBase;
   int * InitialState;
   int * SolvedState;
-
+  SearchEngine Engine;
   void initStates(const int & SizeS);
   void initTrace();
   void setConditions(Stream & IS);
   int checkConditions(const int* Foresight, const int* Trail=IdentityMap);
+  int fastestCheck(const int* Foresight, const int* Trail=IdentityMap);
   void extendNode(int & trace_length);
   int examineNode();  
 public:

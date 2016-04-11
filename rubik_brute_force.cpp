@@ -1,19 +1,25 @@
 #include"rubik.h"
 
+
 Rubik_BF::Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth):
 RubikBase(R)
 {
   const int SizeS=auxiliary::countWords(IS);
   initStates(SizeS);
   setConditions(IS);
-  if(AS.length()==2 && AS[0]=='+')
+  if(AS=="*")
+  {
+    seekerDepth=6;
+    Engine=&Rubik_BF::fastestCheck;
+  }
+  else if(AS.length()==2 && AS[0]=='+')
   {
     seekerDepth=AS[1]-'0';
     if(seekerDepth<0 || seekerDepth>6)
     {
       seekerDepth=0;
     }
-    OUT_("seeker depth: "<<seekerDepth)
+    Engine=&Rubik_BF::checkConditions;
   }
   initTrace();
 }
@@ -98,10 +104,22 @@ int Rubik_BF::checkConditions(const int * Foresight, const int * Trail)
   return found ? Result : 0;
 }
 
+int Rubik_BF::fastestCheck(const int* Foresight, const int* Trail)
+{
+  for(const int *c=SolvedState; *c>=0; ++c)
+  {
+    if(Trail[Foresight[InitialState[*c]]]!=*c)
+    {
+      return 0;
+    }
+  }
+  return 1;
+}
 std::pair< int, std::string > Rubik_BF::start()
 {
   const Topology::t_state* Trace=Topology::getTrace();
   int result=0;
+  foundBetter=false;
   best_choice=0;
   String Result;
   const int step=Topology::TraceSize/30;
@@ -116,7 +134,7 @@ std::pair< int, std::string > Rubik_BF::start()
   }
   while(result==0 && T_short->length<5)
   {
-    result=checkConditions(T_short->state);
+    result=(this->*Engine)(T_short->state,IdentityMap);
     if(result||foundBetter)
     {
       Result=T_short->path();
@@ -134,7 +152,7 @@ std::pair< int, std::string > Rubik_BF::start()
     {
       if((bar++)%step==0)
       {
-	auxiliary::drawBarLine((bar_length++)%30,30);OUT(" depth: "<<(5+depth)<<" best found: "<<Result)
+	auxiliary::drawBarLine((bar_length++)%30,30);OUT(" depth: "<<(5+depth)<<" best found: "<<Result<<"   ");
       }
       for(int side=0;side<6;++side)
       {  
@@ -144,7 +162,7 @@ std::pair< int, std::string > Rubik_BF::start()
 	}
 	for(trail[side]=checkPoints[side];trail[side]->length<depth;++trail[side])
 	{ 
-	  result=checkConditions(T->state,trail[side]->state);
+	  result=(this->*Engine)(T->state,trail[side]->state);
 	  if(result||foundBetter)
 	  {
 	    Result=auxiliary::mergeSimplePaths(T->path(),trail[side]->path());

@@ -271,6 +271,10 @@ void Topology::initSeekers()
     }
     ++node;
   }
+  for(int i=0;i<6;++i)
+  {
+    PathGenerator.trails[i][Trails[i]].length=6;
+  }
 }
 
 #endif
