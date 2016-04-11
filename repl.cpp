@@ -87,7 +87,10 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	
       } while(sign_nwln);
       OS<<NL;
-      OS<<(parser(toParse));
+      while(toParse.good())
+      {
+	OS<<parser(toParse)+' ';
+      }
     }
   }
 }

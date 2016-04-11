@@ -88,6 +88,7 @@ int Rubik_BF::checkConditions(const int * Foresight, const int * Trail)
 	found=true; 
 	break;
       }
+      cond=0;
     }
     else
     {
