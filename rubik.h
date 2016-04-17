@@ -48,6 +48,10 @@ class Rubik
   static const int MaximumStackDepth=256;
   int ** Stack;
   int stack_pointer=0;
+  
+  int* RotationCache;
+  int* RotationAlign;
+  bool NeedAlign;
 
   void 
   initRubik		();
@@ -77,6 +81,12 @@ class Rubik
   macro			(
 			Stream & IS, 
 			String & R);
+  
+  void 
+  setRotation		(const String& Rot);
+  
+  Rubik&
+  applyRotation		();
   
   String 
   functionResolver	(
@@ -177,7 +187,6 @@ public:
   ~Rubik ();
  
   Rubik & operator =  (const Rubik& R)=default;
-  Rubik & operator << (const String & Rot); 
   
   void print(const String & C ) const;
   void REPL (std::istream & IS=std::cin, std::ostream & OS=std::cout);

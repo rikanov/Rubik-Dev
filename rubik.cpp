@@ -66,19 +66,19 @@ Sidemarks Rubik::locationOf(const Sidemarks& S) const
   return A_map[Sup_inv[S]];
 }
 
-Rubik& Rubik::operator<<(const String & Rot)
-{
-  EMPTY(Act)
-  Topology::defOperation(Act,Rot);
-  Topology::actOn(A_map,Act);
-  Topology::inverse(A_map,B_map); 
-  if(Topology::defOperation(Act,Rot,Topology::AllCubes, Topology::Middle))
-  {
-    Topology::actOn(B_map,Act);
-    Topology::inverse(B_map,A_map);
-  }
-  return *this;
-}
+// Rubik& Rubik::operator<<(const String & Rot)
+// {
+//   EMPTY(Act)
+//   Topology::defOperation(Act,Rot);
+//   Topology::actOn(A_map,Act);
+//   Topology::inverse(A_map,B_map); 
+//   if(Topology::defOperation(Act,Rot,Topology::AllCubes, Topology::Middle))
+//   {
+//     Topology::actOn(B_map,Act);
+//     Topology::inverse(B_map,A_map);
+//   }
+//   return *this;
+// }
 
 void Rubik::setAutocomp(const char* A)
 {
@@ -151,6 +151,22 @@ void Rubik::variable(Stream& IS, String& R)
   }
 }
 
+void Rubik::setRotation(const String& Rot)
+{
+  Topology::defOperation(RotationCache,Rot); 
+  NeedAlign=Topology::defOperation(RotationAlign,Rot,Topology::AllCubes, Topology::Middle);
+}
+
+Rubik& Rubik::applyRotation()
+{
+  Topology::actOn(A_map,RotationCache);
+  if(NeedAlign)
+  {
+    Topology::actOn(A_map, RotationAlign);
+  }
+  Topology::inverse(A_map,B_map); 
+  return *this;
+}
 String Rubik::functionResolver(Stream& IS,const String & R)
 {
   GET(arg);

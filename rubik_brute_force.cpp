@@ -9,13 +9,13 @@ RubikBase(R)
   setConditions(IS);
   if(AS=="*")
   {
-    seekerDepth=6;
+    seekerDepth=5;
     Engine=&Rubik_BF::fastestCheck;
   }
   else if(AS.length()==2 && AS[0]=='+')
   {
     seekerDepth=AS[1]-'0';
-    if(seekerDepth<0 || seekerDepth>6)
+    if(seekerDepth<0 || seekerDepth>5)
     {
       seekerDepth=0;
     }

@@ -259,19 +259,19 @@ UI_rfunc(doRotations)
   GETLINE(core)
   GETLINE(UNTIL);
   Stream test;
-  do
-  {
-    String DO=parser(core);
-    if(DO==NIL)
-    {
-      break;
-    }
-    ++counter;
-    (*this) << DO;
-    LOOP_STACK=mergeSimplePaths(LOOP_STACK,DO);
-    test.str(UNTIL);
-    test.clear();
-  }while (parser(test)!=NIL);
+  const String DO=parser(core);
+  if(DO!=NIL)
+  {OUT_("teszt")
+    setRotation(DO); 
+    do
+    {  
+      ++counter;
+      applyRotation();
+      LOOP_STACK=mergeSimplePaths(LOOP_STACK,DO);
+      test.str(UNTIL);
+      test.clear();
+    }while (parser(test)!=NIL);
+  }
   return std::to_string(counter);
 }
   
