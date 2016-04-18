@@ -160,11 +160,13 @@ void Rubik::setRotation(const String& Rot)
 Rubik& Rubik::applyRotation()
 {
   Topology::actOn(A_map,RotationCache);
+  Topology::inverse(A_map,B_map); 
   if(NeedAlign)
   {
-    Topology::actOn(A_map, RotationAlign);
+    Topology::actOn(B_map, RotationAlign);
+    Topology::inverse(B_map,A_map); 
   }
-  Topology::inverse(A_map,B_map); 
+  
   return *this;
 }
 String Rubik::functionResolver(Stream& IS,const String & R)

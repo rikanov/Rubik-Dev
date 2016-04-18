@@ -261,11 +261,12 @@ UI_rfunc(doRotations)
   Stream test;
   const String DO=parser(core);
   if(DO!=NIL)
-  {OUT_("teszt")
+  {
     setRotation(DO); 
     do
     {  
       ++counter;
+      setRotation(parser(core)); // no need if the body of loop is a constant
       applyRotation();
       LOOP_STACK=mergeSimplePaths(LOOP_STACK,DO);
       test.str(UNTIL);
