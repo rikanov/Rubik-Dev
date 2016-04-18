@@ -128,6 +128,8 @@ UI_rfunc(parser)
   trigger("random",              random)
   trigger("side_marks",     printSmarks)
   trigger("cat",               catFiles)
+  trigger("load",              loadCube)
+  trigger("save",              saveCube)
   
     //=====================================//
    //  *** Evaluate object functions ***  //

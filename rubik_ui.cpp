@@ -255,6 +255,7 @@ UI_rfunc(solvedp)
 
 UI_rfunc(doRotations)
 {
+  static const int InfiniteLoopLimit=2000;
   int counter=0;
   GETLINE(core)
   GETLINE(UNTIL);
@@ -265,7 +266,12 @@ UI_rfunc(doRotations)
     setRotation(DO); 
     do
     {  
-      ++counter;
+      if(++counter > InfiniteLoopLimit)
+      {
+	OUT_("ERROR: the number of steps exceeded the InfiniteLoopLimit (up to "<<InfiniteLoopLimit<<") number")
+	OUT_("The loop has been automatically interrupted")
+	break;
+      }
       setRotation(parser(core)); // no need if the body of loop is a constant
       applyRotation();
       LOOP_STACK=mergeSimplePaths(LOOP_STACK,DO);
@@ -306,6 +312,36 @@ UI_rfunc(catFiles)
     } while (!f.eof());
   } 
   return t ? TRUE : NIL;
+}
+
+UI_rfunc(saveCube)
+{
+  GET(file_name)
+  std::ofstream S; 
+  S.open(file_name, std::ios::out); 
+  for(int i=0; i<78; ++i)
+  {
+    S<<A_map[i]<<' ';
+  }
+  S<<NL;
+  S.close();
+  return NIL;
+}
+
+UI_rfunc(loadCube)
+{
+  GET(file_name)
+  std::ifstream S; 
+  S.open(file_name, std::ios::in); 
+  String numericData;
+  int * pointer=A_map;
+  while(S>>numericData)
+  {
+    *(pointer++) = atoi(numericData.c_str()); 
+  }
+  Topology::inverse(A_map, B_map);
+  S.close();
+  return NIL;
 }
 
 UI_rfunc(conc)

@@ -158,6 +158,8 @@ class Rubik
   UI_func(regExpFast)
   UI_func(echo)
   UI_func(catFiles)
+  UI_func(saveCube)
+  UI_func(loadCube)
     
   UI_func(sameCubes)
   UI_func(merge)
