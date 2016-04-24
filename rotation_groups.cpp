@@ -224,16 +224,16 @@ void Topology::actOn(int* Q, const int* R)
 
 void Topology::initSeekers()
 {
-  PathGenerator.head = new t_state[TraceSize+1]; // 976338 -> 877032
+  PathGenerator.head = new t_state[TraceSize+2]; // 976338 -> 877032
   PathGenerator.trails = new t_state* [6];
   
-  PathGenerator.head->alloc()->copy(IdentityMap);
+  PathGenerator.head->copy(IdentityMap);
   t_state * Head=PathGenerator.head;
   int Trails[6];
   for(int i=0;i<6;++i)
   {
     PathGenerator.trails[i]=new t_state [TraceSize/6]; // 
-    PathGenerator.trails[i]->alloc()->copy(IdentityMap);
+    PathGenerator.trails[i]->copy(IdentityMap);
     Trails[i]=1;
   }
   
@@ -251,8 +251,9 @@ void Topology::initSeekers()
       for(int rot=0;rot<3; ++rot, ++next)
       {
 	const t_state * from = (rot ? (next-1) : node);
-	next->alloc()->copy(from->state);
+	next->copy(from->state);
 	actOn(next->state, Rotation[side + SingleSide*8]);
+	inverse(next->state,next->i_state);
 	next->parent=from;
 	next->excludeInverse=(rot ? (next-1)->excludeInverse : node->last);
 	if(next->parent->first<0)
@@ -271,6 +272,7 @@ void Topology::initSeekers()
     }
     ++node;
   }
+  PathGenerator.head[TraceSize+1].state=nullptr;
   for(int i=0;i<6;++i)
   {
     PathGenerator.trails[i][Trails[i]].length=6;

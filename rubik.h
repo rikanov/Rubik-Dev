@@ -196,22 +196,42 @@ public:
 
 class Rubik_BF
 {
-  typedef int (Rubik_BF::*SearchEngine)(const int*,const int*);
-  
+  typedef int (Rubik_BF::*SearchEngine)(const Topology::t_state*,const Topology::t_state*);
+ 
   int seekerDepth;
   int best_choice;
   bool foundBetter;
   const Rubik * RubikBase;
   int * InitialState;
+  int * InvInitialState;
   int * SolvedState;
+  String resolver(const Topology::t_state* A,const Topology::t_state* B);
+  struct Cluster
+  {
+    int Dim;
+    int cluster_size;
+    int * HeuristicIndices;
+    const Topology::t_state** found;
+    void clusterInit(const int & dim=0, const int* solved_state = nullptr);
+  private:
+    
+    int * ClusterDimensions;
+    const Topology::t_state *** ClusteredSolutions;
+  public:
+ 
+    const int& dimensions(const int & Index) {return ClusterDimensions[Index];}
+    const Topology::t_state ** solutions(const int & Index) {return ClusteredSolutions[Index];}
+    Cluster() {clusterInit();}
+    ~Cluster();
+    int indexOf(const Topology::t_state* Rot);
+  } cluster;
   SearchEngine Engine;
   void initStates(const int & SizeS);
   void initTrace();
   void setConditions(Stream & IS);
-  int checkConditions(const int* Foresight, const int* Trail=IdentityMap);
-  int fastestCheck(const int* Foresight, const int* Trail=IdentityMap);
-  void extendNode(int & trace_length);
-  int examineNode();  
+  int checkConditions(const Topology::t_state* Foresight, const Topology::t_state* Trail);
+  int fastestCheck(const Topology::t_state* Foresight, const Topology::t_state* Trail);
+  int deepestCheck(const Topology::t_state* Foresight, const Topology::t_state* Trail);
 public:
   Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
   std::pair<int,String> start();

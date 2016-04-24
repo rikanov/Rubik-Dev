@@ -3,7 +3,8 @@
 auxiliary::Sidemarks::Sidemarks(const int& In): 
   Index(In), 
   std::string(Topology::sideMarksOf(In)),
-  eigenvalue(Topology::getEigenvalue(In))
+  eigenvalue(Topology::getEigenvalue(In)),
+  pivotNumber(Topology::getPivotNumber(In))
 {
   
 }
@@ -16,7 +17,8 @@ auxiliary::Sidemarks::Sidemarks(const char* C): Sidemarks(String(C))
 auxiliary::Sidemarks::Sidemarks(const String& S): 
   Index(Topology::getIndex(S)),
   String(S),
-  eigenvalue(Topology::getEigenvalue(Index))
+  eigenvalue(Topology::getEigenvalue(Index)),
+  pivotNumber(Topology::getPivotNumber(Index))
 {
   
 }
@@ -26,6 +28,7 @@ auxiliary::Sidemarks& auxiliary::Sidemarks::operator=(const std::string& S)
   std::string::operator=(S);
   Index=Topology::getIndex(S);
   eigenvalue=Topology::getEigenvalue(Index);
+  pivotNumber=Topology::getPivotNumber(Index);
   return *this;
 }
 
@@ -34,6 +37,7 @@ auxiliary::Sidemarks& auxiliary::Sidemarks::operator=(const int& In)
   Index=In;
   std::string::operator=(Topology::sideMarksOf(Index));
   eigenvalue=Topology::getEigenvalue(Index);
+  pivotNumber=Topology::getPivotNumber(Index);
   return *this;
 }
 

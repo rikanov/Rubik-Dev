@@ -10,6 +10,7 @@ namespace auxiliary
   {
     int Index;
     int eigenvalue;
+    int pivotNumber;
     
   public:
     Sidemarks()=default;
@@ -25,6 +26,7 @@ namespace auxiliary
     int type() const;
     operator int() const {return Index;}
     const int & getEigenvalue() const {return eigenvalue;}
+    const int & getPivot() const {return pivotNumber;}
     bool is_acting(const char& C, const bool& middle) const;
     static bool sameCubes(const auxiliary::Sidemarks& A, const auxiliary::Sidemarks& B);
  };
