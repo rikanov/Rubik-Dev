@@ -43,17 +43,20 @@ std::string Topology::t_state::path() const
 Topology::t_state * Topology::t_state::alloc()
 {
   state=new int[NumberOfSideMarks];
+  i_state=new int[NumberOfSideMarks];
   return this;
 }
 void Topology::t_state::dealloc()
 {
   delete state;
+  delete i_state;
   state=nullptr;
 }
 void Topology::t_state::copy(const int* C)
 {
   alloc();
   CPY_FUNC(state,C)
+  inverse(state,i_state);
 }
 
 ///=====================
@@ -88,6 +91,7 @@ Topology::Topology()
   makeConnectionBetween(4,0,2);
  
   setHash(); 
+  setPivotNumbers();
   buildRotations();
   createTokens();
   initSeekers();
@@ -153,6 +157,17 @@ void Topology::setHash()
       }
 }
 
+void Topology::setPivotNumbers()
+{
+  int N[3]={0};
+  for(int index=6; index<NumberOfSideMarks; ++index)
+  {
+    const int sub_group=1+Cubes[index].Eigenvalue;
+    Cubes[index].Pivot=N[sub_group];
+    ++N[sub_group];
+  }
+}
+
 void Topology::setEigenvalue(Topology::Cube & C)
 {
   if(C.Facets.length()<3)
@@ -193,6 +208,11 @@ void Topology::setEigenvalue(Topology::Cube & C)
 const int & Topology::getEigenvalue(const int & Index)
 {
   return Index > 0 ? Singleton->Cubes[Index].Eigenvalue : Index;
+}
+
+const int & Topology::getPivotNumber(const int& Index)
+{
+  return Index > 0 ? Singleton->Cubes[Index].Pivot : Index;
 }
 
 int Topology::computeRotate(const Cube & C, const int& R)
@@ -277,7 +297,7 @@ int Topology::getIndex(const int& x, const int& y, const int& z)
   return Singleton->Hash_In[hash(x,y,z)];
 }
 
-const std::string& Topology::sideMarksOf(const int& Index)
+const String& Topology::sideMarksOf(const int& Index)
 {
   return Singleton->Cubes[Index].Facets;
 }

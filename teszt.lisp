@@ -1,4 +1,4 @@
 reset
-swap FL FD
-swap FLU FUR
-brute_force * upside FL FR BL BR
+swap FRU BLU
+brute_force *4 upside
+brute_force +3 upside

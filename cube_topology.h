@@ -25,6 +25,7 @@ private:
     String Facets;
     int Index;
     int Eigenvalue;
+    int Pivot;
     Side * Sides[4]={};
     bool OnTheSide[6]={};
     
@@ -37,6 +38,7 @@ public:
   {
     const t_state * parent;
     int * state;
+    int * i_state;
     int first;
     int last;
     int excludeInverse;
@@ -68,6 +70,7 @@ private:
   void initSeekers();
   
   void setEigenvalue(Topology::Cube& C);
+  void setPivotNumbers();
   int SideDigits[90]={};
   int Hash_In[CompressedArraySize]={};
   int Hash_Out[NumberOfSideMarks]={};
@@ -115,6 +118,7 @@ public:
   static int getIndex(const String & SMarks);
   static int getIndex(const int & x, const int & y, const int & z);
   static const int& getEigenvalue(const int& Index);
+  static const int& getPivotNumber(const int& Index);
   static const String & sideMarksOf(const int & Index);
   static int sideDigit(const char & C);
   static int rotation(const int& Index, const int& Rot, const bool& Invert=false);
