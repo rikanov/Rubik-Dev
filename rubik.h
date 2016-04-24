@@ -115,7 +115,10 @@ class Rubik
 			
   Sidemarks 
   locationOf		(const Sidemarks & S) const;
-			
+
+  void 
+  swapTwoPieces         (const Sidemarks& A, const Sidemarks& B);
+  
   String 
   bruteForce		(
 			Stream& IS, 

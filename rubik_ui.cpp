@@ -445,28 +445,25 @@ UI_rfunc(crypt)
 
 UI_rfunc(swap)
 {
-  GET2(A,B)
-  const int a=Sidemarks(A);
-  const int b=Sidemarks(B);
-  String Result=NIL;
-  if(Topology::getEigenvalue(a)==Topology::getEigenvalue(b))
-  {
-    Stream SA(permute(A));
-    String step;
-    EMPTY(temp)
-    CPY_FUNC(temp,A_map)
-    while(SA >> step)
+  String Success=TRUE;
+  GETLIST(Pieces)
+  String Start;
+  Pieces >> Start;
+  String To;
+  while(Pieces >> To)
+  {   
+    const Sidemarks from(Start), to(To);
+    if(Topology::getEigenvalue(from)==Topology::getEigenvalue(to))
     {
-      String mapped(step);
-      auxiliary::cryptText(A,B,mapped);
-      temp[Sidemarks(step)]=A_map[Sidemarks(mapped)];
-      temp[Sidemarks(mapped)]=A_map[Sidemarks(step)]; 
+      swapTwoPieces(from,to);
     }
-    CPY_FUNC(A_map,temp)
-    Topology::inverse(A_map,B_map);
-    Result=TRUE;
+    else
+    {
+      Success=NIL;
+      break;
+    }
   }
-  return Result;
+  return Success;
 }
 
 UI_rfunc(sameCubes)

@@ -9,6 +9,8 @@ defvar leftside  LU LB LD LF ULF BLU BLD DLF
 defvar frontside FU FR FD FL ULF URF DRF DLF
 defvar backside  BU BL BD BR BRU BLU BLD BRD
 
+defvar Upside upside FR FL BL BR
+
 defvar edges     UR UF UL UB DR DF DL DB FR FL BL BR
 defvar corners   URF ULF BRU BLU DRF DLF BRD BLD
 defvar all-cubes edges corners
