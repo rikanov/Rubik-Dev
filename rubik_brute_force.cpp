@@ -16,7 +16,7 @@ RubikBase(R)
   {
     cluster.clusterInit(AS[1]-'0',SolvedState);
     seekerDepth=5;
-    Engine=&Rubik_BF::deepestCheck;
+    Engine=&Rubik_BF::heuristicalSearch;
   }
   else if(AS.length()==2 && AS[0]=='+')
   {

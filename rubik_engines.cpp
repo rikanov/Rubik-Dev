@@ -46,7 +46,7 @@ int Rubik_BF::fastestCheck(const Topology::t_state* Foresight, const Topology::t
   return 1;
 }
 
-int Rubik_BF::deepestCheck(const Topology::t_state* Foresight, const Topology::t_state* Trail)
+int Rubik_BF::heuristicalSearch(const Topology::t_state* Foresight, const Topology::t_state* Trail)
 {
   for(const int *c=SolvedState; *c>=0; ++c)
   {
@@ -71,7 +71,7 @@ int Rubik_BF::deepestCheck(const Topology::t_state* Foresight, const Topology::t
 	cluster.found = cluster.solutions(index+by_side);
 	for(int depth=0;depth<cluster.dimensions(index+by_side);++depth,++cluster.found)
 	{
-	  const int *c=SolvedState; 
+	  const int *c=SolvedState+cluster.Dim; 
 	  while(*c>=0)
 	  {
 	    if((*cluster.found)->state[Trail->state[Foresight->state[InitialState[*c]]]]!=*c)
@@ -81,7 +81,7 @@ int Rubik_BF::deepestCheck(const Topology::t_state* Foresight, const Topology::t
 	    ++c;
 	  }
 	  if(*c<0)
-	  {OUT_("found: "<<(*cluster.found)->path()<<'+'<<Foresight->path()<<'+'<<Trail->path()<<"  #")
+	  {
 	    return 1;
 	  }
 	}

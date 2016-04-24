@@ -229,9 +229,11 @@ class Rubik_BF
   void initStates(const int & SizeS);
   void initTrace();
   void setConditions(Stream & IS);
+  // Search Engines:
   int checkConditions(const Topology::t_state* Foresight, const Topology::t_state* Trail);
   int fastestCheck(const Topology::t_state* Foresight, const Topology::t_state* Trail);
-  int deepestCheck(const Topology::t_state* Foresight, const Topology::t_state* Trail);
+  int heuristicalSearch(const Topology::t_state* Foresight, const Topology::t_state* Trail);
+  // ===============
 public:
   Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
   std::pair<int,String> start();
