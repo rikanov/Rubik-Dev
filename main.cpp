@@ -17,5 +17,6 @@ int main(int argc, char **argv)
       global.file_open(argv[i]);
     }
   }
+  Topology::close();
   return 0;
 }

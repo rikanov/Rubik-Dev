@@ -240,7 +240,7 @@ void Topology::initSeekers()
   t_state * node = Head;
   t_state * next = node+1;
   t_state overflow[3];
-  while(node->length<5)
+  while(node->length<CONFIG_CACHE_MEMORY_USAGE)
   {
     for(int side=0;side<6;++side)
     {

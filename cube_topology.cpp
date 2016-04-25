@@ -314,12 +314,21 @@ char Topology::oppositeSide(const char& C)
 
 Topology::~Topology()
 {
-  Side ** S=Sides;
-  const int ** R=Rotation;
-  for(int digit=0;digit<256;++digit)
+  if(this==Singleton)
   {
-    delete *(S++);
-    delete *(R++);    
+    Side ** S=Sides;
+//     const int ** R=Rotation;
+//     for(int digit=0;digit<256;++digit)
+//     {
+//       if(*R!=IdentityMap)
+//       {
+// 	delete *(R++);    
+//       }
+//     }
+    for(int digit=0;digit<6;++digit)
+    {
+      delete *(S++);   
+    }
   }
 }
 

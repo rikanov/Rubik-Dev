@@ -12,6 +12,8 @@
 
 //#define SILENT
 
+const int CONFIG_CACHE_MEMORY_USAGE=5; // 6: HIGH 5: NORMAL 4 OR LESS: VERY LOW
+
 typedef std::string String;
 typedef std::stringstream Stream;
 typedef std::regex Regex;

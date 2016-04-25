@@ -33,7 +33,7 @@ private:
   } Cubes[NumberOfSideMarks];
 public: 
   
-  static const int TraceSize=877032; //976338;
+  static const int TraceSize= CONFIG_CACHE_MEMORY_USAGE==6 ? 12704328 : 877032; 
   struct t_state
   {
     const t_state * parent;
@@ -56,13 +56,13 @@ public:
     t_state ** 	trails;
     seeker(): head(nullptr), trails(nullptr) {}
     ~seeker()
-    {OUT_("destructor...")
+    {
       delete[] head;
       for(int i=0;i<6;++i)
       {
-	delete[] trails[i]; OUT_("branch "<<i)
+	delete[] trails[i]; 
       }
-      delete[] trails; OUT_("trails deleted...")
+      delete[] trails; 
     }
   } PathGenerator;
   
