@@ -18,7 +18,7 @@ std::pair< int, std::string > Rubik_BF::start()
   {
     trail[i]=checkPoints[i]=Topology::getTrace(i);
   }
-  while(result==0 && T_short->length<5)
+  while(result==0 && T_short->length<=CONFIG_CACHE_MEMORY_USAGE)
   {
     result=(this->*Engine)(T_short,Topology::getTrace());
     if(result||foundBetter)

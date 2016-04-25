@@ -275,7 +275,7 @@ void Topology::initSeekers()
   PathGenerator.head[TraceSize+1].state=nullptr;
   for(int i=0;i<6;++i)
   {
-    PathGenerator.trails[i][Trails[i]].length=6;
+    PathGenerator.trails[i][Trails[i]].length=CONFIG_CACHE_MEMORY_USAGE+1;
   }
 }
 
