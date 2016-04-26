@@ -37,8 +37,8 @@ public:
   struct t_state
   {
     const t_state * parent;
-    int * state;
-    int * i_state;
+    CubeSlot * state;
+    CubeSlot * i_state;
     int first;
     int last;
     int excludeInverse;
@@ -47,7 +47,7 @@ public:
     String path() const;
     t_state* alloc();
     void dealloc();
-    void copy(const int* C);
+    void copy(const CubeSlot * C);
   };
  
   struct seeker
@@ -71,10 +71,10 @@ private:
   
   void setEigenvalue(Topology::Cube& C);
   void setPivotNumbers();
-  int SideDigits[90]={};
-  int Hash_In[CompressedArraySize]={};
-  int Hash_Out[NumberOfSideMarks]={};
-  const int * Rotation[256]={};
+  CubeSlot SideDigits[90]={};
+  CubeSlot Hash_In[CompressedArraySize]={};
+  CubeSlot Hash_Out[NumberOfSideMarks]={};
+  const CubeSlot * Rotation[256]={};
   
   String tokenTrails[15]={};
   
@@ -82,9 +82,9 @@ private:
   void setHash();
   void makeConnectionBetween(Topology::Side* A, Topology::Side* B, const int& RotatingSide);
   void makeConnectionBetween(const int& A, const int& B, const int& RotatingSide);
-  int computeRotate(const Cube& C, const int& R);
+    int computeRotate(const Topology::Cube& C, const CubeSlot& R);
   void buildRotations();
-  bool createRotation(int* R, const int & side, const int & mod);
+  bool createRotation(CubeSlot* Q, const CubeSlot& Rot, const int& A);
   void createTokens();
   
   Topology();
@@ -121,16 +121,16 @@ public:
   static const int& getPivotNumber(const int& Index);
   static const String & sideMarksOf(const int & Index);
   static int sideDigit(const char & C);
-  static int rotation(const int& Index, const int& Rot, const bool& Invert=false);
-  static const int * rotation(const int& Rot) {return Singleton->Rotation[Rot];}
-  static bool defOperation(int* Q, const String& Operations, const int & Including=NotDefined, const int & Restriction=NotDefined);
-  static const int* operate(const int& Rot, const int& A);
-  static void operate(const int * Q, const int * R, int * Result);
-  static void operateOnRestrictedSpace(int* Q, const int& Rot, const bool & Invert, const bool & Double);
-  static void operateOnRestrictedSpace(int* Q, const int* R, const int& Rot);
-  static void inverse(const int* Q, int* Result);
-  static void inverse(int* Q);
-  static void actOn(int * Q, const int * R);
+  static int rotation(const CubeSlot& Index, const CubeSlot& Rot, const bool& Invert=false);
+  static const CubeSlot * rotation(const int& Rot) {return Singleton->Rotation[Rot];}
+  static bool defOperation(CubeSlot* Q, const std::string& Operations, const int& Including = NotDefined, const int& Restriction = NotDefined);
+  static const CubeSlot * operate(const CubeSlot& Rot, const int& A);
+  static void operate(const CubeSlot * Q, const CubeSlot * R, CubeSlot * Result);
+  static void operateOnRestrictedSpace(CubeSlot * Q, const int& Rot, const bool & Invert, const bool & Double);
+  static void operateOnRestrictedSpace(CubeSlot * Q, const CubeSlot * R, const CubeSlot& Rot);
+  static void inverse(const CubeSlot * Q, CubeSlot * Result);
+  static void inverse(CubeSlot * Q);
+  static void actOn(CubeSlot * Q, const CubeSlot * R);
   static char oppositeSide(const char& C);
   static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
   static const t_state * getTrace() {return Singleton->PathGenerator.head;}

@@ -334,7 +334,7 @@ UI_rfunc(loadCube)
   std::ifstream S; 
   S.open(file_name, std::ios::in); 
   String numericData;
-  int * pointer=A_map;
+  CubeSlot * pointer=A_map;
   while(S>>numericData)
   {
     *(pointer++) = atoi(numericData.c_str()); 

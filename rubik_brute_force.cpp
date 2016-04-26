@@ -32,9 +32,9 @@ RubikBase(R)
 
 void Rubik_BF::initStates(const int& SizeS)
 {
-  SolvedState     = new int [NumberOfSideMarks];
-  InitialState    = new int [NumberOfSideMarks];
-  InvInitialState = new int [NumberOfSideMarks];
+  SolvedState     = new CubeSlot [NumberOfSideMarks];
+  InitialState    = new CubeSlot [NumberOfSideMarks];
+  InvInitialState = new CubeSlot [NumberOfSideMarks];
   memset(SolvedState,0,NumberOfSideMarks);
   memset(InitialState,0,NumberOfSideMarks);
   memset(InvInitialState,0,NumberOfSideMarks);
@@ -47,7 +47,7 @@ void Rubik_BF::initTrace()
 
 void Rubik_BF::setConditions(std::stringstream& IS)
 {
-  int *sp=SolvedState, s_counter=0;
+  CubeSlot *sp=SolvedState, s_counter=0;
   String s;
   while(IS>>s)
   {
@@ -72,7 +72,7 @@ void Rubik_BF::setConditions(std::stringstream& IS)
   {
     *(sp++)=-s_counter;
   }
-  *sp=-256;
+  *sp=-128;
   FOR_FUNC(i)
   {
     InitialState[i]=RubikBase->locationOf(i);

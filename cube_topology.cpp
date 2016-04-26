@@ -42,8 +42,8 @@ std::string Topology::t_state::path() const
 
 Topology::t_state * Topology::t_state::alloc()
 {
-  state=new int[NumberOfSideMarks];
-  i_state=new int[NumberOfSideMarks];
+  state=new CubeSlot[NumberOfSideMarks];
+  i_state=new CubeSlot[NumberOfSideMarks];
   return this;
 }
 void Topology::t_state::dealloc()
@@ -51,8 +51,9 @@ void Topology::t_state::dealloc()
   delete state;
   delete i_state;
   state=nullptr;
+  i_state=nullptr;
 }
-void Topology::t_state::copy(const int* C)
+void Topology::t_state::copy(const CubeSlot* C)
 {
   alloc();
   CPY_FUNC(state,C)
@@ -215,7 +216,7 @@ const int & Topology::getPivotNumber(const int& Index)
   return Index > 0 ? Singleton->Cubes[Index].Pivot : Index;
 }
 
-int Topology::computeRotate(const Cube & C, const int& R)
+int Topology::computeRotate(const Cube & C, const CubeSlot& R)
 {
   int r[3], i=0; r[1]=r[2]=0;
   for(Side * const* S=C.Sides; *S; ++S)

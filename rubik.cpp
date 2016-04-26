@@ -15,9 +15,9 @@ void Rubik::printCollection() const
   NL_ NL_
 }
 
-bool Rubik::is_solved(const int* Cubes, const int & Limit) const
+bool Rubik::is_solved(const CubeSlot* Cubes, const int & Limit) const
 { 
-  const int * b=IdentityMap;
+  const CubeSlot * b=IdentityMap;
   C_EACH_FUNC(A_map,a, index)
   {
     if(index==Limit)

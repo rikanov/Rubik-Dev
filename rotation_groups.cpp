@@ -3,7 +3,7 @@
 
 #include"cube_topology.h"
 
-static inline bool is_inverse(const int& A)
+static inline bool is_inverse(const CubeSlot& A)
 {
   return A&Topology::Inverter;
 }
@@ -16,7 +16,7 @@ void Topology::buildRotations()
   SideGroup[3]=InvertSide;
   for(int Digit=0; Digit<6; ++Digit)
   {
-    int * R=new int[NumberOfSideMarks];
+    CubeSlot * R=new CubeSlot[NumberOfSideMarks];
     FOR_FUNC(index)
     {
       R[index]=computeRotate(Cubes[index],Digit);
@@ -27,14 +27,14 @@ void Topology::buildRotations()
   {
     for(int side=0;side<6;++side)
     {
-      int * R=new int[NumberOfSideMarks];
+      CubeSlot * R=new CubeSlot[NumberOfSideMarks];
       CPY_FUNC(R,IdentityMap)
       Rotation[mod*8+side]=createRotation(R,side,mod) ? R : IdentityMap;
     }
   }
 }
 
-void Topology::operateOnRestrictedSpace(int* Q, const int* R, const int& Rot)
+void Topology::operateOnRestrictedSpace(CubeSlot* Q, const CubeSlot* R, const CubeSlot& Rot)
 {
   for(const int op=(SingleSide<<3)+Rot; *R!=-1; ++R)
   {
@@ -43,13 +43,13 @@ void Topology::operateOnRestrictedSpace(int* Q, const int* R, const int& Rot)
   *Q=-1;
 }
 
-int Topology::rotation(const int& Index, const int& Rot, const bool & Invert)
+int Topology::rotation(const CubeSlot & Index, const CubeSlot & Rot, const bool & Invert)
 {
   return Singleton->Rotation[Invert ? OPPOSITE(Rot):Rot][Index];
 }
 
 
-bool Topology::createRotation(int* Q, const int& Rot, const int& A)
+bool Topology::createRotation(CubeSlot * Q, const CubeSlot & Rot, const int & A)
 {
   bool Result=false;
   if(A & AllCubes)
@@ -119,12 +119,12 @@ bool Topology::createRotation(int* Q, const int& Rot, const int& A)
   return Result;
 }
 
-const int * Topology::operate(const int& Rot, const int& A)
+const CubeSlot * Topology::operate(const CubeSlot & Rot, const int& A)
 {
   return Singleton->Rotation[(A<<3)+Rot];
 }
 
-void Topology::operate(const int* Q, const int* R, int* S) // Group operation: QR -> S
+void Topology::operate(const CubeSlot * Q, const CubeSlot * R, CubeSlot * S) // Group operation: QR -> S
 {
   FOR_FUNC(index)
   {
@@ -132,7 +132,7 @@ void Topology::operate(const int* Q, const int* R, int* S) // Group operation: Q
   }
 }
 
-bool Topology::defOperation(int* Q, const std::string& Operations, const int & Including, const int & Restriction)
+bool Topology::defOperation(CubeSlot * Q, const std::string& Operations, const int & Including, const int & Restriction)
 {
   bool Result=false;
   int all_cubes=0;
@@ -186,7 +186,7 @@ bool Topology::defOperation(int* Q, const std::string& Operations, const int & I
     }
     if((Modifier&Restriction)==Restriction)
     {
-      const int * op=operate(R,Modifier|Including|all_cubes);
+      const CubeSlot * op=operate(R,Modifier|Including|all_cubes);
       actOn(Q,op);
       Result=(op!=nullptr);
     }
@@ -194,7 +194,7 @@ bool Topology::defOperation(int* Q, const std::string& Operations, const int & I
   return Result;
 }
 
-void Topology::inverse(const int* Q, int* Result)
+void Topology::inverse(const CubeSlot * Q, CubeSlot * Result)
 {
   C_EACH_FUNC(Q,q,index)
   {
@@ -202,7 +202,7 @@ void Topology::inverse(const int* Q, int* Result)
   }
 }
 
-void Topology::inverse(int* Q)
+void Topology::inverse(CubeSlot * Q)
 {
   EMPTY(temp)
   CPY_FUNC(temp, Q) 
@@ -212,9 +212,9 @@ void Topology::inverse(int* Q)
   }
 }
 
-void Topology::actOn(int* Q, const int* R)
+void Topology::actOn(CubeSlot * Q, const CubeSlot * R)
 {
-  int *q=Q;
+  CubeSlot *q=Q;
   FOR_FUNC(index)
   {
     *q=R[*q];

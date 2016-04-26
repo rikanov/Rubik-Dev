@@ -1,6 +1,6 @@
 #include "rubik.h"
 #define auto_comp(X) setAutocomp(X);
-#define NEW (new int[NumberOfSideMarks])
+#define NEW (new CubeSlot[NumberOfSideMarks])
 
 Rubik* Rubik::Global=nullptr;
 std::map<String, Rubik*> * Rubik::Collection=new std::map<String, Rubik*>;
@@ -34,10 +34,10 @@ void Rubik::initRubik()
 
 void Rubik::initStack()
 {
-  Stack=new int* [MaximumStackDepth];
+  Stack=new CubeSlot* [MaximumStackDepth];
   FOR_FUNC(index)
   {
-    Stack[index]=new int[NumberOfSideMarks];
+    Stack[index]=new CubeSlot[NumberOfSideMarks];
   }
 
 }

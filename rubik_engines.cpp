@@ -7,7 +7,7 @@ int Rubik_BF::checkConditions(const Topology::t_state * Foresight, const Topolog
   int cond=0;
   int counter=0;
   bool found=false;
-  for(const int *c=SolvedState; *c!=-256; ++c)
+  for(const CubeSlot *c=SolvedState; *c!=-128; ++c)
   {
     if(*c<0) 
     {
@@ -36,7 +36,7 @@ int Rubik_BF::checkConditions(const Topology::t_state * Foresight, const Topolog
 
 int Rubik_BF::fastestCheck(const Topology::t_state* Foresight, const Topology::t_state* Trail)
 {
-  for(const int *c=SolvedState; *c>=0; ++c)
+  for(const CubeSlot *c=SolvedState; *c>=0; ++c)
   {
     if(Trail->state[Foresight->state[InitialState[*c]]]!=*c)
     {
@@ -48,7 +48,7 @@ int Rubik_BF::fastestCheck(const Topology::t_state* Foresight, const Topology::t
 
 int Rubik_BF::heuristicalSearch(const Topology::t_state* Foresight, const Topology::t_state* Trail)
 {
-  for(const int *c=SolvedState; *c>=0; ++c)
+  for(const CubeSlot *c=SolvedState; *c>=0; ++c)
   {
     if(Trail->state[Foresight->state[InitialState[*c]]]!=*c)
     {
@@ -59,37 +59,28 @@ int Rubik_BF::heuristicalSearch(const Topology::t_state* Foresight, const Topolo
 	//const Sidemarks sm(InvInitialState[Foresight->i_state[Trail->i_state[cluster.HeuristicIndices[i]]]]);
 	const Sidemarks sm(Trail->state[Foresight->state[InitialState[cluster.HeuristicIndices[i]]]]);
 	index+=multiplier*sm.getPivot();
-      } 
-      index*=6; 
-      for(int by_side=0; by_side<6; ++by_side)
+      }
+      cluster.found = cluster.solutions(index);
+      for(int depth=0;depth<cluster.dimensions(index);++depth,++cluster.found)
       {
-	if(by_side==Foresight->last)
+	const CubeSlot *c=SolvedState+cluster.Dim; 
+	while(*c>=0)
 	{
-	  continue;
+	  if((*cluster.found)->state[Trail->state[Foresight->state[InitialState[*c]]]]!=*c)
+	  {
+	    break;
+	  }
+	  ++c;
 	}
-	// index=318+by_side; OUT_(index<<' '<<cluster.dimensions(index+by_side))
-	cluster.found = cluster.solutions(index+by_side);
-	for(int depth=0;depth<cluster.dimensions(index+by_side);++depth,++cluster.found)
+	if(*c<0)
 	{
-	  const int *c=SolvedState+cluster.Dim; 
-	  while(*c>=0)
-	  {
-	    if((*cluster.found)->state[Trail->state[Foresight->state[InitialState[*c]]]]!=*c)
-	    {
-	      break;
-	    }
-	    ++c;
-	  }
-	  if(*c<0)
-	  {
-	    return 1;
-	  }
+	  return 1;
 	}
       }
       cluster.found=nullptr; 
       return 0;
     }
-  } OUT_("found")
+  } OUT_("found ")
   cluster.found=nullptr;
   return 1;
 }

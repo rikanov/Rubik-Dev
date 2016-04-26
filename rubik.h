@@ -39,18 +39,18 @@ class Rubik
   
 		// Let I the index of a certain side mark in the current state 
 		// of the Rubik's Cube. Then, let:
-  int * A_map; 	// indices of side marks what we need here, 
-  int * B_map;	// indices of side marks what ARE actually here
+  CubeSlot * A_map; 	// indices of side marks what we need here, 
+  CubeSlot * B_map;	// indices of side marks what ARE actually here
 
-  int * Sup_map;  // to find partial solutions we need supposations
-  int * Sup_inv;  // by default they both are identical mappings. (no supposation)  
+  CubeSlot * Sup_map;  // to find partial solutions we need supposations
+  CubeSlot * Sup_inv;  // by default they both are identical mappings. (no supposation)  
 
   static const int MaximumStackDepth=256;
-  int ** Stack;
+  CubeSlot ** Stack;
   int stack_pointer=0;
   
-  int* RotationCache;
-  int* RotationAlign;
+  CubeSlot * RotationCache;
+  CubeSlot * RotationAlign;
   bool NeedAlign;
 
   void 
@@ -66,7 +66,7 @@ class Rubik
   printCollection	() const;
   
   bool 
-  is_solved		(const int * Cubes = IdentityMap, 
+  is_solved		(const CubeSlot * Cubes = IdentityMap, 
 			 const int & Limit = NumberOfSideMarks) const;
 			 
   bool 
@@ -207,17 +207,17 @@ class Rubik_BF
   int best_choice;
   bool foundBetter;
   const Rubik * RubikBase;
-  int * InitialState;
-  int * InvInitialState;
-  int * SolvedState;
+  CubeSlot * InitialState;
+  CubeSlot * InvInitialState;
+  CubeSlot * SolvedState;
   String resolver(const Topology::t_state* A,const Topology::t_state* B);
   struct Cluster
   {
     int Dim;
     int cluster_size;
-    int * HeuristicIndices;
+    CubeSlot * HeuristicIndices;
     const Topology::t_state** found;
-    void clusterInit(const int & dim=0, const int* solved_state = nullptr);
+    void clusterInit(const int & dim=0, const CubeSlot * solved_state = nullptr);
   private:
     
     int * ClusterDimensions;

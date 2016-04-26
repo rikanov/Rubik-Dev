@@ -1,7 +1,7 @@
 #include "rubik.h"
 
 
-void Rubik_BF::Cluster::clusterInit(const int& dim, const int * solved_state)
+void Rubik_BF::Cluster::clusterInit(const int& dim, const CubeSlot * solved_state)
 {
   found=nullptr;
   if(dim==0)
@@ -14,7 +14,7 @@ void Rubik_BF::Cluster::clusterInit(const int& dim, const int * solved_state)
   } 
   OUT("caching heuristical ends... ")
   Dim=dim; 
-  HeuristicIndices=new int[dim];
+  HeuristicIndices=new CubeSlot[dim];
   for(int i=0; i<dim; ++i)
   {
     HeuristicIndices[i]=solved_state[i]>0 ? solved_state[i] : 0; 
@@ -24,7 +24,6 @@ void Rubik_BF::Cluster::clusterInit(const int& dim, const int * solved_state)
   {
     cluster_size*=24; // ClusterSize=24^Dim;
   }
-  cluster_size*=6;  // ClusterSize=24^Dim * Sides;
   ClusterDimensions = new int [cluster_size];
   for(int i=0;i<cluster_size;++i)
   {
@@ -33,17 +32,19 @@ void Rubik_BF::Cluster::clusterInit(const int& dim, const int * solved_state)
   for(const Topology::t_state * state_pointer=Topology::getTrace()+1; state_pointer->state!=nullptr; ++state_pointer)
   {
     ++ClusterDimensions[indexOf(state_pointer)];
-//     if(indexOf(state_pointer)<0 || indexOf(state_pointer)>=cluster_size)
-//     {
-//       OUT_("something went wrong... "<<indexOf(state_pointer))
-//     }
   }
-  ClusteredSolutions=new const Topology::t_state** [cluster_size];
+  ClusteredSolutions=new const Topology::t_state** [cluster_size]; OUT_(NL<<cluster_size)
+  int usage=0;
   for(int i=0;i<cluster_size;++i)
   {
     ClusteredSolutions[i]= ClusterDimensions[i]==0 ? nullptr : new const Topology::t_state* [ClusterDimensions[i]];
+    if(ClusterDimensions[i])
+    {
+      ++usage;
+    }
     ClusterDimensions[i]=0; 
   } 
+  OUT_(usage)
   for(const Topology::t_state * state_pointer=Topology::getTrace()+1; state_pointer->state!=nullptr; ++state_pointer)
   {
     const int index=indexOf(state_pointer);
@@ -61,9 +62,7 @@ int Rubik_BF::Cluster::indexOf(const Topology::t_state *Rot)
   {
     const Sidemarks sm(Rot->i_state[HeuristicIndices[i]]);
     result+=multiplier*sm.getPivot();
-  } 
-  result*=6;
-  result+=Rot->first; // classification by first of 6 sides rotation;
+  }
   return result;
 }
 

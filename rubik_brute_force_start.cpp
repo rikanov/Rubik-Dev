@@ -18,7 +18,7 @@ std::pair< int, std::string > Rubik_BF::start()
   {
     trail[i]=checkPoints[i]=Topology::getTrace(i);
   }
-  while(result==0 && T_short->length<=CONFIG_CACHE_MEMORY_USAGE)
+  while(result==0 && T_short->state!=nullptr)
   {
     result=(this->*Engine)(T_short,Topology::getTrace());
     if(result||foundBetter)
@@ -31,10 +31,10 @@ std::pair< int, std::string > Rubik_BF::start()
     }
     ++T_short; 
   } 
-  
+  OUT_("it's done "<<seekerDepth)
   for(int depth=0;depth<=seekerDepth; ++depth)
   {
-    for(const Topology::t_state* T=T_short;result==0 && T->state!=nullptr;++T)
+    for(const Topology::t_state* T=Topology::getTrace();result==0 && T->state!=nullptr;++T)
     {
       if((bar++)%step==0)
       {
