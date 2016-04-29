@@ -40,7 +40,7 @@ UI_rfunc(parser)
     //=====================================//
    //  *** Return constant variables ***  //
   //=====================================//  
-  else if(read_in==TRUE || read_in==NIL || Sidemarks(read_in).valid())
+  else if(read_in==L_TRUE || read_in==NIL || Sidemarks(read_in).valid())
   {
     // SKIP
   }
@@ -130,6 +130,7 @@ UI_rfunc(parser)
   trigger("cat",               catFiles)
   trigger("load",              loadCube)
   trigger("save",              saveCube)
+  trigger("edit",                editor)
   
     //=====================================//
    //  *** Evaluate object functions ***  //

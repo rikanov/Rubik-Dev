@@ -95,6 +95,15 @@ void Rubik::initCommandComp()
   
   auto_comp("%exec_file")
   
+    //===========================================//
+   //  *** File operations and text editor ***  //
+  //===========================================//
+  
+  auto_comp("save")
+  auto_comp("load")
+  auto_comp("cat")
+  auto_comp("edit")
+    
     //=======================================//
    //  *** Evaluate built-in functions ***  //
   //=======================================//

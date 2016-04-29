@@ -1,6 +1,7 @@
 #include"globals.h"
 #include"rubik.h"
-#define boolean(X) return (X) ? TRUE : NIL;
+#include "editor.h"
+#define boolean(X) return (X) ? L_TRUE : NIL;
 
 UI_rfunc(REPL)
 {
@@ -105,13 +106,13 @@ UI_rfunc(delete_var)
   else
   {
     Var_space->erase(it);
-    return TRUE;
+    return L_TRUE;
   }
 }
 
 UI_rfunc(nilEquality)
 {
-  return parser(IS)==NIL ? TRUE : NIL;
+  return parser(IS)==NIL ? L_TRUE : NIL;
 }
 
 UI_rfunc(variableEquality)
@@ -216,7 +217,7 @@ UI_rfunc(store)
   else
   {
     CPY_FUNC(Stack[stack_pointer++],A_map)
-    Result=TRUE;
+    Result=L_TRUE;
   }
   return Result;
 }
@@ -232,7 +233,7 @@ UI_rfunc(revert)
   {
     CPY_FUNC(A_map,Stack[--stack_pointer])
     Topology::inverse(A_map, B_map);
-    Result=TRUE;
+    Result=L_TRUE;
   }
   return Result;
 }
@@ -311,7 +312,7 @@ UI_rfunc(catFiles)
       OUT_(tmp);
     } while (!f.eof());
   } 
-  return t ? TRUE : NIL;
+  return t ? L_TRUE : NIL;
 }
 
 UI_rfunc(saveCube)
@@ -342,6 +343,29 @@ UI_rfunc(loadCube)
   Topology::inverse(A_map, B_map);
   S.close();
   return NIL;
+}
+
+UI_rfunc(editor)
+{
+  GET(file_name)
+  Editor ed(file_name);
+    
+  initscr();            // Start ncurses mode
+  noecho();             // Don't echo keystrokes
+  cbreak();             // Disable line buffering
+  keypad(stdscr, true); // Enable special keys to be recorded
+  
+  while(ed.getMode() != 'x')
+  {
+    ed.updateStatus();
+    ed.printStatusLine();
+    ed.printBuff();
+    int input = getch();        
+    ed.handleInput(input);
+  }    
+  refresh();                     
+  endwin(); 
+  return file_name;
 }
 
 UI_rfunc(conc)
@@ -445,7 +469,7 @@ UI_rfunc(crypt)
 
 UI_rfunc(swap)
 {
-  String Success=TRUE;
+  String Success=L_TRUE;
   GETLIST(Pieces)
   String Start;
   Pieces >> Start;

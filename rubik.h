@@ -133,6 +133,7 @@ class Rubik
   UI_func(REPL)
   UI_func(parser)
   UI_func(file_open)
+  UI_func(editor)
   
   UI_func(progn)
   UI_func(list)

@@ -9,10 +9,11 @@
 #include <map>
 #include <time.h>
 #include <algorithm> 
+#include <ncurses.h>
 
 //#define SILENT
 
-const int CONFIG_CACHE_MEMORY_USAGE=6; // 6: HIGH 5: NORMAL 4 OR LESS: VERY LOW
+const int CONFIG_CACHE_MEMORY_USAGE=5; // 6: HIGH 5: NORMAL 4 OR LESS: VERY LOW
 
 typedef std::string String;
 typedef std::stringstream Stream;
@@ -44,8 +45,8 @@ typedef signed char CubeSlot;
 #define TRIM_END(S) while(!S.empty() && (S.back()<=32||S.back()>=127)) S.pop_back();
 #define TRIM(S) TRIM_END(S) while(!S.empty() && (S.front()<=32||S.front()>=127)) S=S.substr(1);
 #define NONILL(X) if(X=="NIL") {X="";}
-#define NIL "NIL"
-#define TRUE "T"
+const String NIL = "NIL";
+const String L_TRUE = "T";
 const String MACRO_SYNTAX="([^ ]+)\\(([^ ]+)\\)";
 const int CompressedArraySize=240;
 const int NumberOfSideMarks=78;	// = 8*3! + 12*2! 
