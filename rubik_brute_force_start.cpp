@@ -46,7 +46,6 @@ std::pair< int, String > Rubik_BF::start()
   {
     for(const Topology::t_state* T=T_short;result==0 && T->state!=nullptr;++T)
     {
-      result=(this->*Engine)(T,Topology::getTrace());
       if(++bar%1000==0)
       {
 	OUT('\r'<<boringMark[(boringPhase++)%4]);
@@ -56,13 +55,18 @@ std::pair< int, String > Rubik_BF::start()
 	auxiliary::drawBarLine((bar_length++)%30,30);
 	OUT(" best found: "<<Result<<"   ");
       }
-      if(result||foundBetter)
+      
+      if(depth==0)
       {
-	Result=resolver(T,Topology::getTrace());
-      }
-      if(result)
-      {
-	break; 
+	result=(this->*Engine)(T,Topology::getTrace());
+	if(result||foundBetter)
+	{
+	  Result=resolver(T,Topology::getTrace());
+	}
+	if(result)
+	{
+	  break; 
+	}
       }
       for(int side=0;result==0 && side<6;++side)
       {  
