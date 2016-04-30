@@ -76,12 +76,12 @@ std::pair< int, String > Rubik_BF::start()
 	  if(result||foundBetter)
 	  {
 	    Result=resolver(T,trail[side]);
-	  }	  
+	  }
+	  if(result)
+	  {
+	    break; 
+	  } 	  
 	}
-	if(result)
-	{
-	  break; 
-	} 
       }
     }
     for(int i=0;i<6;++i)
