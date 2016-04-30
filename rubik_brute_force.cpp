@@ -9,13 +9,14 @@ RubikBase(R)
   setConditions(IS);
   if(AS=="*")
   {
-    seekerDepth=5;
+    seekerDepth=CONFIG_CACHE_MEMORY_USAGE;
     Engine=&Rubik_BF::fastestCheck;
+    cluster.clusterInit(0,SolvedState);
   }
   else if(AS.length()==2 && AS[0]=='*')
   {
     cluster.clusterInit(AS[1]-'0',SolvedState);
-    seekerDepth=5;
+    seekerDepth=CONFIG_CACHE_MEMORY_USAGE;
     Engine=&Rubik_BF::heuristicalSearch;
   }
   else if(AS.length()==2 && AS[0]=='+')

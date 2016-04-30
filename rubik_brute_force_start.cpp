@@ -1,8 +1,13 @@
-#include "rubik.h"
+#include "rubik.h" 
 
-
-std::pair< int, std::string > Rubik_BF::start()
+std::pair< int, String > Rubik_BF::start()
 {
+  if(fastestCheck(Topology::getTrace(), Topology::getTrace()))
+  {
+    return std::pair< int, String >(1,NIL);
+  }
+  const char boringMark[]="-\\|/";
+  int boringPhase=0;
   const Topology::t_state* Trace=Topology::getTrace();
   int result=0;
   foundBetter=false;
@@ -17,9 +22,13 @@ std::pair< int, std::string > Rubik_BF::start()
   for(int i=0;i<6;++i)
   {
     trail[i]=checkPoints[i]=Topology::getTrace(i);
-  }
-  while(result==0 && T_short->state!=nullptr)
+  } 
+  while(result==0 && T_short->length<CONFIG_CACHE_MEMORY_USAGE-1)
   {
+    if(++bar%1000==0)
+    {
+      OUT('\r'<<boringMark[(boringPhase++)%4]<<" depth: "<<T_short->length+CONFIG_CACHE_MEMORY_USAGE);
+    }
     result=(this->*Engine)(T_short,Topology::getTrace());
     if(result||foundBetter)
     {
@@ -31,33 +40,47 @@ std::pair< int, std::string > Rubik_BF::start()
     }
     ++T_short; 
   } 
-  OUT_("it's done "<<seekerDepth)
-  for(int depth=0;depth<=seekerDepth; ++depth)
+  bar_length=1;
+  bar=0;
+  for(int depth=0;result==0 && depth<=seekerDepth; ++depth)
   {
-    for(const Topology::t_state* T=Topology::getTrace();result==0 && T->state!=nullptr;++T)
+    for(const Topology::t_state* T=T_short;result==0 && T->state!=nullptr;++T)
     {
-      if((bar++)%step==0)
+      result=(this->*Engine)(T,Topology::getTrace());
+      if(++bar%1000==0)
       {
-	auxiliary::drawBarLine((bar_length++)%30,30);OUT(" depth: "<<(5+depth)<<" best found: "<<Result<<"   ");
+	OUT('\r'<<boringMark[(boringPhase++)%4]);
       }
-      for(int side=0;side<6;++side)
+      if(bar%step==0)
+      {
+	auxiliary::drawBarLine((bar_length++)%30,30);
+	OUT(" best found: "<<Result<<"   ");
+      }
+      if(result||foundBetter)
+      {
+	Result=resolver(T,Topology::getTrace());
+      }
+      if(result)
+      {
+	break; 
+      }
+      for(int side=0;result==0 && side<6;++side)
       {  
 	if(T->last==side)
 	{
 	  continue;
 	}
 	for(trail[side]=checkPoints[side];trail[side]->length<depth;++trail[side])
-	{ 
+	{ 	  
 	  result=(this->*Engine)(T,trail[side]);
 	  if(result||foundBetter)
 	  {
 	    Result=resolver(T,trail[side]);
-	  }
-	  if(result)
-	  {
-	    depth=seekerDepth+1; side=6; // to escape from the outer loops too
-	    break; 
-	  }
+	  }	  
+	}
+	if(result)
+	{
+	  break; 
 	} 
       }
     }
@@ -66,7 +89,8 @@ std::pair< int, std::string > Rubik_BF::start()
       checkPoints[i]=trail[i];
     }
   }
-  auxiliary::drawBarLine((bar_length++)%30,30);
-  OUT_(" Result:  "<<Result<<(result ? " is a solution for condition: " : " best choice to solve ")<<(result?result:best_choice));
+ // auxiliary::drawBarLine((bar_length++)%30,30);
+  OUT("\r Result:  "<<Result<<(result ? " is a solution for condition: " : " best choice to solve ")<<(result?result:best_choice))
+  OUT_("                        ");
   return std::pair<int,String> (result,Result);
 }

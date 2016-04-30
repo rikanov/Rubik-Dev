@@ -29,3 +29,6 @@ defun same_colors \
   
 defun randomize & \
   do random; nil eqp UR what_is &
+  
+defmacro append(list_ref) \
+  defvar list_ref list_ref &

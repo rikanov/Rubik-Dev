@@ -25,7 +25,15 @@ UI_rfunc(parser)
   //=============================================//
   if(read_in.front()=='#')
   {
-    getline(IS,read_in);
+    if(getline(IS,read_in))
+    {
+      OUT_(read_in)
+    }
+    else
+    {
+      NL_
+    }
+    read_in=NIL;
   }
   
     //=======================================//

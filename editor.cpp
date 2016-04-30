@@ -12,49 +12,51 @@ Editor::Editor()
     buff->appendLine("");
 }
 
-Editor::Editor(String fn)
+Editor::Editor(const String& PlaceOfModification, const bool & is_file)
 {
-    x=0;y=0;mode='n';
-    status = "Normal Mode";
-    filename = fn;
+  x=0;y=0;mode='n';
+  status = "Normal Mode";
+  buff = new Buffer();
 
-    buff = new Buffer();
-
-    ifstream infile(fn.c_str());
+  if(is_file)
+  {
+    ifstream infile(PlaceOfModification.c_str());
     if(infile.is_open())
     {
-        while(!infile.eof())
-        {
-            String temp;
-            getline(infile, temp);
-            buff->appendLine(temp);
-        }
+      filename=PlaceOfModification;
+      while(!infile.eof())
+      {
+	String temp;
+	getline(infile, temp);
+	buff->appendLine(temp);
+      }
     }
     else
     {
-        cerr << "Cannot open file: '" << fn << "'\n";
-        buff->appendLine("");
+      cerr << "Cannot open file: '" << PlaceOfModification << "'\n";
+      buff->appendLine("");
     }
+  }
 }
 
 void Editor::updateStatus()
 {
-    switch(mode)
-    {
-    case 'n':
-        // Normal mode
-        status = "Normal Mode";
-        break;
-    case 'i':
-        // Insert mode
-        status = "Insert Mode";
-        break;
-    case 'x':
-        // Exiting
-        status = "Exiting";
-        break;
-    }
-    status += "\tCOL: " + tos(x) + "\tROW: " + tos(y);
+  switch(mode)
+  {
+  case 'n':
+    // Normal mode
+    status = "Normal Mode";
+    break;
+  case 'i':
+    // Insert mode
+    status = "Insert Mode";
+    break;
+  case 'x':
+    // Exiting
+    status = "Exiting";
+    break;
+  }
+  status += "\tCOL: " + tos(x) + "\tROW: " + tos(y);
 }
 
 String Editor::tos(int i)

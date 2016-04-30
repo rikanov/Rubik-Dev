@@ -202,6 +202,7 @@ public:
 
 class Rubik_BF
 {
+  friend class Rubik;
   typedef int (Rubik_BF::*SearchEngine)(const Topology::t_state*,const Topology::t_state*);
  
   int seekerDepth;
@@ -223,14 +224,17 @@ class Rubik_BF
     
     int * ClusterDimensions;
     const Topology::t_state *** ClusteredSolutions;
+    bool noChanges(const int& dim, const CubeSlot* solved_state) const;
   public:
  
     const int& dimensions(const int & Index) {return ClusterDimensions[Index];}
     const Topology::t_state ** solutions(const int & Index) {return ClusteredSolutions[Index];}
-    Cluster() {clusterInit();}
-    ~Cluster();
+    void deinit();
+    Cluster();
+    ~Cluster() {}
     int indexOf(const Topology::t_state* Rot);
-  } cluster;
+  };
+  static Cluster cluster;
   SearchEngine Engine;
   void initStates(const int & SizeS);
   void initTrace();
@@ -239,6 +243,7 @@ class Rubik_BF
   int checkConditions(const Topology::t_state* Foresight, const Topology::t_state* Trail);
   int fastestCheck(const Topology::t_state* Foresight, const Topology::t_state* Trail);
   int heuristicalSearch(const Topology::t_state* Foresight, const Topology::t_state* Trail);
+  
   // ===============
 public:
   Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);

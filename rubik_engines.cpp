@@ -80,7 +80,7 @@ int Rubik_BF::heuristicalSearch(const Topology::t_state* Foresight, const Topolo
       cluster.found=nullptr; 
       return 0;
     }
-  } OUT_("found ")
+  }
   cluster.found=nullptr;
   return 1;
 }

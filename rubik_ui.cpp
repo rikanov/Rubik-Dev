@@ -261,10 +261,9 @@ UI_rfunc(doRotations)
   GETLINE(core)
   GETLINE(UNTIL);
   Stream test;
-  const String DO=parser(core);
-  if(DO!=NIL)
+  if(core!=NIL)
   {
-    setRotation(DO); 
+    String DO;
     do
     {  
       if(++counter > InfiniteLoopLimit)
@@ -273,13 +272,17 @@ UI_rfunc(doRotations)
 	OUT_("The loop has been automatically interrupted")
 	break;
       }
-      setRotation(parser(core)); // no need if the body of loop is a constant
-      applyRotation();
+      DO=parser(core);
+      if(DO!=NIL)
+      {
+	setRotation(DO); 
+	applyRotation();
+      }
       LOOP_STACK=mergeSimplePaths(LOOP_STACK,DO);
       test.str(UNTIL);
       test.clear();
     }while (parser(test)!=NIL);
-  }
+  } 
   return std::to_string(counter);
 }
   

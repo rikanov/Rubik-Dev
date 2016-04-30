@@ -268,7 +268,6 @@ String auxiliary::putInString(const String& arg, const String& token, const Stri
   }
 }
 
-
 unsigned int auxiliary::countWords(Stream& IS)
 {
   Stream SS(IS.str());
@@ -430,10 +429,9 @@ void auxiliary::cryptText(const String& Key1, const String& Key2, String& Text)
   }
 }
 
-
 void auxiliary::drawBarLine(const int& bar, const int& barLength)
 {
-  String BAR="[";
+  String BAR="   [";
   for(int i=0;i<bar;++i) 
     BAR.push_back('=');
   for(int i=bar;i<=barLength;++i)
