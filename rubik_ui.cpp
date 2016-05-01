@@ -154,8 +154,8 @@ UI_rfunc(logicalAnd)
 
 UI_rfunc(condition)
 {
-  PARSER(A)
-  if(A!=NIL)
+  GETLINE(A) 
+  if(parser(A)!=NIL)
   {
     return parser(IS);
   }

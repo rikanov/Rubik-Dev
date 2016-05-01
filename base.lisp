@@ -32,3 +32,10 @@ defun randomize & \
   
 defmacro append(list_ref) \
   defvar list_ref list_ref &
+  
+defun jessicaF \
+  store \
+  do &; NIL; \
+  if nil same_colors U; revert
+  
+  
