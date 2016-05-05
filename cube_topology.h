@@ -31,9 +31,9 @@ private:
     
     Cube();
   } Cubes[NumberOfSideMarks];
-public: 
-  
-  static const int TraceSize= CONFIG_CACHE_MEMORY_USAGE==6 ? 12704328 : 877032; 
+public:
+  static const int length_indices[];
+  static const int TraceSize; 
   struct t_state
   {
     const t_state * parent;
@@ -50,6 +50,16 @@ public:
     void copy(const CubeSlot * C);
   };
  
+  class RotationRange
+  {
+    const t_state * CurrentState;
+    const int MaxLength;
+  public:
+    RotationRange(const int&,const int&);
+    const t_state* state() const;
+    RotationRange* next();
+  };
+private:
   struct seeker
   {
     t_state * 	head;
@@ -66,7 +76,6 @@ public:
     }
   } PathGenerator;
   
-private:
   void initSeekers();
   
   void setEigenvalue(Topology::Cube& C);

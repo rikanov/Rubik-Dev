@@ -98,3 +98,29 @@ std::pair< int, String > Rubik_BF::start()
   OUT_("                        ");
   return std::pair<int,String> (result,Result);
 }
+
+std::pair< int, String > Rubik_BF::teszt_start()
+{
+  if(fastestCheck(Topology::getTrace(), Topology::getTrace()))
+  {
+    return std::pair< int, String >(1,NIL);
+  }
+  int result=0;
+  foundBetter=false;
+  best_choice=0;
+  String Result;
+  int bar=0;
+  int bar_length=0;
+  for(Topology::RotationRange range(0,CONFIG_CACHE_MEMORY_USAGE); range.state(); range.next())
+  {
+    result=(this->*Engine)(range.state(),Topology::getTrace());
+    if(result||foundBetter)
+    {
+      Result=resolver(range.state(),Topology::getTrace());
+    }
+    if(result)
+    {
+      break; 
+    }
+  }
+}

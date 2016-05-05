@@ -1,4 +1,4 @@
 reset
-do RUR'D2LD'FU2R2DF'
-do brute_force *6 Upside
+# swap FR FL
+swap FL LF
 brute_force *6 Upside FR

@@ -72,26 +72,30 @@ void Rubik_BF::Cluster::clusterInit(const int& dim, const CubeSlot * solved_stat
   {
     ClusterDimensions[i]=0;
   }
-  for(const Topology::t_state * state_pointer=Topology::getTrace()+1; state_pointer->state!=nullptr; ++state_pointer)
+  for(Topology::RotationRange range(CONFIG_CACHE_MEMORY_USAGE-1,CONFIG_CACHE_MEMORY_USAGE);range.state();range.next())
   {
-    ++ClusterDimensions[indexOf(state_pointer)];
-  }
+    ++ClusterDimensions[indexOf(range.state())];
+  } 
   ClusteredSolutions=new const Topology::t_state** [cluster_size]; OUT_(NL<<cluster_size)
-  int usage=0;
+  int usage[12500]={};
   for(int i=0;i<cluster_size;++i)
   {
     ClusteredSolutions[i]= ClusterDimensions[i]==0 ? nullptr : new const Topology::t_state* [ClusterDimensions[i]];
     if(ClusterDimensions[i])
     {
-      ++usage;
+      ++usage[ClusterDimensions[i]];
     }
     ClusterDimensions[i]=0; 
   } 
-  OUT_(usage)
-  for(const Topology::t_state * state_pointer=Topology::getTrace()+1; state_pointer->state!=nullptr; ++state_pointer)
+  for(int i=1, sum=0;i<2500;++i)
   {
-    const int index=indexOf(state_pointer);
-    ClusteredSolutions[index][ClusterDimensions[index]]=state_pointer;
+    if(usage[i]>0)
+      OUT_(i<<": "<<usage[i]<<"  "<<(sum+=usage[i]))
+  }
+  for(Topology::RotationRange range(CONFIG_CACHE_MEMORY_USAGE-1,CONFIG_CACHE_MEMORY_USAGE);range.state();range.next())
+  {
+    const int index=indexOf(range.state());
+    ClusteredSolutions[index][ClusterDimensions[index]]=range.state();
     ++ClusterDimensions[index];
   }
   OUT_("DONE")

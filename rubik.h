@@ -248,6 +248,7 @@ class Rubik_BF
 public:
   Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
   std::pair<int,String> start();
+  std::pair<int,String> teszt_start();
   ~Rubik_BF();
 };
 

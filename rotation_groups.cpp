@@ -272,11 +272,19 @@ void Topology::initSeekers()
     }
     ++node;
   }
-  PathGenerator.head[TraceSize+1].state=nullptr;
+  PathGenerator.head[TraceSize+1].length=CONFIG_CACHE_MEMORY_USAGE+1;
   for(int i=0;i<6;++i)
   {
     PathGenerator.trails[i][Trails[i]].length=CONFIG_CACHE_MEMORY_USAGE+1;
   }
+//   for(int i=0, len=0; i<TraceSize; ++i)
+//   {
+//     if(PathGenerator.head[i].length>len)
+//     {
+//       OUT_(i<<": "<<PathGenerator.head[i].path())
+//       len=PathGenerator.head[i].length;
+//     }
+//   }
 }
 
 #endif

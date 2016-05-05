@@ -1,9 +1,13 @@
 #include "cube_topology.h"
 #include "auxiliary.h"
 
+// Initializing static class members
 const char * Topology::SideMarks="@FURLDB";
 const Topology * Topology::Singleton(nullptr);
 const char Topology::PositiveGroup[][4]={"FUR","FRD","FDL","FLU","UBR","ULB","RBD","BLD"};
+const int Topology::length_indices[]={1,19,289,4177,60553,877033,12704329};
+const int Topology::TraceSize = length_indices[CONFIG_CACHE_MEMORY_USAGE]-1; 
+//============================================================
 
 Topology::Side::Side(const char& S, const int& D): SideMark(S), Digit(D) 
 {
