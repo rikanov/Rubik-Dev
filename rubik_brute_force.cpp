@@ -28,7 +28,6 @@ RubikBase(R)
     }
     Engine=&Rubik_BF::checkConditions;
   }
-  initTrace();
 }
 
 void Rubik_BF::initStates(const int& SizeS)
@@ -39,11 +38,6 @@ void Rubik_BF::initStates(const int& SizeS)
   memset(SolvedState,0,NumberOfSideMarks);
   memset(InitialState,0,NumberOfSideMarks);
   memset(InvInitialState,0,NumberOfSideMarks);
-}
-
-void Rubik_BF::initTrace()
-{
-  best_choice=0;
 }
 
 void Rubik_BF::setConditions(std::stringstream& IS)

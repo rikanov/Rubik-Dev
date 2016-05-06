@@ -1,3 +1,5 @@
+reset
+
 randomize FL
 randomize DB
 
@@ -28,6 +30,7 @@ do brute_force *6 upside FR FL BR BL
 # arrange edge pieces and one corner first:
 do brute_force *6 Upside DL DF DR DB DFL
 #
-# arrange all remained corners then:
+# arrange all the remained corners then:
 do brute_force *6 Upside DL DF DR DB DFL DFR DBL DBR
 #
+

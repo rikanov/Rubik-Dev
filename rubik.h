@@ -225,30 +225,36 @@ class Rubik_BF
     int * ClusterDimensions;
     const Topology::t_state *** ClusteredSolutions;
     bool noChanges(const int& dim, const CubeSlot* solved_state) const;
+   
   public:
  
     const int& dimensions(const int & Index) {return ClusterDimensions[Index];}
     const Topology::t_state ** solutions(const int & Index) {return ClusteredSolutions[Index];}
     void deinit();
+    bool initialized() const {return Dim!=-1;}
     Cluster();
     ~Cluster() {}
-    int indexOf(const Topology::t_state* Rot);
+    int indexOf(const Topology::t_state * Rot);
+    int indexOf(const CubeSlot * R1, const CubeSlot * R2, const CubeSlot * R3);
   };
   static Cluster cluster;
   SearchEngine Engine;
   void initStates(const int & SizeS);
-  void initTrace();
   void setConditions(Stream & IS);
-  // Search Engines:
+  bool checkResult(int& result, String& Result, const Topology::t_state * S1, const Topology::t_state * S2);
+  // Search Engines:  
   int checkConditions(const Topology::t_state* Foresight, const Topology::t_state* Trail);
   int fastestCheck(const Topology::t_state* Foresight, const Topology::t_state* Trail);
   int heuristicalSearch(const Topology::t_state* Foresight, const Topology::t_state* Trail);
+  int useCache(const Topology::t_state* Foresight, const Topology::t_state* Trail);
   
   // ===============
+    int searchManager(int& result, String& Result, const int& level);
+    int secondStage  (int& result, String& Result, const Topology::t_state* T);
+  
 public:
   Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
   std::pair<int,String> start();
-  std::pair<int,String> teszt_start();
   ~Rubik_BF();
 };
 

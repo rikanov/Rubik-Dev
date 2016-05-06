@@ -113,6 +113,18 @@ int Rubik_BF::Cluster::indexOf(const Topology::t_state *Rot)
   return result;
 }
 
+int Rubik_BF::Cluster::indexOf(const CubeSlot * R1,const CubeSlot * R2,const CubeSlot * R3)
+{
+  int multiplier=1;
+  int result=0; 
+  for(int i=0; i<Dim; ++i, multiplier*=24)
+  {
+    const Sidemarks sm(R1[R2[R3[HeuristicIndices[i]]]]);
+    result+=multiplier*sm.getPivot();
+  }
+  return result;
+}
+
 void Rubik_BF::Cluster::deinit()
 {
   for(int i=0;i<cluster_size;++i)

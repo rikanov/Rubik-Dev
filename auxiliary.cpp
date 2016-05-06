@@ -431,11 +431,18 @@ void auxiliary::cryptText(const String& Key1, const String& Key2, String& Text)
 
 void auxiliary::drawBarLine(const int& bar, const int& barLength)
 {
-  String BAR="   [";
-  for(int i=0;i<bar;++i) 
+  static const char boringMarks[]="\\|/-";
+  int length=(bar/12)%barLength;
+  String BAR=" [";
+  for(int i=0;i<length;++i) 
+  {
     BAR.push_back('=');
-  for(int i=bar;i<=barLength;++i)
+  }
+  BAR.push_back(boringMarks[bar%4]);
+  for(int i=length;i<=barLength;++i)
+  {
     BAR.push_back('-');
+  }
   BAR.push_back(']');
   OUT('\r'<<BAR);
 }
