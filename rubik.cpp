@@ -1,4 +1,4 @@
-#include"rubik.h"
+#include"rubik_bf.h"
 #include"cube_topology.h"
 
 void Rubik::printCollection() const

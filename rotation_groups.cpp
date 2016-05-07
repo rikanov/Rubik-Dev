@@ -225,18 +225,8 @@ void Topology::actOn(CubeSlot * Q, const CubeSlot * R)
 void Topology::initSeekers()
 {
   PathGenerator.head = new t_state[TraceSize+2]; // 976338 -> 877032
-  PathGenerator.trails = new t_state* [6];
-  
   PathGenerator.head->copy(IdentityMap);
   t_state * Head=PathGenerator.head;
-  int Trails[6];
-  for(int i=0;i<6;++i)
-  {
-    PathGenerator.trails[i]=new t_state [TraceSize/6]; // 
-    PathGenerator.trails[i]->copy(IdentityMap);
-    Trails[i]=1;
-  }
-  
   t_state * node = Head;
   t_state * next = node+1;
   t_state overflow[3];
@@ -266,17 +256,11 @@ void Topology::initSeekers()
 	}
 	next->last=side;
 	next->length = next->parent->length + (rot==0);
-	PathGenerator.trails[next->first][Trails[next->first]]=*next;
-	++Trails[next->first];
       }
     }
     ++node;
   }
   PathGenerator.head[TraceSize+1].length=CONFIG_CACHE_MEMORY_USAGE+1;
-  for(int i=0;i<6;++i)
-  {
-    PathGenerator.trails[i][Trails[i]].length=CONFIG_CACHE_MEMORY_USAGE+1;
-  }
 //   for(int i=0, len=0; i<TraceSize; ++i)
 //   {
 //     if(PathGenerator.head[i].length>len)

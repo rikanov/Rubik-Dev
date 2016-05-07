@@ -63,16 +63,10 @@ private:
   struct seeker
   {
     t_state * 	head;
-    t_state ** 	trails;
-    seeker(): head(nullptr), trails(nullptr) {}
+    seeker(): head(nullptr) {}
     ~seeker()
     {
       delete[] head;
-      for(int i=0;i<6;++i)
-      {
-	delete[] trails[i]; 
-      }
-      delete[] trails; 
     }
   } PathGenerator;
   
@@ -143,6 +137,5 @@ public:
   static char oppositeSide(const char& C);
   static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
   static const t_state * getTrace() {return Singleton->PathGenerator.head;}
-  static const t_state * getTrace(const int& T) {return Singleton->PathGenerator.trails[T];}
 };
 #endif

@@ -1,8 +1,9 @@
-#include"rubik.h"
+#include"rubik_bf.h"
 
 
 Rubik_BF::Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth):
-RubikBase(R)
+RubikBase(R),
+useExtendedPath(false)
 {
   const int SizeS=auxiliary::countWords(IS);
   initStates(SizeS);
@@ -17,7 +18,7 @@ RubikBase(R)
   {
     cluster.clusterInit(AS[1]-'0',SolvedState);
     seekerDepth=CONFIG_CACHE_MEMORY_USAGE;
-    Engine=&Rubik_BF::heuristicalSearch;
+    Engine=&Rubik_BF::heuristicSearch;
   }
   else if(AS.length()==2 && AS[0]=='+')
   {
@@ -82,6 +83,10 @@ String Rubik_BF::resolver(const Topology::t_state* A,const Topology::t_state* B)
   if(cluster.found)
   {
     Result=auxiliary::mergeSimplePaths(Result,(*cluster.found)->path());
+  }
+  if(cluster.trail)
+  {
+    Result=auxiliary::mergeSimplePaths(Result,(*cluster.trail)->path()); OUT_((*cluster.trail)->path())
   }
   return Result;
 }

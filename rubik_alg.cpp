@@ -1,4 +1,4 @@
-#include"rubik.h"
+#include"rubik_bf.h"
 
 String Rubik::random()
 {
