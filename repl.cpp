@@ -1,12 +1,12 @@
 #include"globals.h"
 #include"rubik.h"
-
+#include"auxiliary.h"
 
 void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {
   if(&IS==&std::cin)
   {
-    OUT_("\nTo log out from REPL::"<<Object<<", press Ctrl-D or Ctrl-Z on Windows systems");
+    OUT_(Color::red<<"\nTo log out from REPL::"<<Color::light<<Object<<Color::red<<", press Ctrl-D or Ctrl-Z on Windows systems"<<Color::gray);
     // Use tab for auto completion
     rl_bind_key ('\t', rl_complete) ;
     // Use our function for auto - complete
@@ -20,10 +20,11 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
       String Get;
       do
       {    
-	char *buf;
+	char *buf; 
+	OUT(Color::white)
 	if((buf=readline(prompt))==NULL)
 	{
-	  OUT("\nREPL mode has been closed for: "<<Object);
+	  OUT(Color::red<<"\nREPL mode has been closed for: "<<Color::light<<Object<<Color::gray);
 	  free(buf);
 	  return;
 	}
@@ -35,6 +36,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	{
 	  continue;
 	}
+	OUT(Color::gray)
 	String Get(buf);
 	TRIM(Get)
 	if(sign_nwln=Get.back()=='\\')
@@ -58,7 +60,10 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
       }
       while(toParse.good())
       {
-	OS<<parser(toParse)+' ';
+	String parsed=parser(toParse)+' ';
+	OUT(Color::light)
+	OS<<parsed;
+	OUT(Color::gray)
       }
       NL_
     }

@@ -434,3 +434,13 @@ void auxiliary::drawBarLine(const int& bar, const int& barLength)
   BAR.push_back(']');
   OUT('\r'<<BAR);
 }
+
+namespace Color {
+  Modifier red(FG_RED);
+  Modifier blue(FG_BLUE);
+  Modifier green(FG_GREEN);
+  Modifier cyan(FG_CYAN);
+  Modifier gray(FG_DARK_GRAY);
+  Modifier light(FG_LIGHT_MAGENTA);
+  Modifier white(FG_WHITE);
+}

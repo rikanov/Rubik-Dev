@@ -28,8 +28,6 @@ typedef signed char CubeSlot;
 #define IS_FACET(X) (X=='F'||X=='U'||X=='R'||X=='B'||X=='D'||X=='L')
 #define UPCASE(x) ((x)&95)
 #define IS_LOWCASE(x) ((x)&32)
-#define FUNCTOR(x) CubeSlot[NumberOfSideMarks]; \
-		    memcpy(x,IdentityMap,sizeof IdentityMap);
 #define EMPTY(x) CubeSlot x[NumberOfSideMarks]={}; 
 #define CPY_FUNC(x,y) memcpy(x,y, NumberOfSideMarks); // DON'T use sizeof y or x !!!!!!!!
 #define FOR_FUNC(x) for(int x=0;x<NumberOfSideMarks;++x)

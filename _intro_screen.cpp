@@ -2,11 +2,7 @@
 
 void auxiliary::intro()
 {
-  Color::Modifier red(Color::FG_RED);
-  Color::Modifier blue(Color::FG_BLUE);
-  Color::Modifier green(Color::FG_GREEN);
-  Color::Modifier fg_norm(Color::FG_DEFAULT);
-  OUT_(blue)
+  OUT_(Color::blue)
   OUT_("\t\t ________  ___  ___  ________  ___  ___  __    ________       ")
   OUT_("\t\t|\\   __  \\|\\  \\|\\  \\|\\   __  \\|\\  \\|\\  \\|\\  \\ |\\   ____\\      ")
   OUT_("\t\t\\ \\  \\|\\  \\ \\  \\\\\\  \\ \\  \\|\\ /\\ \\  \\ \\  \\/  /|\\ \\  \\___|_     ")
@@ -15,10 +11,10 @@ void auxiliary::intro()
   OUT_("\t\t   \\ \\__\\\\ _\\\\ \\_______\\ \\_______\\ \\__\\ \\__\\\\ \\__\\____\\_\\  \\  ")
   OUT_("\t\t    \\|__|\\|__|\\|_______|\\|_______|\\|__|\\|__| \\|__|\\_________\\ ")
   OUT_("\t\t                                                 \\|_________| ")
-  OUT_(green)
+  OUT_(Color::green)
   OUT_("\t\t                     Robert Ikanov                            ")
   OUT_("\t\t                 Robert.Ikanov@Gmail.Com                      ")
-  OUT_(red)
+  OUT_(Color::red)
   OUT_("\t\t        ________  ___  ___  ________  _______                 ")
   OUT_("\t\t       |\\   ____\\|\\  \\|\\  \\|\\   __  \\|\\  ___ \\                ")
   OUT_("\t\t       \\ \\  \\___|\\ \\  \\\\\\  \\ \\  \\|\\ /\\ \\   __/|               ")
@@ -26,5 +22,5 @@ void auxiliary::intro()
   OUT_("\t\t         \\ \\  \\____\\ \\  \\\\\\  \\ \\  \\|\\  \\ \\  \\_|\\ \\            ")
   OUT_("\t\t          \\ \\_______\\ \\_______\\ \\_______\\ \\_______\\           ")
   OUT_("\t\t           \\|_______|\\|_______|\\|_______|\\|_______|           ")
-  OUT_(fg_norm<<NL);
+  OUT_(Color::gray<<NL);
 }

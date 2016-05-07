@@ -86,7 +86,7 @@ String Rubik_BF::resolver(const Topology::t_state* A,const Topology::t_state* B)
   }
   if(cluster.trail)
   {
-    Result=auxiliary::mergeSimplePaths(Result,(*cluster.trail)->path()); OUT_((*cluster.trail)->path())
+    Result=auxiliary::mergeSimplePaths(Result,(*cluster.trail)->path());
   }
   return Result;
 }

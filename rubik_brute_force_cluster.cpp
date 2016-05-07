@@ -182,12 +182,12 @@ int Rubik_BF::Cluster::subIndexOf(const Topology::t_state *Rot, const bool & inv
   return result;
 }
 
-int Rubik_BF::Cluster::subIndexOf(const CubeSlot * R1, const CubeSlot * R2) const
+int Rubik_BF::Cluster::subIndexOf(const CubeSlot * R1, const CubeSlot * R2, const CubeSlot * R3) const
 {
   int result=0;
   for(int i=Dim, radix=1; i<Dim+2; ++i, radix*=24)
   {
-    const Sidemarks sm(R1[R2[HeuristicIndices[i]]]);
+    const Sidemarks sm(R1[R2[R3[HeuristicIndices[i]]]]);
     result+=radix*sm.getPivot();
   }
   return result;

@@ -1,4 +1,5 @@
 reset
-# swap FR FL
-swap FL LF
-brute_force *6 Upside FR
+randomize FD
+
+brute_force *6 Upside 
+

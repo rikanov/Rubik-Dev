@@ -1,4 +1,5 @@
 #include "rubik_bf.h" 
+#include"auxiliary.h"
 
 static int bar_length=0;
 static bool show_bar = false;
@@ -19,10 +20,12 @@ int Rubik_BF::searchManager(int& result, String& Result, const int & level)
   {
     return result;
   }
+  int bline=0;
   for(Topology::RotationRange range(0,CONFIG_CACHE_MEMORY_USAGE); range.state(); range.next())
   {
-    if(show_bar)
+    if(show_bar && bline++ ==3000)
     {
+      bline=0;
       auxiliary::drawBarLine(bar_length++, 30);
     }
     if
@@ -65,6 +68,8 @@ std::pair< int, String > Rubik_BF::start()
   {
     return std::pair< int, String >(1,NIL);
   }
+  cluster.found=nullptr;
+  cluster.trail=nullptr;
   foundBetter=false;
   best_choice=0;
   String Result;
@@ -80,13 +85,14 @@ std::pair< int, String > Rubik_BF::start()
     
     show_bar=true;
     Engine=&Rubik_BF::heuristicSearch; 
-    OUT_("\nis the heuristic search needed ? "<<(result ? "no" : "yes\n"))
+    OUT_("\nheuristic search needed ? "<<Color::white<<(result ? "no" : "yes\n"))
     searchManager(result, Result, 1);
     
     useExtendedPath=true; 
-    OUT("\r                                     ")
-    OUT_("\ris the extended search needed ? "<<(result ? "no" : "yes\n"))
+    OUT(Color::gray<<"\r                                     ")
+    OUT_("\rextended search needed  ? "<<Color::white<<(result ? "no" : "yes\n"))
     searchManager(result, Result, 1); 
+    OUT(Color::gray)
     OUT("\r                                     ")
   }
   else
@@ -95,7 +101,7 @@ std::pair< int, String > Rubik_BF::start()
     searchManager(result, Result, 1);
     searchManager(result, Result, 2);
   }
-  OUT("\nResult:  "<<Result<<(result ? " is a solution for condition: " : " best choice to solve ")<<(result?result:best_choice))
-  OUT_("                        ");
+  OUT(Color::cyan<<"\nResult:  "<<Color::light<<Result<<Color::cyan<<(result ? " is a solution for condition: " : " best choice to solve ")<<Color::light<<(result?result:best_choice))
+  OUT_(Color::gray<<"                        ");
   return std::pair<int,String> (result,Result);
 }
