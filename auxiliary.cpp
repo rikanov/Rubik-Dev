@@ -117,18 +117,6 @@ bool auxiliary::Sidemarks::sameCubes(const auxiliary::Sidemarks& A, const auxili
 }
 ///=============================================================================================================
 
-int * auxiliary::nestedLoop(int* Array, int depth, const int& UpperBound, const int& LowerBound )
-{
-  int *i=Array;
-  ++(*i); 
-  while( --depth && *i==UpperBound)
-  {
-    *(i++)=LowerBound;
-    ++(*i);
-  }
-  return (depth || *i<UpperBound) ? i : nullptr;
-}
-
 void auxiliary::imbueStream(Stream& IS, const String & V)
 {
   String IS_;

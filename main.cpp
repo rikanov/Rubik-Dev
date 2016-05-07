@@ -1,10 +1,11 @@
 #include <iostream>
 #include <stdio.h>
 #include"rubik.h"
-#include"lift.h"
 
 int main(int argc, char **argv) 
 { 
+
+  intro();
   Rubik global;
   if(argc==1)
   {
