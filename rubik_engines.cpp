@@ -86,7 +86,7 @@ int Rubik_BF::useCache(const Topology::t_state* rot_sequence)
       {
 	if(useExtendedPath)
 	{
-	  result=useExtendedCache(*cluster.found, rot_sequence);
+	  result=useExtendedCache(rot_sequence);
 	}
 	break;
       }
@@ -101,22 +101,22 @@ int Rubik_BF::useCache(const Topology::t_state* rot_sequence)
   return 0;
 }
 
-int Rubik_BF::useExtendedCache(const Topology::t_state* first_sequence, const Topology::t_state* second_sequence)
+int Rubik_BF::useExtendedCache(const Topology::t_state* rot_sequence)
 {
-  const int index=cluster.subIndexOf(first_sequence, second_sequence);
-  cluster.trail = cluster.sideSolutions(index);
+  const int index=cluster.subIndexOf((*cluster.found)->state, rot_sequence->state, InitialState);
+  cluster.trail = cluster.sideSolutions(index); 
   for(int depth=0;depth<cluster.sideDimensions(index);++depth,++cluster.trail)
   {
     const CubeSlot *c =SolvedState+cluster.Dim+2; 
     while(*c>=0)
     {
-      if((*cluster.trail)->state[first_sequence->state[second_sequence->state[InitialState[*c]]]]!=*c)
+      if((*cluster.trail)->state[(*cluster.found)->state[rot_sequence->state[InitialState[*c]]]]!=*c)
       {
 	break;
       }
       ++c;
     }
-    if(*c>0)
+    if(*c<0)
     {
       return 1;
     }
