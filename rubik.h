@@ -187,6 +187,8 @@ class Rubik
   UI_func(printSmarks)
   UI_func(readCache)
   
+  UI_func(show3D)
+  
 public:
   
   Rubik  ();

@@ -3,20 +3,18 @@
 
 #include "globals.h"
 
-using namespace std;
-
 class Buffer
 {
 public:
     Buffer();
 
-    vector<String> lines;
+    std::vector<String> lines;
 
     void insertLine(String, int);
     void appendLine(String);
     void removeLine(int);
 
-    string remTabs(String);
+    std::string remTabs(String);
 };
 
 #endif

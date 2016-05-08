@@ -1,6 +1,7 @@
-#include"globals.h"
-#include"rubik.h"
+#include "globals.h"
+#include "rubik.h"
 #include "editor.h"
+#include "visualization.h"
 #define boolean(X) return (X) ? L_TRUE : NIL;
 
 UI_rfunc(REPL)
@@ -594,4 +595,12 @@ UI_rfunc(readCache)
   const int index =atoi(A.c_str()); 
   const bool validIndex= (index>=0 && index<Topology::getTraceSize());
   return validIndex ? Topology::cachePoint(index) : NIL;
+}
+
+UI_rfunc(show3D)
+{
+  int myargc=1;
+  char * myargv[1];
+  myargv[0]=strdup("Visualization");
+  RUBIK_3D::visualization(myargc,myargv);
 }

@@ -259,7 +259,7 @@ void Editor::saveFile()
         filename = "untitled";
     }
 
-    ofstream f(filename.c_str());
+    std::ofstream f(filename.c_str());
     if(f.is_open())
     {
         for(int i=0; i<buff->lines.size(); i++)

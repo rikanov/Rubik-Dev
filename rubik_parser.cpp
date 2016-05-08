@@ -160,6 +160,12 @@ UI_rfunc(parser)
   trigger   ("what_is",      what_is)
   trigger   ("where_is",    where_is)
   
+    //============================================//
+   //  *** Show 3D view of the current cube ***  //
+  //============================================//
+
+  trigger("visualization",   show3D)
+  
     //========================================//
    //  *** Look for matching user-space ***  //
   //========================================//  
