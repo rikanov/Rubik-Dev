@@ -8,6 +8,9 @@ class Topology
 public:
   static const char * SideMarks;
 private:
+  
+  static int CONFIG_CACHE_MEMORY_BOUND; // 6: HIGH 5: NORMAL 4 OR LESS: VERY LOW, MUST BE SET
+                                       // BY THE INIT FUNCTION IN THE LISP ENVIRONMENT
   static const Topology * Singleton;
   static const char PositiveGroup[][4];
   int SideGroup[4];
@@ -33,7 +36,7 @@ private:
   } Cubes[NumberOfSideMarks];
 public:
   static const int length_indices[];
-  static const int TraceSize; 
+  static int TraceSize; 
   struct t_state
   {
     const t_state * parent;
@@ -43,7 +46,7 @@ public:
     int last;
     int excludeInverse;
     int length;
-    t_state(): parent(nullptr), state(nullptr),first(-1), last(-1), excludeInverse(-1), length(0) {}
+    t_state(): parent(nullptr), state(nullptr),i_state(nullptr),first(-1), last(-1), excludeInverse(-1), length(0) {}
     String path() const;
     t_state* alloc();
     void dealloc();
@@ -68,9 +71,11 @@ private:
     {
       delete[] head;
     }
-  } PathGenerator;
+  };
   
-  void initSeekers();
+  mutable seeker PathGenerator;
+  
+  void initSeekers() const;
   
   void setEigenvalue(Topology::Cube& C);
   void setPivotNumbers();
@@ -137,5 +142,9 @@ public:
   static char oppositeSide(const char& C);
   static int sideGroup(const int& S) {return (Singleton->SideGroup[S])<<3;}
   static const t_state * getTrace() {return Singleton->PathGenerator.head;}
+  static void initCache(const int& C); 
+  static int cacheLevel() {return CONFIG_CACHE_MEMORY_BOUND;}
+  static const int& getTraceSize() {return TraceSize;}
+  static String cachePoint(const int & index) {return Singleton->PathGenerator.head[index].path();}
 };
 #endif

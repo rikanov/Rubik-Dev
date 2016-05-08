@@ -133,6 +133,7 @@ class Rubik
   UI_func(REPL)
   UI_func(parser)
   UI_func(file_open)
+  UI_func(init)
   UI_func(editor)
   
   UI_func(progn)
@@ -184,6 +185,7 @@ class Rubik
   UI_func(revert)
   UI_func(setAlign)
   UI_func(printSmarks)
+  UI_func(readCache)
   
 public:
   

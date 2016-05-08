@@ -1,4 +1,5 @@
 #include "rubik_bf.h"
+#include "def_colors.h"
 
 Rubik_BF::Cluster Rubik_BF::cluster=Cluster();
 
@@ -19,18 +20,18 @@ Rubik_BF::Cluster::Cluster():
 bool Rubik_BF::Cluster::noChanges(const int& dim, const CubeSlot * solved_state) const
 {
   bool Result=false;
-  if(dim==Dim)
+  if(dim==Dim && definedLevel==Topology::cacheLevel())
   {
     int i=0;
-    while(i<dim)
+    while(i<dim+2)
     {
-      if((solved_state[i]>0 ? solved_state[i] : 0)!=HeuristicIndices[i])
+      if(solved_state[i] !=HeuristicIndices[i])
       {
 	break;
       }
       ++i;
     }
-    Result=(i==dim);
+    Result=(i==dim+2);
   }
   return Result;
 }
@@ -41,7 +42,7 @@ void Rubik_BF::Cluster::mainClusterInit(const CubeSlot * solved_state)
   HeuristicIndices=new CubeSlot[Dim+2];
   for(int i=0; i<Dim+2; ++i)
   {
-    HeuristicIndices[i]=solved_state[i]>0 ? solved_state[i] : 0; 
+    HeuristicIndices[i]=solved_state[i]; 
   }
   cluster_size=1;
   for(int i=0; i<Dim; ++i)
@@ -53,7 +54,7 @@ void Rubik_BF::Cluster::mainClusterInit(const CubeSlot * solved_state)
   {
     ClusterDimensions[i]=0;
   }
-  for(Topology::RotationRange range(CONFIG_CACHE_MEMORY_USAGE-1,CONFIG_CACHE_MEMORY_USAGE);range.state();range.next())
+  for(Topology::RotationRange range(Topology::cacheLevel()-1,Topology::cacheLevel());range.state();range.next())
   {
     ++ClusterDimensions[indexOf(range.state(),true)];
   } 
@@ -63,13 +64,13 @@ void Rubik_BF::Cluster::mainClusterInit(const CubeSlot * solved_state)
     ClusteredSolutions[i]= ClusterDimensions[i]==0 ? nullptr : new ClusterSprig [ClusterDimensions[i]];
     ClusterDimensions[i]=0; 
   } 
-  for(Topology::RotationRange range(CONFIG_CACHE_MEMORY_USAGE-1,CONFIG_CACHE_MEMORY_USAGE);range.state();range.next())
+  for(Topology::RotationRange range(Topology::cacheLevel()-1,Topology::cacheLevel());range.state();range.next())
   {
     const int index=indexOf(range.state(),true);
     ClusteredSolutions[index][ClusterDimensions[index]]=range.state();
     ++ClusterDimensions[index];
   }
-  OUT_("done.")
+  OUT_(Color::white<<"done."<<Color::gray)
 }
 
 void Rubik_BF::Cluster::sideClusterInit()
@@ -81,11 +82,6 @@ void Rubik_BF::Cluster::sideClusterInit()
   {
     ClusterDimensions[i]=0;
   }
-  for(Topology::RotationRange range(0,CONFIG_CACHE_MEMORY_USAGE-1); range.state(); range.next())
-  {
-    const int index=subIndexOf(range.state(),true);
-    SideClusterDimensions[index]+=(index>0);
-  }
   const int indexOfIdentity=indexOf(Topology::getTrace(), true); 
   for(int i=0;i<ClusterDimensions[indexOfIdentity];++i)
   {
@@ -96,16 +92,6 @@ void Rubik_BF::Cluster::sideClusterInit()
   {
     SideCluster[i] = SideClusterDimensions[i]==0 ? nullptr :new ClusterSprig[SideClusterDimensions[i]]; 
     SideClusterDimensions[i]=0;
-  }
-  for(Topology::RotationRange range(0,CONFIG_CACHE_MEMORY_USAGE-1); range.state(); range.next())
-  {
-    const int index=subIndexOf(range.state(),true);
-    if(index==0)
-    {
-      continue;
-    }
-    SideCluster[index][SideClusterDimensions[index]]=range.state();
-    ++SideClusterDimensions[index];
   } 
   for(int i=0;i<ClusterDimensions[indexOfIdentity];++i)
   {
@@ -113,7 +99,7 @@ void Rubik_BF::Cluster::sideClusterInit()
     SideCluster[index][SideClusterDimensions[index]]=ClusteredSolutions[indexOfIdentity][i];
     ++SideClusterDimensions[index];
   }
-  OUT_("done.")
+  OUT_(Color::white<<"done."<<Color::gray)
 }
 
 void Rubik_BF::Cluster::clusterInit(const int& dim, const CubeSlot * solved_state)
@@ -124,29 +110,32 @@ void Rubik_BF::Cluster::clusterInit(const int& dim, const CubeSlot * solved_stat
     return;
   }
   deinit();
+  definedLevel=Topology::cacheLevel();
   if(dim==0)
   {
     cluster_size=0;
     HeuristicIndices=nullptr;
     ClusterDimensions=nullptr;
     ClusteredSolutions=nullptr;
+    SideClusterDimensions=nullptr;
+    SideCluster=nullptr;
     return;
   } 
   OUT("caching heuristical ends... ")
   Dim=dim;
   mainClusterInit(solved_state);
   sideClusterInit();
-  OUT_("Initialization status: OK")
+  OUT_("Initialization status:"<<Color::white<<"  OK"<<Color::gray)
 }
 
 int Rubik_BF::Cluster::indexOf(const Topology::t_state *Rot, const bool & inv) const
 {
-  int multiplier=1;
+  int radix=1;
   int result=0; 
-  for(int i=0; i<Dim; ++i, multiplier*=24)
+  for(int i=0; i<Dim; ++i, radix*=24)
   {
     const Sidemarks sm(inv ? Rot->i_state[HeuristicIndices[i]] : Rot->state[HeuristicIndices[i]]);
-    result+=multiplier*sm.getPivot();
+    result+=radix*sm.getPivot();
   }
   return result;
 }

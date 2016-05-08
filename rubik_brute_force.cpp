@@ -10,14 +10,14 @@ useExtendedPath(false)
   setConditions(IS);
   if(AS=="*")
   {
-    seekerDepth=CONFIG_CACHE_MEMORY_USAGE;
+    seekerDepth=Topology::cacheLevel();
     Engine=&Rubik_BF::fastestCheck;
     cluster.clusterInit(0,SolvedState);
   }
   else if(AS.length()==2 && AS[0]=='*')
   {
     cluster.clusterInit(AS[1]-'0',SolvedState);
-    seekerDepth=CONFIG_CACHE_MEMORY_USAGE;
+    seekerDepth=Topology::cacheLevel();
     Engine=&Rubik_BF::heuristicSearch;
   }
   else if(AS.length()==2 && AS[0]=='+')

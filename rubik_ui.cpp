@@ -560,6 +560,19 @@ UI_rfunc(file_open)
   return file_open(F.c_str());
 }
 
+UI_rfunc(init)
+{
+  GET(A);
+  int size=atoi(A.c_str());
+  if(size<2 || size>7)
+  {
+    size=2;
+  } 
+  Topology::initCache(size);
+  (*Var_space)["cache-level"]=A;
+  return "init";
+}
+
 UI_rfunc(printSmarks)
 {
   while(IS.good())
@@ -573,4 +586,12 @@ UI_rfunc(printSmarks)
   }
   NL_
   return "side_marks";
+}
+
+UI_rfunc(readCache)
+{
+  GET(A)
+  const int index =atoi(A.c_str()); 
+  const bool validIndex= (index>=0 && index<Topology::getTraceSize());
+  return validIndex ? Topology::cachePoint(index) : NIL;
 }

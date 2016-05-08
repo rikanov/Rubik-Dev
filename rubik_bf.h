@@ -23,6 +23,7 @@ class Rubik_BF
     typedef const Topology::t_state * ClusterSprig;
     typedef ClusterSprig * ClusterBranch;
     typedef ClusterBranch* ClusterTree;
+    int definedLevel;
     int Dim;
     int cluster_size;
     CubeSlot * HeuristicIndices;

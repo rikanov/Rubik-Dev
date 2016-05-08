@@ -1,6 +1,6 @@
 #include"globals.h"
 #include"rubik.h"
-#include"auxiliary.h"
+#include"def_colors.h"
 
 void Rubik::REPL(std::istream & IS, std::ostream & OS)
 {

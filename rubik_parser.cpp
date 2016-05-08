@@ -57,6 +57,7 @@ UI_rfunc(parser)
   //=====================================//
   
   trigger("REPL", REPL)
+  trigger("init", init)
   
     //=================================//
    //  *** Collection management ***  //
@@ -135,6 +136,7 @@ UI_rfunc(parser)
   trigger("swap",                  swap)
   trigger("random",              random)
   trigger("side_marks",     printSmarks)
+  trigger("cache",            readCache)
   trigger("cat",               catFiles)
   trigger("load",              loadCube)
   trigger("save",              saveCube)

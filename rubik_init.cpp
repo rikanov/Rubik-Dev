@@ -52,6 +52,7 @@ void Rubik::initCommandComp()
   //=================================//
   
   auto_comp("REPL")
+  auto_comp("init")
   auto_comp("collection_view")
   
     //=======================================//
@@ -134,6 +135,7 @@ void Rubik::initCommandComp()
   auto_comp("random"     )
   auto_comp("reset"      )
   auto_comp("side_marks" )
+  auto_comp("cache"      )
   
     //=====================================//
    //  *** Evaluate object functions ***  //

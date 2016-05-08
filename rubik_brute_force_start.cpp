@@ -1,5 +1,5 @@
 #include "rubik_bf.h" 
-#include"auxiliary.h"
+#include "def_colors.h"
 
 static int bar_length=0;
 static bool show_bar = false;
@@ -21,7 +21,7 @@ int Rubik_BF::searchManager(int& result, String& Result, const int & level)
     return result;
   }
   int bline=0;
-  for(Topology::RotationRange range(0,CONFIG_CACHE_MEMORY_USAGE); range.state(); range.next())
+  for(Topology::RotationRange range(0,Topology::cacheLevel()); range.state(); range.next())
   {
     if(show_bar && bline++ ==3000)
     {
@@ -52,7 +52,7 @@ int Rubik_BF::secondStage(int & result, String & Result, const Topology::t_state
     bline=0;
     auxiliary::drawBarLine(bar_length++,30); // to show the engine stills work
   }
-  for(Topology::RotationRange range(CONFIG_CACHE_MEMORY_USAGE-1,CONFIG_CACHE_MEMORY_USAGE); range.state(); range.next())
+  for(Topology::RotationRange range(Topology::cacheLevel()-1,Topology::cacheLevel()); range.state(); range.next())
   {
     if(checkResult(result,Result,T,range.state()))
     {
