@@ -1,16 +1,30 @@
 #include"rubik_bf.h"
 #include"cube_topology.h"
+#include"def_colors.h"
 
 void Rubik::printCollection() const
 {
   NL_
-  OUT((Global==this ? " * " : "   "))
-  OUT_("global \t"<<Global->stack_pointer)
+  if(Global==this)
+  {
+    OUT_(Color::red<<" * "<<Color::white<<"global \t\t"<<(Global->stack_pointer)<<Color::gray)
+  }
+  else
+  {
+    OUT_(Color::gray<<"   global \t\t"<<(Global->stack_pointer))
+  }
   for(std::map<String, Rubik*>::iterator it=Collection->begin();it!=Collection->end();++it)
   {
-    String P(it->second->Object);
-    OUT((P==Object ? " * " : "   "))
-    OUT_(P<<" \t"<<it->second->stack_pointer)
+    const String P(it->second->Object);
+    const String tab(P.length()>10 ? " \t" : " \t\t");
+    if(P==Object)
+    {
+      OUT_(Color::red<<" * "<<Color::white<<P<<tab<<(it->second->stack_pointer)<<Color::gray)
+    }
+    else
+    {
+      OUT_(Color::gray<<"   "<<P<<tab<<(it->second->stack_pointer))
+    }
   } 
   NL_ NL_
 }
