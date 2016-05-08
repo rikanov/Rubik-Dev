@@ -69,7 +69,7 @@ class Rubik_BF
     int subIndexOf(const Topology::t_state * Rot, const bool & inv) const;
     int subIndexOf(const CubeSlot* R1, const CubeSlot* R2, const CubeSlot* R3) const;
   };
-  static Cluster cluster;
+  static Cluster * cluster;
   SearchEngine Engine;
   void initStates(const int & SizeS);
   void setConditions(Stream & IS);
@@ -81,7 +81,7 @@ class Rubik_BF
   int heuristicSearch(const Topology::t_state* rot_sequence, const Topology::t_state*);
   int useCache(const Topology::t_state* rot_sequence);
   int useExtendedCache(const Topology::t_state* rot_sequence);
-  bool isHeuristicSearch() const {return cluster.initialized();}
+  bool isHeuristicSearch() const {return cluster->initialized();}
   // ===============
     int searchManager(int& result, String& Result, const int& level);
     int secondStage  (int& result, String& Result, const Topology::t_state* T);

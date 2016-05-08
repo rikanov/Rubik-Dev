@@ -41,9 +41,9 @@ typedef signed char CubeSlot;
 #define TRIM_END(S) while(!S.empty() && (S.back()<=32||S.back()>=127)) S.pop_back();
 #define TRIM(S) TRIM_END(S) while(!S.empty() && (S.front()<=32||S.front()>=127)) S=S.substr(1);
 #define NONILL(X) if(X=="NIL") {X="";}
-const String NIL = "NIL";
-const String L_TRUE = "T";
-const String MACRO_SYNTAX="([^ ]+)\\(([^ ]+)\\)";
+extern const char * NIL;
+extern const char * L_TRUE;
+extern const char * MACRO_SYNTAX;
 const int CompressedArraySize=240;
 const int NumberOfSideMarks=78;	// = 8*3! + 12*2! 
 const CubeSlot IdentityMap[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,\

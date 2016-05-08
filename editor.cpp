@@ -20,7 +20,7 @@ Editor::Editor(const String& PlaceOfModification, const bool & is_file)
 
   if(is_file)
   {
-    ifstream infile(PlaceOfModification.c_str());
+    std::ifstream infile(PlaceOfModification.c_str());
     if(infile.is_open())
     {
       filename=PlaceOfModification;
@@ -33,7 +33,7 @@ Editor::Editor(const String& PlaceOfModification, const bool & is_file)
     }
     else
     {
-      cerr << "Cannot open file: '" << PlaceOfModification << "'\n";
+      std::cerr << "Cannot open file: '" << PlaceOfModification << "'\n";
       buff->appendLine("");
     }
   }
@@ -111,6 +111,10 @@ void Editor::handleInput(int c)
             break;
         case 127:
         case KEY_BACKSPACE:
+	    if(x == 0 && y==0)
+	    {
+	      break;
+	    }
             if(x == 0 && y > 0)
             {
                 x = buff->lines[y-1].length();
@@ -260,7 +264,7 @@ void Editor::saveFile()
     {
         for(int i=0; i<buff->lines.size(); i++)
         {
-            f << buff->lines[i] << endl;
+            f << buff->lines[i] << NL;
         }
         status = "Saved to file!";
     }

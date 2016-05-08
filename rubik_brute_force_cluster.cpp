@@ -1,8 +1,6 @@
 #include "rubik_bf.h"
 #include "def_colors.h"
 
-Rubik_BF::Cluster Rubik_BF::cluster=Cluster();
-
 Rubik_BF::Cluster::Cluster():
   Dim(-1),
   cluster_size(0),

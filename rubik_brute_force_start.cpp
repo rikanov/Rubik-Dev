@@ -68,8 +68,8 @@ std::pair< int, String > Rubik_BF::start()
   {
     return std::pair< int, String >(1,NIL);
   }
-  cluster.found=nullptr;
-  cluster.trail=nullptr;
+  cluster->found=nullptr;
+  cluster->trail=nullptr;
   foundBetter=false;
   best_choice=0;
   String Result;

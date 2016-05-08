@@ -1,4 +1,5 @@
 #include"rubik.h"
+#include"def_colors.h"
 
 #define trigger(X,Y) else if(read_in==X) {read_in=Y(IS);}
 #define trigger_v(X,Y) else if(read_in==X) {Y();}
@@ -27,7 +28,7 @@ UI_rfunc(parser)
   {
     if(getline(IS,read_in))
     {
-      OUT_(read_in)
+      OUT_(Color::green<<read_in<<Color::gray)
     }
     else
     {

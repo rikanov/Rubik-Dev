@@ -218,7 +218,7 @@ Rubik::~Rubik()
   delete[] A_map, B_map, Sup_map, Sup_inv, Stack;
   if(Object=="global")
   {
-    Rubik_BF::cluster.deinit();
+    Rubik_BF::cluster->deinit();
     for(std::map<String, Rubik*>::iterator it=Collection->begin();it!=Collection->end();++it)
     {
       delete it->second;

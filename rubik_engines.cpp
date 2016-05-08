@@ -67,22 +67,22 @@ int Rubik_BF::heuristicSearch(const Topology::t_state* rot_sequence, const Topol
       return useCache(rot_sequence);
     }
   }
-  cluster.found=nullptr;
-  cluster.trail=nullptr;
+  cluster->found=nullptr;
+  cluster->trail=nullptr;
   return 1;
 }
 
 int Rubik_BF::useCache(const Topology::t_state* rot_sequence)
 {
   int result=0;
-  int index=cluster.indexOf(rot_sequence->state,InitialState); 
-  cluster.found = cluster.solutions(index);
-  for(int depth=0;depth<cluster.dimensions(index);++depth,++cluster.found)
+  int index=cluster->indexOf(rot_sequence->state,InitialState); 
+  cluster->found = cluster->solutions(index);
+  for(int depth=0;depth<cluster->dimensions(index);++depth,++cluster->found)
   {
-    const CubeSlot *c =SolvedState+cluster.Dim; 
+    const CubeSlot *c =SolvedState+cluster->Dim; 
     while(*c>=0)
     {
-      if((*cluster.found)->state[rot_sequence->state[InitialState[*c]]]!=*c)
+      if((*cluster->found)->state[rot_sequence->state[InitialState[*c]]]!=*c)
       {
 	if(useExtendedPath)
 	{
@@ -97,20 +97,20 @@ int Rubik_BF::useCache(const Topology::t_state* rot_sequence)
       return 1;
     }
   }
-  cluster.found=nullptr;
+  cluster->found=nullptr;
   return 0;
 }
 
 int Rubik_BF::useExtendedCache(const Topology::t_state* rot_sequence)
 {
-  const int index=cluster.subIndexOf((*cluster.found)->state, rot_sequence->state, InitialState);
-  cluster.trail = cluster.sideSolutions(index); 
-  for(int depth=0;depth<cluster.sideDimensions(index);++depth,++cluster.trail)
+  const int index=cluster->subIndexOf((*cluster->found)->state, rot_sequence->state, InitialState);
+  cluster->trail = cluster->sideSolutions(index); 
+  for(int depth=0;depth<cluster->sideDimensions(index);++depth,++cluster->trail)
   {
-    const CubeSlot *c =SolvedState+cluster.Dim+2; 
+    const CubeSlot *c =SolvedState+cluster->Dim+2; 
     while(*c>=0)
     {
-      if((*cluster.trail)->state[(*cluster.found)->state[rot_sequence->state[InitialState[*c]]]]!=*c)
+      if((*cluster->trail)->state[(*cluster->found)->state[rot_sequence->state[InitialState[*c]]]]!=*c)
       {
 	break;
       }
@@ -121,6 +121,6 @@ int Rubik_BF::useExtendedCache(const Topology::t_state* rot_sequence)
       return 1;
     }
   }
-  cluster.trail=nullptr;
+  cluster->trail=nullptr;
   return 0;
 }

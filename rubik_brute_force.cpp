@@ -1,6 +1,6 @@
 #include"rubik_bf.h"
 
-
+Rubik_BF::Cluster * Rubik_BF::cluster = new Cluster;
 Rubik_BF::Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth):
 RubikBase(R),
 useExtendedPath(false)
@@ -12,11 +12,11 @@ useExtendedPath(false)
   {
     seekerDepth=Topology::cacheLevel();
     Engine=&Rubik_BF::fastestCheck;
-    cluster.clusterInit(0,SolvedState);
+    cluster->clusterInit(0,SolvedState);
   }
   else if(AS.length()==2 && AS[0]=='*')
   {
-    cluster.clusterInit(AS[1]-'0',SolvedState);
+    cluster->clusterInit(AS[1]-'0',SolvedState);
     seekerDepth=Topology::cacheLevel();
     Engine=&Rubik_BF::heuristicSearch;
   }
@@ -80,13 +80,13 @@ String Rubik_BF::resolver(const Topology::t_state* A,const Topology::t_state* B)
 {
   String Result;
   Result=auxiliary::mergeSimplePaths(A->path(),B->path());
-  if(cluster.found)
+  if(cluster->found)
   {
-    Result=auxiliary::mergeSimplePaths(Result,(*cluster.found)->path());
+    Result=auxiliary::mergeSimplePaths(Result,(*cluster->found)->path());
   }
-  if(cluster.trail)
+  if(cluster->trail)
   {
-    Result=auxiliary::mergeSimplePaths(Result,(*cluster.trail)->path());
+    Result=auxiliary::mergeSimplePaths(Result,(*cluster->trail)->path());
   }
   return Result;
 }
