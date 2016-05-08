@@ -11,7 +11,7 @@
 #include <algorithm> 
 #include <ncurses.h>
 
-const int CONFIG_CACHE_MEMORY_USAGE=6; // 6: HIGH 5: NORMAL 4 OR LESS: VERY LOW
+const int CURRENT_VERSION_NUMBERS[]={1,0,0};
 
 typedef std::string String;
 typedef std::stringstream Stream;
