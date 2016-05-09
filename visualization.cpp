@@ -8,7 +8,7 @@
   #endif
   #include <GL/gl.h>
   #include <GL/glu.h>
-  #include <GL/glut.h>
+  #include <GL/freeglut.h>
 #endif
 
 #include <iostream>
@@ -23,18 +23,19 @@ namespace RUBIK_3D
     
   void makeMenu()
   {
-    glutAddMenuEntry("Up                    U   ", 1);
-    glutAddMenuEntry("Up Inv.           shift+U", 2);
-    glutAddMenuEntry("Right                 R   ", 3);
-    glutAddMenuEntry("Right Inv.       shift+R", 4);
+    
+    glutAddMenuEntry("Right                 R   ", 1);
+    glutAddMenuEntry("Right Inv.       shift+R", 2);
+    glutAddMenuEntry("Up                    U   ", 3);
+    glutAddMenuEntry("Up Inv.           shift+U", 4);
     glutAddMenuEntry("Front                 F   ", 5);
     glutAddMenuEntry("Front Inv.       shift+F", 6);
     glutAddMenuEntry("Left                    L   ", 7);
     glutAddMenuEntry("Left Inv.          shift+L", 8);
-    glutAddMenuEntry("Back                  B    ", 9);
-    glutAddMenuEntry("Back Inv.       shift+B",10);
-    glutAddMenuEntry("Down                 D   ",11);
-    glutAddMenuEntry("Down Inv       shift+D",12);
+    glutAddMenuEntry("Down                 D   ",9);
+    glutAddMenuEntry("Down Inv       shift+D",10);
+    glutAddMenuEntry("Back                  B    ",11);
+    glutAddMenuEntry("Back Inv.       shift+B",12);
     glutAddMenuEntry("Ask server...  shift+A",13);
     glutAddMenuEntry("Exit",14);
   }
@@ -121,9 +122,45 @@ namespace RUBIK_3D
     rubik.twister(x,y,z,inv);
   }
 
-  void mymenu(int z)
+  void mymenu(int ID)
   {
-    ;
+    const bool inv=1-(ID%2); // even numbers
+    int x=0,y=0,z=0;
+    switch(ID)
+    {
+      case 1:
+      case 2:
+	x=1;
+	break;
+      case 3:
+      case 4:
+	y=1;
+	break;
+      case 5:
+      case 6:
+	z=1;
+	break;
+      case 7:
+      case 8:
+	x=-1;
+	break;
+      case 9:
+      case 10:
+	y=-1;
+	break;
+      case 11:
+      case 12:
+	z=-1;
+	break;
+      case 13:
+	// TODO
+	break;
+      case 14:
+	glutLeaveMainLoop();
+      default:
+	;	
+    }
+    rubik.twister(x,y,z,inv);
   }
 
   void initLight(void) 
@@ -144,6 +181,7 @@ namespace RUBIK_3D
 
   int visualization(int argc, char **argv) {
     glutInit(&argc, argv);
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize (640, 600);
     glutCreateWindow ("RUBIK'S CUBE");
@@ -161,7 +199,8 @@ namespace RUBIK_3D
     glutKeyboardFunc(keyboard);
     glutDisplayFunc (display);
     glEnable(GL_DEPTH_TEST);
-    glutMainLoop();
+    glutMainLoop(); 
+    OUT_("openGL main loop has been closed...")
     return 0;
   }
 }

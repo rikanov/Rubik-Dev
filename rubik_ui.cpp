@@ -603,4 +603,5 @@ UI_rfunc(show3D)
   char * myargv[1];
   myargv[0]=strdup("Visualization");
   RUBIK_3D::visualization(myargc,myargv);
+  return "visualization";
 }
