@@ -35,22 +35,23 @@ private:
     Cube();
   } Cubes[NumberOfSideMarks];
 public:
-  static const int length_indices[];
+  static const int length_indices[]; // {1,19,289,4177,60553,877033,12704329}
   static int TraceSize; 
   struct t_state
   {
     const t_state * parent;
+    const t_state * first_child;
+    const t_state * inverse;
     CubeSlot * state;
-    CubeSlot * i_state;
-    int first;
-    int last;
-    int excludeInverse;
+    CubeSlot first;
+    CubeSlot last;
     int length;
-    t_state(): parent(nullptr), state(nullptr),i_state(nullptr),first(-1), last(-1), excludeInverse(-1), length(0) {}
+    t_state(): parent(nullptr),first_child(nullptr),inverse(nullptr), state(nullptr),first(7), last(7), length(0) {}
     String path() const;
     t_state* alloc();
     void dealloc();
     void copy(const CubeSlot * C);
+    const t_state * ancestor(const int & i) const {return i<=0 ? this : parent->ancestor(i-1);}
   };
  
   class RotationRange

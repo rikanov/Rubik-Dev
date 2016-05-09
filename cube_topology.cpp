@@ -36,33 +36,35 @@ void Topology::singleton()
 }
 std::string Topology::t_state::path() const
 {
-    if(last<0)
-    {
-        return "";
-    }
-    String mark;
-    mark.push_back(Topology::SideMarks[last+1]);
-    return parent ? auxiliary::mergeSimplePaths(parent->path(),mark) : "";
+  static const char M[]="2'";
+  const CubeSlot last_side = last &7; 
+  if(last_side==7)
+  {
+      return "";
+  }
+  String mark;
+  mark.push_back(Topology::SideMarks[last_side+1]);
+  if(last>7)
+  {
+    mark.push_back(M[last/8-1]);
+  }
+  return parent ? auxiliary::mergeSimplePaths(parent->path(),mark) : "";
 }
 
 Topology::t_state * Topology::t_state::alloc()
 {
     state=new CubeSlot[NumberOfSideMarks];
-    i_state=new CubeSlot[NumberOfSideMarks];
     return this;
 }
 void Topology::t_state::dealloc()
 {
     delete state;
-    delete i_state;
     state=nullptr;
-    i_state=nullptr;
 }
 void Topology::t_state::copy(const CubeSlot* C)
 {
     alloc();
     CPY_FUNC(state,C)
-    inverse(state,i_state);
 }
 
 ///=====================

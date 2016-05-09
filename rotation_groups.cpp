@@ -8,6 +8,30 @@ static inline bool is_inverse(const CubeSlot& A)
   return A&Topology::Inverter;
 }
 
+static bool redundancy(const CubeSlot & side, const CubeSlot & last, const CubeSlot & exclude)
+{
+  return side==(last&7) || ((side==OPPOSITE(last&7))&&(side==(exclude&7))); // use &7 to hide the number of side rotation
+}
+
+static inline int relative_position(CubeSlot skip_,CubeSlot skip, const CubeSlot & rot)
+{
+  skip_&=7;
+  skip &=7;
+  const int a=(rot/8); 
+  const int b=(rot%8); 
+  int Result=3*b+a;   
+  Result-= (skip < b) ? 3 : 0;
+  Result-= (skip_< b) && (skip_==OPPOSITE(skip)) ? 3 : 0;
+  return Result;
+}
+
+static inline int reverse_rotation(const CubeSlot & R)
+{
+  const int turn=2-(R/8);
+  const int side=R&7;
+  return 8*turn+side;
+}
+
 void Topology::buildRotations()
 {
   SideGroup[0]=0;
@@ -235,27 +259,32 @@ void Topology::initSeekers() const
   TraceSize=length_indices[CONFIG_CACHE_MEMORY_BOUND]-1;
   PathGenerator.head = new t_state[TraceSize+2]; // 976338 -> 877032
   PathGenerator.head->copy(IdentityMap);
+  PathGenerator.head->inverse=PathGenerator.head;
+  PathGenerator.head->parent =PathGenerator.head;
   t_state * Head=PathGenerator.head;
   t_state * node = Head;
   t_state * next = node+1;
   t_state overflow[3];
+  int index=0;
   while(node->length<CONFIG_CACHE_MEMORY_BOUND)
   {
-    for(int side=0;side<6;++side)
+    for(int side=0,first_ch=1;side<6;++side)
     {
-      if(side==node->last || (side==OPPOSITE(node->last)&&(side==node->excludeInverse)))
-      {
+      if(redundancy(side,node->last,node->parent->last))
+      {//OUT_((index++)<<"redundancy!!!")
 	continue;
+      }
+      if(first_ch)
+      {
+	node->first_child=next;
+	first_ch=0;
       }
       for(int rot=0;rot<3; ++rot, ++next)
       {
-	const t_state * from = (rot ? (next-1) : node);
-	next->copy(from->state);
+	next->copy(rot ? (next-1)->state : node->state);
 	actOn(next->state, Rotation[side + SingleSide*8]);
-	inverse(next->state,next->i_state);
-	next->parent=from;
-	next->excludeInverse=(rot ? (next-1)->excludeInverse : node->last);
-	if(next->parent->first<0)
+	next->parent=node;
+	if(next->parent->first==7)
 	{
 	  next->first=side;
 	}
@@ -263,21 +292,26 @@ void Topology::initSeekers() const
 	{
 	  next->first=next->parent->first;
 	}
-	next->last=side;
-	next->length = next->parent->length + (rot==0);
+	next->last=side+(rot*8);
+	next->length = next->parent->length+1;
       }
     }
     ++node;
   }
   next->length=CONFIG_CACHE_MEMORY_BOUND+1;
-//   for(int i=0, len=0; i<TraceSize; ++i)
-//   {
-//     if(PathGenerator.head[i].length>len)
-//     {
-//       OUT_(i<<": "<<PathGenerator.head[i].path())
-//       len=PathGenerator.head[i].length;
-//     }
-//   }
+  for(t_state * p=PathGenerator.head+1; p->length<=CONFIG_CACHE_MEMORY_BOUND;++p)
+  {
+    const t_state * INV_PAR = p->parent->inverse;
+    const t_state * INV=PathGenerator.head+1+relative_position(7,7,reverse_rotation(p->last)); 
+   
+    if(p->parent!=PathGenerator.head)
+    for(int anc=INV_PAR->length-1;anc>=0;--anc)
+    {
+      const CubeSlot step=INV_PAR->ancestor(anc)->last; 
+      INV=INV->first_child+relative_position(INV->parent->last,INV->last,step);
+    }
+    p->inverse=INV;
+  }
 }
 
 #endif

@@ -132,7 +132,7 @@ int Rubik_BF::Cluster::indexOf(const Topology::t_state *Rot, const bool & inv) c
   int result=0; 
   for(int i=0; i<Dim; ++i, radix*=24)
   {
-    const Sidemarks sm(inv ? Rot->i_state[HeuristicIndices[i]] : Rot->state[HeuristicIndices[i]]);
+    const Sidemarks sm(inv ? Rot->inverse->state[HeuristicIndices[i]] : Rot->state[HeuristicIndices[i]]);
     result+=radix*sm.getPivot();
   }
   return result;
@@ -163,7 +163,7 @@ int Rubik_BF::Cluster::subIndexOf(const Topology::t_state *Rot, const bool & inv
   }
   for(int i=0, radix=1; i<2; ++i, radix*=24)
   {
-    const Sidemarks sm(inv ? Rot->i_state[HeuristicIndices[index+i]] : Rot->state[HeuristicIndices[index+i]]);
+    const Sidemarks sm(inv ? Rot->inverse->state[HeuristicIndices[index+i]] : Rot->state[HeuristicIndices[index+i]]);
     result+=radix*sm.getPivot();
   }
   return result;
