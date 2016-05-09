@@ -4,7 +4,7 @@ Currently, only the Hungarian documentation can be read (in progress status), th
 
 Hungarian: 
  igyekszem a fejlesztői és felhasználó dokumentációt folyamatosan bővíteni, az aktuális információk az alábbi linkeken érhetőek el:
- Fejlesztői információk: https://drive.google.com/file/d/0B2ed70AbCWb6RF9mb0hpVmhjUFU/view?usp=sharing
+ Fejlesztői információk: https://drive.google.com/file/d/0B2ed70AbCWb6SGlkRmJhNkU3VGs/view?usp=sharing
  (folyamatosan frissül)
  
 A dokumentációk folyamatosan készülnek, a befejezetlen részeket középre igazított három pont (...) jelzi.
