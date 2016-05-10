@@ -63,6 +63,7 @@ namespace auxiliary
   String permute(String P);
   void cryptText(const String& Key1, const String& Key2, String & Text);
   String mirror(const String & a, const char & c);
+  String inverse(const String & a);
   void drawBarLine(const int & bar, const int & barLength);
   void intro();
 }

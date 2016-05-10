@@ -300,6 +300,45 @@ void auxiliary::cryptText(const String& Key1, const String& Key2, String& Text)
   }
 }
 
+String auxiliary::inverse(const String& a)
+{
+  String Result;
+  for(String::const_reverse_iterator rit=a.rbegin();rit!=a.rend();++rit)
+  {
+    const char ch=*rit;
+    String sign="";
+    bool opp=false;
+    switch(ch)
+    {
+      case '\'':
+	++rit;
+	break;
+      case '2':
+	sign="2";
+	++rit;
+	break;
+      case '|':
+	opp=true;
+	if(*(++rit)=='|')
+	{
+	  sign="||";
+	  ++rit;
+	}
+	else
+	{
+	  sign="|";
+	}
+	break;
+      default:
+	sign="'";
+    }
+    Result.push_back(opp ? Topology::oppositeSide(*rit) : *rit);
+    Result.append(sign);
+  }
+  return Result;
+}
+
+
 void auxiliary::drawBarLine(const int& bar, const int& barLength)
 {
   static const char boringMarks[]="\\|/-";

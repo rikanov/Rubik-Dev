@@ -511,6 +511,12 @@ UI_rfunc(mirror)
   return auxiliary::mirror(RotC,UPCASE(Plane.at(0)));
 }
 
+UI_rfunc(inverse)
+{
+  PARSER(A)
+  return auxiliary::inverse(A);
+}
+
 UI_rfunc(cube)
 {
   String Result;
