@@ -58,13 +58,14 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
       {
 	continue;
       }
+      String parsed;
       while(toParse.good())
       {
-	String parsed=parser(toParse)+' ';
-	OUT(Color::light)
-	OS<<parsed;
-	OUT(Color::gray)
+	parsed=parser(toParse)+' ';
       }
+      OUT(Color::light)
+      OS<<parsed;
+      OUT(Color::gray)
       NL_
     }
   }
