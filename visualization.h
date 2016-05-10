@@ -1,5 +1,6 @@
 #ifndef RUBIK_3DVISUALIZATION
 #define RUBIK_3DVISUALIZATION
+#include "rubik.h"
 
 namespace RUBIK_3D
 { 
@@ -11,7 +12,7 @@ namespace RUBIK_3D
   void keyboard(unsigned char key, int, int);
   void mymenu(int z);
   void initLight(void);
-  int visualization(int argc, char **argv);
+  int visualization(Rubik * cube, int argc, char **argv);
 }
 
 

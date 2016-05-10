@@ -57,12 +57,13 @@ class Cube3D
   
 public:
   
-  Cube3D(const int& x, const int& y, const int& z);
+  Cube3D(const int& x, const int& y, const int& z, const auxiliary::CubeletColors & colors);
   void show() const;
 };
   
 class Rubik3D
 {
+  Rubik * TheCube;
   Cube3D * Cublets[3][3][3];
   int axisX, axisY, axisZ;
   bool inverse;
@@ -70,7 +71,7 @@ class Rubik3D
   int haste;
   
 public:
-  explicit Rubik3D(const int & H=2);
+  explicit Rubik3D(Rubik * TC, const int & H=2);
   ~Rubik3D();
   void twister(const int& X, const int& Y, const int& Z, const bool& inv);
   void rotate(); // to be valid exactly one of the coordinates must differ from zero!

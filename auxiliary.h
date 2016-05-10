@@ -6,6 +6,19 @@
 
 namespace auxiliary 
 {
+  struct CubeletColors
+  {
+    int
+    front,
+    up,
+    right,
+    left,
+    down,
+    back;
+    
+    CubeletColors(): front(0),up(0),right(0),left(0),down(0),back(0) {}
+  };
+  
   class Sidemarks: public String
   {
     int Index;
@@ -29,6 +42,7 @@ namespace auxiliary
     const int & getPivot() const {return pivotNumber;}
     bool is_acting(const char& C, const bool& middle) const;
     static bool sameCubes(const auxiliary::Sidemarks& A, const auxiliary::Sidemarks& B);
+    CubeletColors getColors(const auxiliary::Sidemarks& Cubelet) const;
  };
  std::ostream & operator<<(std::ostream & os, const Sidemarks & sm);
  std::istream & operator>>(std::istream& is, auxiliary::Sidemarks& sm);

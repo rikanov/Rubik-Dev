@@ -72,23 +72,23 @@ void Cube3D::facets(const int& color_mark, const int& a1, const int& a2, const i
   glEnd();
 }
 
-Cube3D::Cube3D(const int& x, const int& y, const int& z):
+Cube3D::Cube3D(const int& x, const int& y, const int& z, const auxiliary::CubeletColors & colors):
   PosX(x),
   PosY(y),
   PosZ(z)
 {
-  for(int i=0;i<8;++i)
+  for(int i=0;i<8;++i)  // to get spatial coordinates
   {
     Corners[i][0]+=(x*2.0);
     Corners[i][1]+=(y*2.0);
     Corners[i][2]+=(z*2.0);
   }
-  front = orange;
-  up    = blue  ;
-  right = white ;
-  left  = yellow;
-  back  = red   ;
-  down  = green ;
+  front = colors.front;
+  up    = colors.up   ;
+  right = colors.right;
+  left  = colors.left ;
+  back  = colors.back ;
+  down  = colors.down ;
   setSideColors();
 }
   
@@ -114,7 +114,8 @@ void Cube3D::show() const
 
 //============================================
 
-Rubik3D::Rubik3D(const int & H):
+Rubik3D::Rubik3D(Rubik* TC, const int& H):
+  TheCube(TC),
   axisX(0),
   axisY(0),
   axisZ(0),
@@ -128,7 +129,7 @@ Rubik3D::Rubik3D(const int & H):
     {
       for(int z=-1;z<2;++z)
       {
-	Cublets[x+1][y+1][z+1]=new Cube3D(x,y,z);
+	Cublets[x+1][y+1][z+1]=new Cube3D(x,y,z,TheCube->pickCubelet(x,y,z));
       }
     }
   }
@@ -304,5 +305,6 @@ void Rubik3D::twister(const int & X, const int & Y, const int & Z, const bool & 
   axisY=Y;
   axisZ=Z;
   inverse=inv;
-  theta=90;
+  theta=90; 
+  TheCube->rotationByAxis(X,Y,Z,inv);
 }

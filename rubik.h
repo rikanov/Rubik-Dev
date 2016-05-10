@@ -199,6 +199,8 @@ public:
   Rubik & operator =  (const Rubik& R)=default;
   
   void print(const String & C ) const;
+  CubeletColors pickCubelet(const int & x,const int & y,const int & z) const;
+  void rotationByAxis(const int & x,const int & y,const int & z, const bool & inv);
   void REPL (std::istream & IS=std::cin, std::ostream & OS=std::cout);
   
   String file_open(const char * F);

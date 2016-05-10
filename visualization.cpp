@@ -19,7 +19,7 @@ namespace RUBIK_3D
   GLfloat p=0.0,q=0.0,r=0.0;
   bool moving=false;
   int beginx=0, beginy=0;
-  Rubik3D rubik;
+  Rubik3D * rubik;
     
   void makeMenu()
   {
@@ -85,7 +85,7 @@ namespace RUBIK_3D
       glRotatef(-30.0+q,0.0,1.0,0.0);
       glRotatef(0.0+r,0.0,0.0,1.0);   
       
-      rubik.showCube();
+      rubik->showCube();
       
       glFlush();
       glutSwapBuffers();
@@ -119,7 +119,7 @@ namespace RUBIK_3D
       default:
 	return;
     }
-    rubik.twister(x,y,z,inv);
+    rubik->twister(x,y,z,inv);
   }
 
   void mymenu(int ID)
@@ -157,10 +157,11 @@ namespace RUBIK_3D
 	break;
       case 14:
 	glutLeaveMainLoop();
+	return;
       default:
 	;	
     }
-    rubik.twister(x,y,z,inv);
+    rubik->twister(x,y,z,inv);
   }
 
   void initLight(void) 
@@ -179,7 +180,9 @@ namespace RUBIK_3D
     glEnable(GL_DEPTH_TEST);
   }
 
-  int visualization(int argc, char **argv) {
+  int visualization(Rubik * cube, int argc, char **argv) 
+  {
+    rubik=new Rubik3D(cube);
     glutInit(&argc, argv);
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -200,7 +203,8 @@ namespace RUBIK_3D
     glutDisplayFunc (display);
     glEnable(GL_DEPTH_TEST);
     glutMainLoop(); 
-    OUT_("openGL main loop has been closed...")
+    OUT_("\nopenGL main loop has been closed...")
+    delete rubik;
     return 0;
   }
 }
