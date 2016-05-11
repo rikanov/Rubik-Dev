@@ -15,43 +15,55 @@
 
 #define FROM Cublets[X_from+1][Y_from+1][Z_from+1]
 #define MOVE_TO Cublets[X_to+1][Y_to+1][Z_to+1]
-  static GLfloat color[7][3]= 
-  { // FURLDB
-    {0.5,0.5,0.5}, // inner color: gray
-    {1.0,0.5,0.0}, //orange
-    {0.0,0.0,1.0}, //blue
-    {1.0,1.0,1.0}, //white
-    {1.0,1.0,0.0}, //yellow
-    {0.0,1.0,0.0}, //green
-    {1.0,0.0,0.0}  //red
-  };
-  static const int
-    gray   =0,
-    orange =1,
-    blue   =2,
-    white  =3,
-    yellow =4,
-    green  =5,
-    red    =6;
 
-    static inline int
-    isZero(const int& z)
-    {
-      return z==0;
-    }
-    
-    static inline int
-    twist(const int & axis, const bool & inverse)
-    {
-      return axis*(inverse ? -1 : 1);
-    }
-    
-    static inline int
-    reverter(const bool & R)
-    {
-      return R ? -1 : 1;
-    }
-    
+GLfloat Rubik3D::phi=0.0;
+GLfloat Rubik3D::chi=0.0;
+GLfloat Rubik3D::radius=5.0;
+GLfloat Rubik3D::cameraX=0.0;
+GLfloat Rubik3D::cameraY=0.0;
+GLfloat Rubik3D::cameraZ=5.0;
+int Rubik3D::beginx=0;
+int Rubik3D::beginy=0;
+bool Rubik3D::moving=false;
+Rubik3D * Rubik3D::Singleton=nullptr;
+
+static GLfloat color[7][3]= 
+{ // FURLDB
+  {0.5,0.5,0.5}, // inner color: gray
+  {1.0,0.5,0.0}, //orange
+  {0.0,0.0,1.0}, //blue
+  {1.0,1.0,1.0}, //white
+  {1.0,1.0,0.0}, //yellow
+  {0.0,1.0,0.0}, //green
+  {1.0,0.0,0.0}  //red
+};
+static const int
+  gray   =0,
+  orange =1,
+  blue   =2,
+  white  =3,
+  yellow =4,
+  green  =5,
+  red    =6;
+
+  static inline int
+  isZero(const int& z)
+  {
+    return z==0;
+  }
+  
+  static inline int
+  twist(const int & axis, const bool & inverse)
+  {
+    return axis*(inverse ? -1 : 1);
+  }
+  
+  static inline int
+  reverter(const bool & R)
+  {
+    return R ? -1 : 1;
+  }
+  
 void Cube3D::facets(const int& color_mark, const int& a1, const int& a2, const int& a3, const int& a4) const
 {
   glColor3fv(color[color_mark]);
@@ -114,8 +126,9 @@ void Cube3D::show() const
 
 //============================================
 
-Rubik3D::Rubik3D(Rubik* TC, const int& H):
+Rubik3D::Rubik3D(Rubik* TC,const String & R, const int& H):
   TheCube(TC),
+  resolver_skript(R.c_str()),
   axisX(0),
   axisY(0),
   axisZ(0),
@@ -133,6 +146,7 @@ Rubik3D::Rubik3D(Rubik* TC, const int& H):
       }
     }
   }
+  Singleton=this;
 }
 
 Rubik3D::~Rubik3D()
@@ -262,8 +276,7 @@ void Rubik3D::showCube()
   }
   
   // Rotate sides
-  
- 
+   
   if(theta)
   {
     glRotatef(reverter(inverse)*(90-theta),-axisX,-axisY,-axisZ);
@@ -297,9 +310,9 @@ void Rubik3D::showCube()
 
 void Rubik3D::twister(const int & X, const int & Y, const int & Z, const bool & inv)
 {
-  if(theta)
+  while(theta)
   {
-    return; // waiting for finishing former action
+    display();
   }
   axisX=X;
   axisY=Y;
@@ -307,4 +320,33 @@ void Rubik3D::twister(const int & X, const int & Y, const int & Z, const bool & 
   inverse=inv;
   theta=90; 
   TheCube->rotationByAxis(X,Y,Z,inv);
+}
+
+void Rubik3D::resolver()
+{
+  if(resolver_skript==NIL)
+  {
+    return;
+  }
+  TheCube->file_open(resolver_skript);
+  const String Solution=TheCube->getSolution(); 
+  C_FOR_STR(Solution,it)
+  {
+    bool inv=false;
+    char next=*it;
+    char last;
+    if(it+1!=Solution.end() && *(it+1)=='\'')
+    {
+      ++it;
+      inv=true;
+    }
+    if(next=='2')
+    {
+      next=last;
+    }
+    last=next;
+    int x,y,z;
+    auxiliary::convertToCoordinates(next,x,y,z);
+    twister(x,y,z,inv);
+  }
 }

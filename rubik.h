@@ -203,7 +203,7 @@ public:
   CubeletColors pickCubelet(const int & x,const int & y,const int & z) const;
   void rotationByAxis(const int & x,const int & y,const int & z, const bool & inv);
   void REPL (std::istream & IS=std::cin, std::ostream & OS=std::cout);
-  
+  const String & getSolution() const {return LOOP_STACK;}
   String file_open(const char * F);
 };
 

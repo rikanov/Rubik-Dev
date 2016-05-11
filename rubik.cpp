@@ -2,41 +2,6 @@
 #include"cube_topology.h"
 #include"def_colors.h"
 
-static auxiliary::Sidemarks sidemarksFromCoordinates(const int& x, const int& y, const int& z)
-{
-  String SM;
-  switch(x)
-  {
-    case -1:
-      SM+="L";
-      break;
-    case 1:
-      SM+="R";
-    default:
-      ;
-  }
-  switch(y)
-  {
-    case -1:
-      SM+="D";
-      break;
-    case 1:
-      SM+="U";
-    default:
-      ;
-  }
-  switch(z)
-  {
-    case -1:
-      SM+="B";
-      break;
-    case 1:
-      SM+="F";
-    default:
-      ;
-  }
-  return SM; 
-}
 void Rubik::printCollection() const
 {
   NL_
@@ -250,14 +215,14 @@ String Rubik::file_open(const char * F)
 
 CubeletColors Rubik::pickCubelet(const int& x, const int& y, const int& z) const
 {
-  const Sidemarks cublet_place(sidemarksFromCoordinates(x,y,z));
+  const Sidemarks cublet_place(convertToSidemarks(x,y,z));
   const Sidemarks cublet_value(whatIs(cublet_place));
   return cublet_place.getColors(cublet_value);
 }
 
 void Rubik::rotationByAxis(const int& x, const int& y, const int& z, const bool & inv)
 {
-  String rot=sidemarksFromCoordinates(x,y,z);
+  String rot=convertToSidemarks(x,y,z);
   if(inv)
   {
     rot.push_back('\'');

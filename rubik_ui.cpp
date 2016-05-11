@@ -1,7 +1,7 @@
 #include "globals.h"
 #include "rubik.h"
 #include "editor.h"
-#include "visualization.h"
+#include "rubik3d.h"
 #define boolean(X) return (X) ? L_TRUE : NIL;
 
 UI_rfunc(REPL)
@@ -604,10 +604,9 @@ UI_rfunc(readCache)
 }
 
 UI_rfunc(show3D)
-{
-  int myargc=1;
-  char * myargv[1];
-  myargv[0]=strdup("Visualization");
-  RUBIK_3D::visualization(this,myargc,myargv);
+{ 
+  PARSER(A) 
+  Rubik3D rubik3d(this,A,2);
+  rubik3d.init3D();
   return "visualization";
 }

@@ -1,7 +1,4 @@
-reset
-
-randomize FL
-randomize DB
+store
 
 defvar loop-stack
 defvar pool upside
@@ -33,4 +30,6 @@ do brute_force *6 Upside DL DF DR DB DFL
 # arrange all the remained corners then:
 do brute_force *6 Upside DL DF DR DB DFL DFR DBL DBR
 #
+
+revert
 

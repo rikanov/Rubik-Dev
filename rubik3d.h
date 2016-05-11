@@ -20,6 +20,7 @@
 class Cube3D
 { 
   friend class Rubik3D;
+  
   int Colorize[3][3][3]={}; // to be valid exactly one of the coordinates must differ from 1
   
   int& /* side colours references */
@@ -63,19 +64,45 @@ public:
   
 class Rubik3D
 {
+  static Rubik3D * Singleton;
+  
   Rubik * TheCube;
+  const char * resolver_skript;
   Cube3D * Cublets[3][3][3];
   int axisX, axisY, axisZ;
   bool inverse;
   int theta;
   int haste;
   
+  // auxiliary data members to GL graphics  
+  static GLfloat phi;
+  static GLfloat chi;
+  static GLfloat radius;
+  static bool moving;
+  static int beginx;
+  static int beginy;
+  static GLfloat cameraX;
+  static GLfloat cameraY;
+  static GLfloat cameraZ;
+  
 public:
-  explicit Rubik3D(Rubik * TC, const int & H=2);
+  explicit Rubik3D(Rubik * TC,const String & R, const int & H=2);
   ~Rubik3D();
-  void twister(const int& X, const int& Y, const int& Z, const bool& inv);
+    void twister(const int& X, const int& Y, const int& Z, const bool& inv);
   void rotate(); // to be valid exactly one of the coordinates must differ from zero!
   void setColors();
   void showCube();  
+  void resolver();
+  
+  // static OpenGL members
+  static void mouse(int btn,int state,int x,int y);
+  static void motion(int x, int y);
+  static void myreshape(int w,int h);
+  static void display();
+  static void keyboard(unsigned char key, int, int);
+  static void makeMenu();
+  static void mymenu(int z);
+  static void initLight(void);
+  static int init3D();
 };
 #endif // RUBIK3D_H*/

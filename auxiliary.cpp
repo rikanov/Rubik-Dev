@@ -269,6 +269,68 @@ std::string auxiliary::mirror(const std::string& a, const char& c)
     return Result;
 }
 
+auxiliary::Sidemarks auxiliary::convertToSidemarks(const int& x, const int& y, const int& z)
+{
+  String SM;
+  switch(x)
+  {
+    case -1:
+      SM+="L";
+      break;
+    case 1:
+      SM+="R";
+    default:
+      ;
+  }
+  switch(y)
+  {
+    case -1:
+      SM+="D";
+      break;
+    case 1:
+      SM+="U";
+    default:
+      ;
+  }
+  switch(z)
+  {
+    case -1:
+      SM+="B";
+      break;
+    case 1:
+      SM+="F";
+    default:
+      ;
+  }
+  return SM; 
+}
+
+void auxiliary::convertToCoordinates(const char& SM, int& x, int& y, int& z)
+{
+  x=0; y=0; z=0;
+  switch(SM)
+  {
+    case 'L':
+      x=-1;
+      break;
+    case 'R':
+      x= 1;
+      break;
+    case 'D':
+      y=-1;
+      break;
+    case 'U':
+      y= 1;
+      break;
+    case 'B':
+      z=-1;
+      break;
+    case 'F':
+      z= 1;
+      break;
+  }
+}
+
 String auxiliary::permute(String P)
 {
   String Result;

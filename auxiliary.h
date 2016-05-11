@@ -65,6 +65,8 @@ namespace auxiliary
   String mirror(const String & a, const char & c);
   String inverse(const String & a);
   void drawBarLine(const int & bar, const int & barLength);
+  Sidemarks convertToSidemarks(const int & x, const int & y, const int & z);
+  void convertToCoordinates(const char & SM, int & x,int & y,int & z);
   void intro();
 }
 
