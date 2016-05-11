@@ -14,6 +14,12 @@
 #include <iostream>
 #include <cmath>
 #include "rubik3d.h"
+
+static const int PI=3.14156;
+static inline GLfloat toRadian(const int & alfa)
+{
+  return PI*alfa/180.0f;
+}
 void Rubik3D::makeMenu()
 {  
   glutAddMenuEntry("Right                 R   ", 1);
@@ -44,13 +50,20 @@ void Rubik3D::motion(int x, int y)
 {
   if (moving) 
   {
-    chi-= (x - beginx)/300.0f;
+    chi-= (x - beginx);
     beginx = x;
-    phi+= (y - beginy)/300.0f;
+    phi-= (y - beginy);
     beginy=y;
-    cameraZ=radius*sin(phi)*cos(chi);
-    cameraX=radius*sin(phi)*sin(chi);
-    cameraY=radius*cos(phi);
+    GLfloat rad_phi=toRadian(phi);
+    GLfloat rad_chi=toRadian(chi);
+    cameraZ=radius*sin(rad_phi)*cos(rad_chi);
+    cameraX=radius*sin(rad_phi)*sin(rad_chi);
+    cameraY=radius*cos(rad_phi);
+    
+    upZ=sin(rad_phi-PI/2)*cos(rad_chi);
+    upX=(rad_phi-PI/2)*sin(rad_chi);
+    upY=radius*cos(rad_phi-PI/2);
+    
     glutPostRedisplay();
   }
 }
@@ -76,7 +89,7 @@ void Rubik3D::display()
     glLoadIdentity();
 
     glPushMatrix();
-    gluLookAt(cameraX,cameraY,cameraZ,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f);
+    gluLookAt(cameraX,cameraY,cameraZ,0.0f,0.0f,0.0f,upX,upY,upZ);
     Singleton->showCube();
     
     glFlush();

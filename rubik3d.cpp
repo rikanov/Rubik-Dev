@@ -16,12 +16,16 @@
 #define FROM Cublets[X_from+1][Y_from+1][Z_from+1]
 #define MOVE_TO Cublets[X_to+1][Y_to+1][Z_to+1]
 
-GLfloat Rubik3D::phi=0.0;
+GLfloat Rubik3D::phi=89.0;
 GLfloat Rubik3D::chi=0.0;
 GLfloat Rubik3D::radius=5.0;
 GLfloat Rubik3D::cameraX=0.0;
 GLfloat Rubik3D::cameraY=0.0;
 GLfloat Rubik3D::cameraZ=5.0;
+GLfloat Rubik3D::upX=0.0;
+GLfloat Rubik3D::upY=0.0;
+GLfloat Rubik3D::upZ=1.0;
+
 int Rubik3D::beginx=0;
 int Rubik3D::beginy=0;
 bool Rubik3D::moving=false;

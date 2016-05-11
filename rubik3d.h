@@ -84,6 +84,9 @@ class Rubik3D
   static GLfloat cameraX;
   static GLfloat cameraY;
   static GLfloat cameraZ;
+  static GLfloat upX;
+  static GLfloat upY;
+  static GLfloat upZ;
   
 public:
   explicit Rubik3D(Rubik * TC,const String & R, const int & H=2);
