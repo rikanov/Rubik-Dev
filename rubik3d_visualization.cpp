@@ -70,30 +70,35 @@ void Rubik3D::motion(int x, int y)
 
 void Rubik3D::myreshape(int w,int h)
 {
-    glViewport(0,0,w,h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    if (w <= h)
-    {
-      glOrtho(-10.0,10.0,-10.0*(GLfloat)h/(GLfloat)w, 10.0*(GLfloat)h/(GLfloat)w,-10.0,10.0);
-    }
-    else
-    {
-      glOrtho(-10.0*(GLfloat)w/(GLfloat)h, 10.0*(GLfloat)w/(GLfloat)h,-10.0,10.0,-10.0,10.0);
-    }
-    glMatrixMode(GL_MODELVIEW);
+  glViewport(0,0,w,h);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  if (w <= h)
+  {
+    glOrtho(-10.0,10.0,-10.0*(GLfloat)h/(GLfloat)w, 10.0*(GLfloat)h/(GLfloat)w,-10.0,10.0);
+  }
+  else
+  {
+    glOrtho(-10.0*(GLfloat)w/(GLfloat)h, 10.0*(GLfloat)w/(GLfloat)h,-10.0,10.0,-10.0,10.0);
+  }
+  glMatrixMode(GL_MODELVIEW);
 }
 void Rubik3D::display()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
+  if(AutoPlayOn)
+  {
+    AutoPlayOn=false;
+    Singleton->resolver();
+  }
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity();
 
-    glPushMatrix();
-    gluLookAt(cameraX,cameraY,cameraZ,0.0f,0.0f,0.0f,upX,upY,upZ);
-    Singleton->showCube();
-    
-    glFlush();
-    glutSwapBuffers();
+  glPushMatrix();
+  gluLookAt(cameraX,cameraY,cameraZ,0.0f,0.0f,0.0f,upX,upY,upZ);
+  Singleton->showCube();
+  
+  glFlush();
+  glutSwapBuffers();
 }
 
 void Rubik3D::keyboard(unsigned char key, int, int)
@@ -167,11 +172,7 @@ void Rubik3D::mymenu(int ID)
     default:
       ;	
   }
-  if(resolve)
-  {
-    Singleton->resolver();
-  }
-  else
+  if(AutoPlayOn==false)
   {
     Singleton->twister(x,y,z,inv);
   }

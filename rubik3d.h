@@ -79,6 +79,7 @@ class Rubik3D
   static GLfloat chi;
   static GLfloat radius;
   static bool moving;
+  static bool AutoPlayOn;
   static int beginx;
   static int beginy;
   static GLfloat cameraX;

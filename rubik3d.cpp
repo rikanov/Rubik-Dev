@@ -29,6 +29,7 @@ GLfloat Rubik3D::upZ=1.0;
 int Rubik3D::beginx=0;
 int Rubik3D::beginy=0;
 bool Rubik3D::moving=false;
+bool Rubik3D::AutoPlayOn=false;
 Rubik3D * Rubik3D::Singleton=nullptr;
 
 static GLfloat color[7][3]= 
