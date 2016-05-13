@@ -92,6 +92,13 @@ UI_rfunc(defvar)
       String temp="list "+former+";";
       S=parser(temp);
     }
+    if(variableEquality(S,fName))
+    {
+      OUT(Color::red<<"ERROR: self-reference has been defined to symbol: ")
+      S="";
+      (*Var_space)[fName]=NIL;
+      break;
+    }
     (*Var_space)[fName]+=S+' ';
   }
   TRIM_END((*Var_space)[fName])
@@ -390,13 +397,13 @@ UI_rfunc(stringReplace)
 
 UI_rfunc(list)
 {
-  String Result,read_in;
-  GETLINE(L)
+  String Result;
+  GETLINE(L) 
   Stream buffer(L);
   while(buffer.good())
   {
     Result+=parser(buffer);
-    Result.push_back(' ');
+    Result.push_back(' '); 
   }
   TRIM_END(Result);
   return Result;
@@ -517,6 +524,27 @@ UI_rfunc(inverse)
 {
   PARSER(A)
   return auxiliary::inverse(A);
+}
+
+UI_rfunc(reverse)
+{
+  String Result;
+  PARSER(A)
+  C_FOR_STR(A,it)
+  {
+    String next;
+    next.push_back(*it);
+    if((it+1)!=A.end() && !isletter(*(it+1)))
+    {
+      next.push_back(*(++it));
+      if((it+1)!=A.end() && *(it+1)=='|')
+      {
+	next.push_back(*(++it));
+      }
+    }
+    Result=next+Result;
+  }
+  return Result;
 }
 
 UI_rfunc(cube)

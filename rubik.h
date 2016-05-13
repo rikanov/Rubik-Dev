@@ -171,6 +171,7 @@ class Rubik
   UI_func(permute)
   UI_func(mirror)
   UI_func(inverse)
+  UI_func(reverse)
   UI_func(pathFinder)
   UI_func(crypt)
   UI_func(swap)

@@ -24,7 +24,7 @@ typedef signed char CubeSlot;
 #define FOR_STR(S,it) for(std::string::iterator it=S.begin();it!=S.end();++it)
 #define C_FOR_STR(S,it) for(std::string::const_iterator it=S.begin();it!=S.end();++it)
 #define OPPOSITE(x) (5-(x))
-#define isletter(x) ('A'<=((x)&95)<='Z')
+#define isletter(x) ('A'<=((x)&95) && ((x)&95)<='Z')
 #define IS_FACET(X) (X=='F'||X=='U'||X=='R'||X=='B'||X=='D'||X=='L')
 #define UPCASE(x) ((x)&95)
 #define IS_LOWCASE(x) ((x)&32)
