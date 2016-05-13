@@ -23,8 +23,8 @@ GLfloat Rubik3D::cameraX=0.0;
 GLfloat Rubik3D::cameraY=0.0;
 GLfloat Rubik3D::cameraZ=5.0;
 GLfloat Rubik3D::upX=0.0;
-GLfloat Rubik3D::upY=0.0;
-GLfloat Rubik3D::upZ=1.0;
+GLfloat Rubik3D::upY=1.0;
+GLfloat Rubik3D::upZ=0.0;
 
 int Rubik3D::beginx=0;
 int Rubik3D::beginy=0;

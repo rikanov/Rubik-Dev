@@ -34,14 +34,14 @@ void Rubik3D::makeMenu()
   glutAddMenuEntry("Down Inv       shift+D",10);
   glutAddMenuEntry("Back                  B    ",11);
   glutAddMenuEntry("Back Inv.       shift+B",12);
-  glutAddMenuEntry("Ask server...  shift+A",13);
+  glutAddMenuEntry("Run skript...  shift+S",13);
   glutAddMenuEntry("Exit",14);
 }
 void Rubik3D::mouse(int btn,int state,int x,int y)
 {
   if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
   {
-    moving = 1;
+    moving = true;
     beginx = x;
     beginy = y;
   }
@@ -103,39 +103,21 @@ void Rubik3D::display()
 
 void Rubik3D::keyboard(unsigned char key, int, int)
 {
+  if(key=='S')
+  {
+    AutoPlayOn=true;
+    return;
+  }
   int x=0,y=0,z=0;
   bool inv=(key & 32)==0;
-  key |= 32;
-  switch(key)
-  {
-    case 'l':
-      x = -1;
-      break;
-    case 'r':
-      x = 1;
-      break;
-    case 'd':
-      y =-1;
-      break;
-    case 'u':
-      y = 1;
-      break;
-    case 'b':
-      z =-1;
-      break;
-    case 'f':
-      z = 1;
-      break;
-    default:
-      return;
-  }
+  key &= 95;
+  convertToCoordinates(key,x,y,z);
   Singleton->twister(x,y,z,inv);
 }
 
 void Rubik3D::mymenu(int ID)
 {
   const bool inv=1-(ID%2); // even numbers
-  bool resolve=false;
   int x=0,y=0,z=0;
   switch(ID)
   {
@@ -164,7 +146,7 @@ void Rubik3D::mymenu(int ID)
       z=-1;
       break;
     case 13:
-      resolve=true;
+      AutoPlayOn=true;
       break;
     case 14:
       glutLeaveMainLoop();

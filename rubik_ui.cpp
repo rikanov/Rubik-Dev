@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "rubik.h"
 #include "editor.h"
+#include "def_colors.h"
 #include "rubik3d.h"
 #define boolean(X) return (X) ? L_TRUE : NIL;
 
@@ -88,7 +89,8 @@ UI_rfunc(defvar)
     }
     if(S==fName)
     {
-      S="list "+former+";";
+      String temp="list "+former+";";
+      S=parser(temp);
     }
     (*Var_space)[fName]+=S+' ';
   }
@@ -269,8 +271,8 @@ UI_rfunc(doRotations)
     {  
       if(++counter > InfiniteLoopLimit)
       {
-	OUT_("ERROR: the number of steps exceeded the InfiniteLoopLimit (up to "<<InfiniteLoopLimit<<") number")
-	OUT_("The loop has been automatically interrupted")
+	OUT_(Color::red<<"ERROR: the number of steps exceeded the InfiniteLoopLimit number (set up to "<<InfiniteLoopLimit<<")")
+	OUT_(Color::gray<<"The loop has been automatically interrupted")
 	break;
       }
       DO=parser(core);
