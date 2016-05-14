@@ -87,7 +87,7 @@ class Rubik_BF
     int secondStage  (int& result, String& Result, const Topology::t_state* T);
   
 public:
-  Rubik_BF(const Rubik * R, Stream& IS, const String & AS, const int & bfWidth);
+  Rubik_BF(const Rubik * R, Stream& IS, const String & AS);
   std::pair<int,String> start();
   ~Rubik_BF();
 };

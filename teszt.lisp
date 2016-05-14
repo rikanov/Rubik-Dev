@@ -1,5 +1,5 @@
 reset
-randomize FD
+swap ULF UFR
 
-brute_force *6 Upside 
+heuristic *6 FLU BLU BRU UR UF UL UB BL BR FL FR
 

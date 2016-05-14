@@ -11,9 +11,9 @@ String Rubik::random()
   return Result;
 }
 
-String Rubik::bruteForce(Stream& IS, const String & AS) const
-{
-  Rubik_BF BF(this, IS, AS, BF_WIDTH);
+String Rubik::heuristic(Stream& IS, const String & AS) const
+{OUT_("heuristic...")
+  Rubik_BF BF(this, IS, AS);
   std::pair<int,String> Result=BF.start();
   BF_SUCCESS=Result.first ? std::to_string(Result.first) : "NIL";
   BF_RESULT =Result.second;

@@ -574,7 +574,7 @@ UI_rfunc(setAlign)
   return Result;
 }
 
-UI_rfunc(callBruteForce)
+UI_rfunc(getSolution)
 {
   String As=parser(IS);
   GETLINE(results_list)
@@ -583,7 +583,7 @@ UI_rfunc(callBruteForce)
   {
     return NIL;
   }
-  return bruteForce(results_stream,As);
+  return heuristic(results_stream,As);
 }
 
 UI_rfunc(random)

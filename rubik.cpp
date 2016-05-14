@@ -102,7 +102,7 @@ void Rubik::setAutocomp(const char* A)
   (*Var_space)[A];
 }
 
-bool Rubik::variableEquality(String& A, const String& B) const
+bool Rubik::variableEquality(String A, const String& B) const
 {
   bool Result=false;
   if(A==B)

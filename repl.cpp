@@ -24,7 +24,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	OUT(Color::white)
 	if((buf=readline(prompt))==NULL)
 	{
-	  OUT(Color::red<<"\nREPL mode has been closed for: "<<Color::light<<Object<<Color::gray);
+	  OUT_(Color::red<<"\nREPL mode has been closed for: "<<Color::light<<Object<<Color::gray);
 	  free(buf);
 	  return;
 	}
