@@ -127,7 +127,7 @@ bool Rubik::variableEquality(String A, const String& B) const
 void Rubik::select(Stream& IS, String& Result, const bool & Inv)
 {
   GET(head)
-  Stream SS(parser(IS));
+  GETLIST(SS)
   while(SS.good())
   {
     Stream next;
@@ -140,7 +140,7 @@ void Rubik::select(Stream& IS, String& Result, const bool & Inv)
       Result+=query+' ';
     }
   }
-  TRIM_END(Result)
+  TRIM_END(Result);
 }
 
 void Rubik::macro(Stream& IS, String& R)
@@ -192,8 +192,8 @@ Rubik& Rubik::applyRotation()
 }
 String Rubik::functionResolver(Stream& IS,const String & R)
 {
-  GET(arg);
-  return auxiliary::putInString(arg,'&',Var_space->at(R));
+  GETLIST(arg);
+  return auxiliary::putInString(arg.str(),'&',Var_space->at(R));
 }
 
 String Rubik::file_open(const char * F)

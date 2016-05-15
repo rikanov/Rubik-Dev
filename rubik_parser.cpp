@@ -26,14 +26,8 @@ UI_rfunc(parser)
   //=============================================//
   if(read_in.front()=='#')
   {
-    if(getline(IS,read_in))
-    {
-      OUT_(Color::green<<read_in<<Color::gray)
-    }
-    else
-    {
-      NL_
-    }
+    GETLINE(print_out)
+    OUT_(Color::green<<print_out<<Color::gray)
     read_in=NIL;
   }
   

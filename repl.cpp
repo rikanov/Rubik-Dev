@@ -25,6 +25,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	if((buf=readline(prompt))==NULL)
 	{
 	  OUT_(Color::red<<"\nREPL mode has been closed for: "<<Color::light<<Object<<Color::gray);
+	  Collection->erase(Object);
 	  free(buf);
 	  return;
 	}
@@ -38,7 +39,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	}
 	OUT(Color::gray)
 	String Get(buf);
-	TRIM(Get)
+	TRIM(Get);
 	if(sign_nwln=Get.back()=='\\')
 	{
 	  Get.pop_back();
@@ -79,7 +80,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
       do
       {  
 	getline(IS, Get);
-	TRIM(Get)
+	TRIM(Get);
 	if(sign_nwln=Get.back()=='\\')
 	{
 	  Get.pop_back();

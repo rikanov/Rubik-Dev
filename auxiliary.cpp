@@ -338,7 +338,7 @@ String auxiliary::permute(String P)
   do {
     Result+=P+' ';
   } while(std::next_permutation(P.begin(),P.end()));
-  TRIM(Result)
+  TRIM(Result);
   return Result;
 }
 

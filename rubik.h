@@ -13,7 +13,7 @@
 #define GETLIST(L) Stream L(list(IS));
 #define PARSER(A) String A=parser(IS);
 #define PARSER2(A,B) PARSER(A) PARSER(B)
-#define GETLINE(L) String L;getline(IS,L,';');TRIM_END(L);{String ToEnd; getline(IS,ToEnd); if(ToEnd!="") {IS.str(ToEnd);IS.clear();}}
+#define GETLINE(L) String L;getline(IS,L,';');TRIM_END(L);
 #define OUTSPREAD(O) String O; getline(IS,O);
 #define LOOP_STACK (*Var_space)["loop-stack"]
 #define BF_SUCCESS (*Var_space)["heuristic-success"]

@@ -101,7 +101,7 @@ UI_rfunc(defvar)
     }
     (*Var_space)[fName]+=S+' ';
   }
-  TRIM_END((*Var_space)[fName])
+  TRIM_END((*Var_space)[fName]);
   return fName;
 }
 
@@ -164,13 +164,10 @@ UI_rfunc(logicalAnd)
 
 UI_rfunc(condition)
 {
-  GETLINE(A) 
-  if(parser(A)!=NIL)
-  {
-    return parser(IS);
-  }
-  GETLINE(rest_to_throw)
-  return NIL;
+  GETLINE(IF)
+  GETLINE(THEN)
+  GETLINE(ELSE)
+  return parser(IF)!=NIL ? parser(THEN) : parser(ELSE);
 }
 
 UI_rfunc(forLoop)
@@ -190,7 +187,7 @@ UI_rfunc(forLoop)
       IS.str(eval.str());
     }
   }
-  TRIM_END(Result)
+  TRIM_END(Result);
   return Result;
 }
 
@@ -204,8 +201,8 @@ UI_rfunc(regExp)
   }
   catch (regex_error e) 
   {
-     OUT_(e.what())
-     OUT_("CODE IS: " << e.code())
+     OUT_(Color::red<<e.what())
+     OUT_(Color::gray<<"CODE IS: "<< Color::white << e.code() << Color::gray)
      return NIL;
   } 
 }
@@ -383,7 +380,7 @@ UI_rfunc(editor)
 
 UI_rfunc(conc)
 {
-  GET2(A,B)
+  PARSER2(A,B)
   return A+B;
 }
 
@@ -423,7 +420,7 @@ UI_rfunc(mapcar)
     Stream evaluate(lambda+' '+read_in);
     Result+=parser(evaluate)+' ';
   }
-  TRIM_END(Result)
+  TRIM_END(Result);
   return Result;
 }
 
@@ -470,7 +467,7 @@ UI_rfunc(permute)
 
 UI_rfunc(crypt)
 {
-  GET2(A,B)
+  PARSER2(A,B)
   if(auxiliary::regExp("?*->?*",A.c_str())==false)
   {
     return A;
@@ -556,7 +553,7 @@ UI_rfunc(cube)
     S<<Sidemarks(index).c_str()<<' '<<Sidemarks(*b).c_str();
     Result+=assoc(S)+' ';
   }
-  TRIM_END(Result)
+  TRIM_END(Result);
   return Result;
 }
 

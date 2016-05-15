@@ -5,7 +5,8 @@
 Rubik* Rubik::Global=nullptr;
 std::map<String, Rubik*> * Rubik::Collection=new std::map<String, Rubik*>;
 std::map<String, String> * Rubik::Var_space =new std::map<String, String>;
-Rubik::Rubik(): A_map NEW, B_map NEW, Sup_map NEW, RotationCache NEW, RotationAlign NEW, Sup_inv NEW, Object("global")
+Rubik::Rubik(): A_map NEW, B_map NEW, Sup_map NEW, RotationCache NEW, RotationAlign NEW, Sup_inv NEW, Object("global"),
+  NeedAlign(false)
 {
   Topology::singleton();
   Global=this;
@@ -14,7 +15,8 @@ Rubik::Rubik(): A_map NEW, B_map NEW, Sup_map NEW, RotationCache NEW, RotationAl
   initRubik();
 }
 
-Rubik::Rubik(const String& name): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, RotationCache NEW, RotationAlign NEW, Object(name)
+Rubik::Rubik(const String& name): A_map NEW, B_map NEW, Sup_map NEW, Sup_inv NEW, RotationCache NEW, RotationAlign NEW, Object(name),
+  NeedAlign(false)
 {
   delete (*Collection)[Object];
   (*Collection)[Object]=this;

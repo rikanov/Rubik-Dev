@@ -23,11 +23,7 @@ typedef signed char CubeSlot;
 #define STR_END std::string::npos
 #define FOR_STR(S,it) for(std::string::iterator it=S.begin();it!=S.end();++it)
 #define C_FOR_STR(S,it) for(std::string::const_iterator it=S.begin();it!=S.end();++it)
-#define OPPOSITE(x) (5-(x))
-#define isletter(x) ('A'<=((x)&95) && ((x)&95)<='Z')
-#define IS_FACET(X) (X=='F'||X=='U'||X=='R'||X=='B'||X=='D'||X=='L')
-#define UPCASE(x) ((x)&95)
-#define IS_LOWCASE(x) ((x)&32)
+
 #define EMPTY(x) CubeSlot x[NumberOfSideMarks]={}; 
 #define CPY_FUNC(x,y) memcpy(x,y, NumberOfSideMarks); // DON'T use sizeof y or x !!!!!!!!
 #define FOR_FUNC(x) for(int x=0;x<NumberOfSideMarks;++x)
@@ -38,9 +34,7 @@ typedef signed char CubeSlot;
 #define OUT(x) std::cout<<x<<std::flush;
 #define NL std::endl
 #define NL_ std::cout<<std::endl;
-#define TRIM_END(S) while(!S.empty() && (S.back()<=32||S.back()>=127)) S.pop_back();
-#define TRIM(S) TRIM_END(S) while(!S.empty() && (S.front()<=32||S.front()>=127)) S=S.substr(1);
-#define NONILL(X) if(X=="NIL") {X="";}
+
 extern const char * NIL;
 extern const char * L_TRUE;
 extern const char * MACRO_SYNTAX;
@@ -48,5 +42,56 @@ const int CompressedArraySize=240;
 const int NumberOfSideMarks=78;	// = 8*3! + 12*2! 
 const CubeSlot IdentityMap[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,\
 			40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77};
+
+void inline TRIM_END(String & S)
+{
+  while(!S.empty() && S.back()==' ' ||S.back()=='\t') 
+  {
+    S.pop_back();
+  }
+}
+
+void inline TRIM(String & S)
+{
+  TRIM_END(S);
+  while(!S.empty() && (S.front()==' ' || S.front()=='\t')) 
+  {
+    S=S.substr(1);
+  }
+}
+
+void inline NONILL(String & X)
+{
+  if(X=="NIL") 
+  {
+    X="";
+    
+  }
+}
+
+bool inline isletter(const char& x)
+{
+  return ('A'<=((x)&95) && ((x)&95)<='Z');
+}
+
+int inline OPPOSITE(const int& x) 
+{
+  return (5-x);
+}
+
+bool inline IS_FACET(const char& X)
+{
+  return (X=='F'||X=='U'||X=='R'||X=='B'||X=='D'||X=='L');
+}
+
+char inline UPCASE(const char & x)
+{
+  return x & 95;
+}
+
+bool inline IS_LOWCASE(const char & x)
+{
+  return (x&32);
+}
 
 #endif
