@@ -1,7 +1,6 @@
 store
 
 defvar loop-stack
-defvar pool upside
 
 # beginner (L2L) method test
 #
