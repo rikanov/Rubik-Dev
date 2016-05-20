@@ -544,6 +544,20 @@ UI_rfunc(reverse)
   return Result;
 }
 
+UI_rfunc(rotationLength)
+{
+  int Result=0;
+  PARSER(A)
+  if(A!=NIL)
+  {
+    C_FOR_STR(A,it)
+    {
+      Result+=isletter(*it);
+    }
+  }
+  return std::to_string(Result);
+}
+
 UI_rfunc(cube)
 {
   String Result;

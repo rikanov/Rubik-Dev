@@ -1,6 +1,7 @@
 #include "rubik_bf.h"
 #include "def_colors.h"
 
+static const int HASH[]={1,24,576,13824,331776,7962624,191102976};
 Rubik_BF::Cluster::Cluster():
   Dim(-1),
   cluster_size(0),
@@ -128,24 +129,22 @@ void Rubik_BF::Cluster::clusterInit(const int& dim, const CubeSlot * solved_stat
 
 int Rubik_BF::Cluster::indexOf(const Topology::t_state *Rot, const bool & inv) const
 {
-  int radix=1;
   int result=0; 
-  for(int i=0; i<Dim; ++i, radix*=24)
+  for(int i=0; i<Dim; ++i)
   {
     const Sidemarks sm(inv ? Rot->inverse->state[HeuristicIndices[i]] : Rot->state[HeuristicIndices[i]]);
-    result+=radix*sm.getPivot();
+    result+=HASH[i]*sm.getPivot();
   }
   return result;
 }
 
 int Rubik_BF::Cluster::indexOf(const CubeSlot * R1,const CubeSlot * R2) const
 {
-  int radix=1;
   int result=0; 
-  for(int i=0; i<Dim; ++i, radix*=24)
+  for(int i=0; i<Dim; ++i)
   {
     const Sidemarks sm(R1[R2[HeuristicIndices[i]]]);
-    result+=radix*sm.getPivot();
+    result+=HASH[i]*sm.getPivot();
   }
   return result;
 }
@@ -161,10 +160,10 @@ int Rubik_BF::Cluster::subIndexOf(const Topology::t_state *Rot, const bool & inv
       return 0;
     }
   }
-  for(int i=0, radix=1; i<2; ++i, radix*=24)
+  for(int i=0; i<2; ++i)
   {
     const Sidemarks sm(inv ? Rot->inverse->state[HeuristicIndices[index+i]] : Rot->state[HeuristicIndices[index+i]]);
-    result+=radix*sm.getPivot();
+    result+=HASH[i]*sm.getPivot();
   }
   return result;
 }
@@ -172,10 +171,10 @@ int Rubik_BF::Cluster::subIndexOf(const Topology::t_state *Rot, const bool & inv
 int Rubik_BF::Cluster::subIndexOf(const CubeSlot * R1, const CubeSlot * R2, const CubeSlot * R3) const
 {
   int result=0;
-  for(int i=Dim, radix=1; i<Dim+2; ++i, radix*=24)
+  for(int i=0; i<2; ++i)
   {
-    const Sidemarks sm(R1[R2[R3[HeuristicIndices[i]]]]);
-    result+=radix*sm.getPivot();
+    const Sidemarks sm(R1[R2[R3[HeuristicIndices[Dim+i]]]]);
+    result+=HASH[i]*sm.getPivot();
   }
   return result;
 }
