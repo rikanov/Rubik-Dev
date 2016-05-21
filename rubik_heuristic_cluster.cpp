@@ -82,6 +82,13 @@ void Rubik_BF::Cluster::sideClusterInit()
     SideClusterDimensions[i]=0;
   }
   const int indexOfIdentity=indexOf(Topology::getTrace(), true); 
+  for(Topology::RotationRange range(0,Topology::cacheLevel()-1); range.state(); range.next())
+  {
+    if(indexOf(range.state(),true)==indexOfIdentity)
+    {
+      ++SideClusterDimensions[subIndexOf(range.state(),true)];
+    }
+  }
   for(int i=0;i<ClusterDimensions[indexOfIdentity];++i)
   {
     const int index=subIndexOf(ClusteredSolutions[indexOfIdentity][i],true);
@@ -92,6 +99,15 @@ void Rubik_BF::Cluster::sideClusterInit()
     SideCluster[i] = SideClusterDimensions[i]==0 ? nullptr :new ClusterSprig[SideClusterDimensions[i]]; 
     SideClusterDimensions[i]=0;
   } 
+  for(Topology::RotationRange range(0,Topology::cacheLevel()-1); range.state(); range.next())
+  {
+    if(indexOf(range.state(),true)==indexOfIdentity)
+    {
+      const int index=subIndexOf(range.state(),true);
+      SideCluster[index][SideClusterDimensions[index]]=range.state();
+      ++SideClusterDimensions[index];
+    }
+  }
   for(int i=0;i<ClusterDimensions[indexOfIdentity];++i)
   {
     const int index=subIndexOf(ClusteredSolutions[indexOfIdentity][i],true);
