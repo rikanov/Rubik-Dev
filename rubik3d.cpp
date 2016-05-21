@@ -334,24 +334,6 @@ void Rubik3D::resolver()
     return;
   }
   TheCube->file_open(resolver_skript);
-  const String Solution=TheCube->getSolution(); 
-  C_FOR_STR(Solution,it)
-  {
-    bool inv=false;
-    char next=*it;
-    char last;
-    if(it+1!=Solution.end() && *(it+1)=='\'')
-    {
-      ++it;
-      inv=true;
-    }
-    if(next=='2')
-    {
-      next=last;
-    }
-    last=next;
-    int x,y,z;
-    auxiliary::convertToCoordinates(next,x,y,z);
-    twister(x,y,z,inv);
-  }
+  Solution=TheCube->getSolution();
+  it=Solution.begin();
 }

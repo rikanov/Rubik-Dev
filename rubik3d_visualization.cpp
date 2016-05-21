@@ -14,6 +14,7 @@
 #include <iostream>
 #include <cmath>
 #include "rubik3d.h"
+#include "def_colors.h"
 
 static const int PI=3.14156;
 static inline GLfloat toRadian(const int & alfa)
@@ -85,6 +86,7 @@ void Rubik3D::myreshape(int w,int h)
 }
 void Rubik3D::display()
 {
+  static char last;
   if(AutoPlayOn)
   {
     AutoPlayOn=false;
@@ -95,6 +97,38 @@ void Rubik3D::display()
 
   glPushMatrix();
   gluLookAt(cameraX,cameraY,cameraZ,0.0f,0.0f,0.0f,upX,upY,upZ);
+  
+  if(Singleton->theta==0)
+  {
+    if(Singleton->Solution!="" && Singleton->it==Singleton->Solution.end())
+    {
+      Singleton->Solution="";
+    }
+    if(Singleton->Solution!="")
+    {
+      bool inv=false;
+      char next=*Singleton->it;
+      String::iterator oit=(next=='2' || next=='\'') ? Singleton->it-1 : Singleton->it;
+      String head=(Singleton->Solution.begin()!=oit) ? String(Singleton->Solution.begin(),oit) : "";
+      if(Singleton->it+1!=Singleton->Solution.end() && *(Singleton->it+1)=='\'')
+      {
+	++Singleton->it;
+	inv=true;
+      }
+      if(next=='2')
+      {
+	next=last;
+      }
+      last=next;
+      int x,y,z;
+      auxiliary::convertToCoordinates(next,x,y,z);
+      Singleton->twister(x,y,z,inv);
+      String act=String(oit,Singleton->it+1);
+      String trail=String(Singleton->it+1,Singleton->Solution.end());
+      OUT('\r'<<Color::gray<<head<<Color::white<<act<<Color::gray<<trail);
+      ++Singleton->it;
+    }
+  }
   Singleton->showCube();
   
   glFlush();

@@ -67,6 +67,8 @@ class Rubik3D
   static Rubik3D * Singleton;
   
   Rubik * TheCube;
+  String Solution;
+  String::iterator it;
   const char * resolver_skript;
   Cube3D * Cublets[3][3][3];
   int axisX, axisY, axisZ;
