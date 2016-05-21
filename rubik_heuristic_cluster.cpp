@@ -79,7 +79,7 @@ void Rubik_BF::Cluster::sideClusterInit()
   SideClusterDimensions = new int [576];
   for(int i=0;i<576;++i)
   {
-    ClusterDimensions[i]=0;
+    SideClusterDimensions[i]=0;
   }
   const int indexOfIdentity=indexOf(Topology::getTrace(), true); 
   for(int i=0;i<ClusterDimensions[indexOfIdentity];++i)
