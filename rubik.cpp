@@ -75,16 +75,16 @@ void Rubik::swapTwoPieces(const Sidemarks& A, const Sidemarks& B)
   Stream SA(permute(A));
   String step;
   EMPTY(temp)
-  CPY_FUNC(temp,A_map)
+  CPY_FUNC(temp,B_map)
   while(SA >> step)
   {
     String mapped(step);
     auxiliary::cryptText(A,B,mapped);
-    temp[Sidemarks(step)]=A_map[Sidemarks(mapped)];
-    temp[Sidemarks(mapped)]=A_map[Sidemarks(step)]; 
+    temp[Sidemarks(step)]=B_map[Sidemarks(mapped)];
+    temp[Sidemarks(mapped)]=B_map[Sidemarks(step)]; 
   }
-  CPY_FUNC(A_map,temp)
-  Topology::inverse(A_map,B_map);
+  CPY_FUNC(B_map,temp)
+  Topology::inverse(B_map,A_map);
 }
 
 Sidemarks Rubik::whatIs(const Sidemarks& S) const
@@ -227,7 +227,6 @@ void Rubik::rotationByAxis(const int& x, const int& y, const int& z, const bool 
   {
     rot.push_back('\'');
   }
-  OUT(rot)
   setRotation(rot);
   applyRotation();
 }
