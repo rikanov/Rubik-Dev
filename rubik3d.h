@@ -97,10 +97,12 @@ public:
     void twister(const int& X, const int& Y, const int& Z, const bool& inv);
   void rotate(); // to be valid exactly one of the coordinates must differ from zero!
   void setColors();
-  void showCube();  
   void resolver();
   
   // static OpenGL members
+  static bool haveSolution();
+  static void showCube();
+  static void applySolution();
   static void mouse(int btn,int state,int x,int y);
   static void motion(int x, int y);
   static void myreshape(int w,int h);
