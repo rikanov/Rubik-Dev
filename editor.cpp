@@ -1,4 +1,5 @@
 #include "editor.h"
+#include "def_colors.h"
 
 Editor::Editor()
 {
@@ -21,9 +22,9 @@ Editor::Editor(const String& PlaceOfModification, const bool & is_file)
   if(is_file)
   {
     std::ifstream infile(PlaceOfModification.c_str());
+    filename=PlaceOfModification;
     if(infile.is_open())
     {
-      filename=PlaceOfModification;
       while(!infile.eof())
       {
 	String temp;
@@ -33,8 +34,14 @@ Editor::Editor(const String& PlaceOfModification, const bool & is_file)
     }
     else
     {
-      std::cerr << "Cannot open file: '" << PlaceOfModification << "'\n";
-      buff->appendLine("");
+      infile.close();
+      OUT_(Color::red<<"Cannot open file: '"<< PlaceOfModification)
+      OUT_(Color::gray<< "Create a new one with name: "<<Color::white << PlaceOfModification << Color::gray)
+      std::ofstream touch(PlaceOfModification.c_str());
+      touch << ' ';
+      touch.close();
+      std::ifstream infile(PlaceOfModification.c_str());
+      buff->appendLine(" ");
     }
   }
 }
