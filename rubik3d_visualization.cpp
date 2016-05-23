@@ -24,17 +24,17 @@ void Rubik3D::makeMenu()
 {  
   glutAddMenuEntry("Right                 R   ", 1);
   glutAddMenuEntry("Right Inv.       shift+R", 2);
-  glutAddMenuEntry("Up                    U   ", 3);
+  glutAddMenuEntry("Up                     U   ", 3);
   glutAddMenuEntry("Up Inv.           shift+U", 4);
   glutAddMenuEntry("Front                 F   ", 5);
   glutAddMenuEntry("Front Inv.       shift+F", 6);
   glutAddMenuEntry("Left                    L   ", 7);
   glutAddMenuEntry("Left Inv.          shift+L", 8);
-  glutAddMenuEntry("Down                 D   ",9);
+  glutAddMenuEntry("Down                D   ",9);
   glutAddMenuEntry("Down Inv       shift+D",10);
-  glutAddMenuEntry("Back                  B    ",11);
+  glutAddMenuEntry("Back                 B    ",11);
   glutAddMenuEntry("Back Inv.       shift+B",12);
-  glutAddMenuEntry("Run skript...  shift+S",13);
+  glutAddMenuEntry("Run skript...   shift+S",13);
   glutAddMenuEntry("Exit",14);
 }
 void Rubik3D::mouse(int btn,int state,int x,int y)
@@ -95,7 +95,9 @@ void Rubik3D::display()
 
   glPushMatrix();
   gluLookAt(cameraX,cameraY,cameraZ,0.0f,0.0f,0.0f,upX,upY,upZ);
-  Singleton->showCube();
+  
+  applySolution();
+  showCube();
   
   glFlush();
   glutSwapBuffers();
@@ -103,6 +105,10 @@ void Rubik3D::display()
 
 void Rubik3D::keyboard(unsigned char key, int, int)
 {
+  if(haveSolution())
+  {
+    return; // don't rotate until the Cube is solved!
+  }
   if(key=='S')
   {
     AutoPlayOn=true;
@@ -154,7 +160,7 @@ void Rubik3D::mymenu(int ID)
     default:
       ;	
   }
-  if(AutoPlayOn==false)
+  if(AutoPlayOn==false && haveSolution()==false)
   {
     Singleton->twister(x,y,z,inv);
   }

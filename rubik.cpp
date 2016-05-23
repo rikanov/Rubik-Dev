@@ -227,7 +227,6 @@ void Rubik::rotationByAxis(const int& x, const int& y, const int& z, const bool 
   {
     rot.push_back('\'');
   }
-  OUT(rot)
   setRotation(rot);
   applyRotation();
 }

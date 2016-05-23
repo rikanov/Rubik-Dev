@@ -11,7 +11,8 @@
   #include <GL/glut.h>
 #endif
 
-#include"rubik3d.h"
+#include "rubik3d.h"
+#include "def_colors.h"
 
 #define FROM Cublets[X_from+1][Y_from+1][Z_from+1]
 #define MOVE_TO Cublets[X_to+1][Y_to+1][Z_to+1]
@@ -268,13 +269,13 @@ void Rubik3D::showCube()
     {
       for(int z=-1;z<2;++z)
       {
-	if( theta==0 ||
-	  ( axisX && (axisX!=x)) ||
-	  ( axisY && (axisY!=y)) ||
-	  ( axisZ && (axisZ!=z))
+	if( Singleton->theta==0 ||
+	  ( Singleton->axisX && (Singleton->axisX!=x)) ||
+	  ( Singleton->axisY && (Singleton->axisY!=y)) ||
+	  ( Singleton->axisZ && (Singleton->axisZ!=z))
 	)
 	{
-	  Cublets[x+1][y+1][z+1]->show();
+	  Singleton->Cublets[x+1][y+1][z+1]->show();
 	}
       }
     }
@@ -282,9 +283,9 @@ void Rubik3D::showCube()
   
   // Rotate sides
    
-  if(theta)
+  if(Singleton->theta)
   {
-    glRotatef(reverter(inverse)*(90-theta),-axisX,-axisY,-axisZ);
+    glRotatef(reverter(Singleton->inverse)*(90-Singleton->theta),-Singleton->axisX,-Singleton->axisY,-Singleton->axisZ);
     for(int x=-1;x<2;++x)
     {
       for(int y=-1;y<2;++y)
@@ -292,24 +293,24 @@ void Rubik3D::showCube()
 	for(int z=-1;z<2;++z)
 	{
 	  if( 
-	    ( axisX && (axisX==x)) ||
-	    ( axisY && (axisY==y)) ||
-	    ( axisZ && (axisZ==z))
+	    ( Singleton->axisX && (Singleton->axisX==x)) ||
+	    ( Singleton->axisY && (Singleton->axisY==y)) ||
+	    ( Singleton->axisZ && (Singleton->axisZ==z))
 	  )
 	  {
-	    Cublets[x+1][y+1][z+1]->show();
+	    Singleton->Cublets[x+1][y+1][z+1]->show();
 	  }
 	}
       }
     }
-    if(theta == haste)
+    if(Singleton->theta == Singleton->haste)
     {
-      rotate();
-      axisX=0;
-      axisY=0;
-      axisZ=0;
+      Singleton->rotate();
+      Singleton->axisX=0;
+      Singleton->axisY=0;
+      Singleton->axisZ=0;
     }
-    theta -= haste;
+    Singleton->theta -= Singleton->haste;
   }
 }
 
@@ -334,24 +335,47 @@ void Rubik3D::resolver()
     return;
   }
   TheCube->file_open(resolver_skript);
-  const String Solution=TheCube->getSolution(); 
-  C_FOR_STR(Solution,it)
+  Solution=TheCube->getSolution();
+  it=Solution.begin();
+}
+
+void Rubik3D::applySolution()
+{  
+  static char last;
+  if(Singleton->theta==0)
   {
-    bool inv=false;
-    char next=*it;
-    char last;
-    if(it+1!=Solution.end() && *(it+1)=='\'')
+    if(Singleton->Solution!="" && Singleton->it==Singleton->Solution.end())
     {
-      ++it;
-      inv=true;
+      Singleton->Solution="";
     }
-    if(next=='2')
+    if(Singleton->Solution!="")
     {
-      next=last;
+      bool inv=false;
+      char next=*Singleton->it;
+      String::iterator oit=(next=='2' || next=='\'') ? Singleton->it-1 : Singleton->it;
+      String head=(Singleton->Solution.begin()!=oit) ? String(Singleton->Solution.begin(),oit) : "";
+      if(Singleton->it+1!=Singleton->Solution.end() && *(Singleton->it+1)=='\'')
+      {
+	++Singleton->it;
+	inv=true;
+      }
+      if(next=='2')
+      {
+	next=last;
+      }
+      last=next;
+      int x,y,z;
+      auxiliary::convertToCoordinates(next,x,y,z);
+      Singleton->twister(x,y,z,inv);
+      String act=String(oit,Singleton->it+1);
+      String trail=String(Singleton->it+1,Singleton->Solution.end());
+      OUT('\r'<<Color::gray<<head<<Color::white<<act<<Color::gray<<trail);
+      ++Singleton->it;
     }
-    last=next;
-    int x,y,z;
-    auxiliary::convertToCoordinates(next,x,y,z);
-    twister(x,y,z,inv);
   }
+}
+
+bool Rubik3D::haveSolution()
+{
+  return Singleton->Solution!="";
 }
