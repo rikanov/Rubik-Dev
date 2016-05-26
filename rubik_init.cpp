@@ -157,6 +157,7 @@ void Rubik::initCommandComp()
   auto_comp("cube"      )
   auto_comp("what_is"   )
   auto_comp("where_is"  )
+  auto_comp("eigenvalue")
   
     //============================================//
    //  *** Show 3D view of the current cube ***  //

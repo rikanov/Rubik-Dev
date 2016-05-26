@@ -9,9 +9,8 @@
 
 UI_rfunc(parser)
 { 
-  String read_in;
-  
-  IS>>read_in;
+  GET(read_in)
+  TRIM_END(read_in);
   
     //=======================================//
    //  *** Self-evaluate EXEC function ***  //
@@ -156,6 +155,7 @@ UI_rfunc(parser)
   trigger   ("cube",            cube)
   trigger   ("what_is",      what_is)
   trigger   ("where_is",    where_is)
+  trigger   ("eigenvalue", eigenFunc)
   
     //============================================//
    //  *** Show 3D view of the current cube ***  //

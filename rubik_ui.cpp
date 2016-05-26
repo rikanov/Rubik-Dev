@@ -79,18 +79,12 @@ UI_rfunc(defvar)
   GET(fName)
   String former=(*Var_space)[fName];
   (*Var_space)[fName]="";
-  for(bool End=false;IS.good() && !End;)
+  while(IS.good())
   {
     GET(S)
-    while(!S.empty() && S.back()==';')
-    {
-      S.pop_back();
-      End=true;
-    }
     if(S==fName)
     {
-      String temp="list "+former+";";
-      S=parser(temp);
+      S=list(fName);
     }
     if(variableEquality(S,fName))
     {
@@ -256,6 +250,12 @@ UI_rfunc(where_is)
   return S.valid() ? locationOf(S) : NIL;
 }
 
+UI_rfunc(eigenFunc)
+{
+  PARSER(A)
+  return std::to_string(Sidemarks(A).getEigenvalue());
+}
+
 UI_rfunc(solvedp)
 {
   boolean(is_solved());
@@ -302,9 +302,20 @@ UI_rfunc(assoc)
 
 UI_rfunc(echo)
 {
-  GET(read_in)
-  std::map<String,String>::const_iterator it=Var_space->find(read_in);
-  return (it!=Var_space->end() ? it->second : read_in);
+  GETLINE(A)
+  Stream E(A);
+  while(E.good())
+  {
+    String next;
+    E >> next;
+    if(Var_space->find(next)!=Var_space->end())
+    {
+      next=Var_space->at(next);
+    }
+   OUT_(next)
+  }
+  NL_
+  return NIL;
 }
 
 UI_rfunc(catFiles)
@@ -487,6 +498,11 @@ UI_rfunc(swap)
   while(Pieces >> To)
   {   
     const Sidemarks from(Start), to(To);
+    if(from.valid()==false || to.valid()==false)
+    {
+      Success=NIL;
+      break;
+    }
     if(Topology::getEigenvalue(from)==Topology::getEigenvalue(to))
     {
       swapTwoPieces(from,to);

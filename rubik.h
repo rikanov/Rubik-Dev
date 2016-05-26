@@ -8,7 +8,7 @@
 #define UI_func(X) String X(const String & S); String X(Stream& IS);
 #define UI_rfunc(X) String Rubik::X(const String & S) {Stream IS(S); return X(IS);} String Rubik::X(Stream& IS)
 #define CALL_BACK(SN,F,A) Stream SN; {Stream eval__(A);SN.str(F(eval__));}
-#define GET(A) String A; IS>>A;
+#define GET(A) String A; IS>>A; 
 #define GET2(A,B) String A,B; IS>>A; IS>>B;
 #define GETLIST(L) Stream L(list(IS));
 #define PARSER(A) String A=parser(IS);
@@ -20,7 +20,6 @@
 #define BF_RESULT  (*Var_space)["heuristic-result"]
 
 using namespace auxiliary;
-
 class Rubik_BF;
 class Rubik 
 {
@@ -179,6 +178,7 @@ class Rubik
   
   UI_func(what_is)
   UI_func(where_is)
+  UI_func(eigenFunc)
   UI_func(cube)
   UI_func(solvedp)
   UI_func(doRotations)
@@ -187,7 +187,6 @@ class Rubik
   UI_func(setAlign)
   UI_func(printSmarks)
   UI_func(readCache)
-  
   UI_func(show3D)
   
 public:
