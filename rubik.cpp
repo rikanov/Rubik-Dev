@@ -192,8 +192,8 @@ Rubik& Rubik::applyRotation()
 }
 String Rubik::functionResolver(Stream& IS,const String & R)
 {
-  GETLIST(arg);
-  return auxiliary::putInString(arg.str(),'&',Var_space->at(R));
+  PARSER(arg); 
+  return auxiliary::putInString(arg,'&',Var_space->at(R));
 }
 
 String Rubik::file_open(const char * F)

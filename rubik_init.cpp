@@ -91,6 +91,7 @@ void Rubik::initCommandComp()
   auto_comp("define"  )
   auto_comp("defmacro")
   auto_comp("echo"    )
+  auto_comp("print"   )
 
     //==========================================//
    //  *** Swap REPL to a new file stream ***  //

@@ -161,7 +161,10 @@ UI_rfunc(condition)
   GETLINE(IF)
   GETLINE(THEN)
   GETLINE(ELSE)
-  return parser(IF)!=NIL ? parser(THEN) : parser(ELSE);
+  String Result=parser(IF);
+  Stream eval(Result!=NIL ? THEN : ELSE);
+  chainParser(eval);
+  return Result;
 }
 
 UI_rfunc(forLoop)
@@ -170,18 +173,11 @@ UI_rfunc(forLoop)
   GET(token)
   GETLIST(ForIn)
   OUTSPREAD(core)
-  String Next;
-  while(ForIn>>Next)
+  while(ForIn>>(*Var_space)[token])
   {
-    (*Var_space)[token]=Next;
     Stream eval(core);
-    Result+=parser(eval)+' ';
-    if(!ForIn.good())
-    {
-      IS.str(eval.str());
-    }
+    Result=chainParser(eval); 
   }
-  TRIM_END(Result);
   return Result;
 }
 
@@ -253,7 +249,8 @@ UI_rfunc(where_is)
 UI_rfunc(eigenFunc)
 {
   PARSER(A)
-  return std::to_string(Sidemarks(A).getEigenvalue());
+  Sidemarks toTest(A);
+  return toTest.valid() ? std::to_string(toTest.getEigenvalue()) : NIL;
 }
 
 UI_rfunc(solvedp)
@@ -316,6 +313,13 @@ UI_rfunc(echo)
   }
   NL_
   return NIL;
+}
+
+UI_rfunc(print)
+{
+  PARSER(A)
+  OUT_(Color::white<<A<<Color::gray)
+  NO_RETURN
 }
 
 UI_rfunc(catFiles)
@@ -634,7 +638,7 @@ UI_rfunc(init)
   } 
   Topology::initCache(size);
   (*Var_space)["cache-level"]=A;
-  return "init";
+  NO_RETURN
 }
 
 UI_rfunc(printSmarks)
@@ -649,7 +653,7 @@ UI_rfunc(printSmarks)
     OUT(S<<':'<<S.getEigenvalue()<<' ');
   }
   NL_
-  return "side_marks";
+  NO_RETURN;
 }
 
 UI_rfunc(readCache)
@@ -665,5 +669,5 @@ UI_rfunc(show3D)
   PARSER(A) 
   Rubik3D rubik3d(this,A,2);
   rubik3d.init3D();
-  return "visualization";
+  NO_RETURN;
 }

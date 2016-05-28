@@ -7,10 +7,21 @@
 #define trigger_pv(X,Y) else if(read_in==X) {Y(parser(IS));}
 #define nil_return(X) return(((X)=="" || (X)=="NIL") ? NIL : (X))
 
+UI_rfunc(chainParser)
+{
+  String Result;
+  while(IS.good())
+  {
+    Result=parser(IS);
+  }
+  return Result;
+}
+
 UI_rfunc(parser)
 { 
   GET(read_in)
   TRIM_END(read_in);
+  const String not_defined=read_in;
   
     //=======================================//
    //  *** Self-evaluate EXEC function ***  //
@@ -94,6 +105,7 @@ UI_rfunc(parser)
   trigger("defmacro", defmacro)
   trigger("delete", delete_var)
   trigger("echo",         echo)
+  trigger("print",       print)
 
     //==========================================//
    //  *** Swap REPL to a new file stream ***  //
@@ -169,7 +181,12 @@ UI_rfunc(parser)
   else
   {
     macro(IS,read_in);
-    variable(IS,read_in);
+    variable(IS,read_in); 
   }
+  if(read_in=="no-return#")
+  {
+    read_in=not_defined;
+  }
+ 
   nil_return(read_in);
 }

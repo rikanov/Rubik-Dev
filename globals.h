@@ -34,6 +34,7 @@ typedef signed char CubeSlot;
 #define OUT(x) std::cout<<x<<std::flush;
 #define NL std::endl
 #define NL_ std::cout<<std::endl;
+#define NO_RETURN return "no-return#";
 
 extern const char * NIL;
 extern const char * L_TRUE;

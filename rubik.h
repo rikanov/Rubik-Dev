@@ -20,6 +20,7 @@
 #define BF_RESULT  (*Var_space)["heuristic-result"]
 
 using namespace auxiliary;
+
 class Rubik_BF;
 class Rubik 
 {
@@ -129,6 +130,7 @@ class Rubik
    //==========================//
   UI_func(REPL)
   UI_func(parser)
+  UI_func(chainParser)
   UI_func(file_open)
   UI_func(init)
   UI_func(editor)
@@ -159,6 +161,7 @@ class Rubik
   UI_func(regExp)
   UI_func(regExpFast)
   UI_func(echo)
+  UI_func(print)
   UI_func(catFiles)
   UI_func(saveCube)
   UI_func(loadCube)
@@ -187,6 +190,7 @@ class Rubik
   UI_func(setAlign)
   UI_func(printSmarks)
   UI_func(readCache)
+  
   UI_func(show3D)
   
 public:
