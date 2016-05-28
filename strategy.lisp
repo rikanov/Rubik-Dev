@@ -14,6 +14,7 @@ defun move \
   move-edge 
   
 defun setcube \
+  reset             \
   print assoc & FRU \
   move & 
   

@@ -64,11 +64,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
       {
 	continue;
       }
-      String parsed;
-      while(toParse.good())
-      {
-	parsed=parser(toParse)+' ';
-      }
+      const String parsed=chainParser(toParse);
       OUT(Color::light)
       OS<<parsed;
       OUT(Color::gray)
@@ -98,10 +94,7 @@ void Rubik::REPL(std::istream & IS, std::ostream & OS)
 	toParse<<' '<< Get;
 	
       } while(sign_nwln);
-      while(toParse.good())
-      {
-	parser(toParse); //	OS<<parser(toParse)+' ';
-      }
+      chainParser(toParse);
     }
   }
 }
