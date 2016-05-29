@@ -58,7 +58,7 @@ Topology::t_state * Topology::t_state::alloc()
 }
 void Topology::t_state::dealloc()
 {
-    delete state;
+    delete[] state;
     state=nullptr;
 }
 void Topology::t_state::copy(const CubeSlot* C)
@@ -336,19 +336,17 @@ Topology::~Topology()
 {
     if(this==Singleton)
     {
-        Side ** S=Sides;
-//     const int ** R=Rotation;
-//     for(int digit=0;digit<256;++digit)
-//     {
-//       if(*R!=IdentityMap)
-//       {
-// 	delete *(R++);
-//       }
-//     }
-        for(int digit=0; digit<6; ++digit)
-        {
-            delete *(S++);
-        }
+      Side ** S=Sides;
+      const CubeSlot ** R=Rotation;
+      for(int digit=0;digit<256;++digit)
+      {
+	delete[] *R;
+	++R;
+      }
+      for(int digit=0; digit<6; ++digit)
+      {
+	  delete *(S++);
+      }
     }
 }
 

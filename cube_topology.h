@@ -70,6 +70,10 @@ private:
     seeker(): head(nullptr) {}
     ~seeker()
     {
+      for(int i=0;i<length_indices[CONFIG_CACHE_MEMORY_BOUND];++i)
+      {
+	delete[] head[i].state;
+      }
       delete[] head;
     }
   };

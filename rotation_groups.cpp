@@ -53,7 +53,8 @@ void Topology::buildRotations()
     {
       CubeSlot * R=new CubeSlot[NumberOfSideMarks];
       CPY_FUNC(R,IdentityMap)
-      Rotation[mod*8+side]=createRotation(R,side,mod) ? R : IdentityMap;
+      createRotation(R,side,mod);
+      Rotation[mod*8+side]= R;
     }
   }
 }

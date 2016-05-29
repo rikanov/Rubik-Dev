@@ -201,7 +201,7 @@ void Rubik_BF::Cluster::deinit()
   {
     for(int i=0;i<cluster_size;++i)
     {
-      delete ClusteredSolutions[i];
+      delete[] ClusteredSolutions[i];
     }
   }
   if(SideCluster)
