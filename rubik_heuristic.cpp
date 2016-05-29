@@ -94,5 +94,6 @@ String Rubik_BF::resolver(const Topology::t_state* A,const Topology::t_state* B)
 Rubik_BF::~Rubik_BF()
 {
   delete[] InitialState;
+  delete[] InvInitialState;
   delete[] SolvedState;
 }

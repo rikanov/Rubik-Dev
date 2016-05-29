@@ -208,7 +208,7 @@ void Rubik_BF::Cluster::deinit()
   {
     for(int i=0;i<576;++i)
     {
-      delete SideCluster[i];
+      delete[] SideCluster[i];
     }
   }
   delete[] SideClusterDimensions;

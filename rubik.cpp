@@ -215,9 +215,15 @@ String Rubik::file_open(const char * F)
 
 CubeletColors Rubik::pickCubelet(const int& x, const int& y, const int& z) const
 {
-  const Sidemarks cublet_place(convertToSidemarks(x,y,z));
-  const Sidemarks cublet_value(whatIs(cublet_place));
-  return cublet_place.getColors(cublet_value);
+  CubeletColors Result;
+  Sidemarks cublet_place; 
+  cublet_place=convertToSidemarks(x,y,z);
+  if(cublet_place!=-1)
+  {
+    Sidemarks cublet_value(whatIs(cublet_place));
+    Result = cublet_place.getColors(cublet_value);
+  }
+  return Result;
 }
 
 void Rubik::rotationByAxis(const int& x, const int& y, const int& z, const bool & inv)
@@ -237,6 +243,7 @@ Rubik::~Rubik()
   if(Object=="global")
   {
     Rubik_BF::cluster->deinit();
+    delete Rubik_BF::cluster;
     for(std::map<String, Rubik*>::iterator it=Collection->begin();it!=Collection->end();++it)
     {
       delete it->second;

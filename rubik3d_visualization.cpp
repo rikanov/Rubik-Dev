@@ -191,5 +191,6 @@ int Rubik3D::init3D()
   glEnable(GL_DEPTH_TEST);
   glutMainLoop(); 
   OUT_("\nopenGL main loop has been closed...")
+  free(myargv[0]);
   return 0;
 }
