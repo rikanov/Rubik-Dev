@@ -37,4 +37,10 @@ for_in I FRU FDR FDL BDR BDL;         \
 	  FRU-swap corner-sidemarks        \
 	  FR-swap edge-sidemarks           \
 	  test::test-execute
-	  
+
+delete test::test-result-ok 
+delete test::test-result-wrong 
+delete test::test-begin 
+delete test::test-execute 
+delete FR-swap
+delete FRU-swap
