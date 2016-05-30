@@ -32,12 +32,7 @@ UI_rfunc(REPL)
 
 UI_rfunc(progn)
 {
-  String Result;
-  while(IS.good())
-  {
-    Result=parser(IS);
-  }
-  return Result;
+  return chainParser(IS);
 }
 
 UI_rfunc(getValue)
@@ -116,7 +111,8 @@ UI_rfunc(delete_var)
 
 UI_rfunc(nilEquality)
 {
-  return parser(IS)==NIL ? L_TRUE : NIL;
+  PARSER(A)
+  return A==NIL ? L_TRUE : NIL;
 }
 
 UI_rfunc(variableEquality)
@@ -258,6 +254,29 @@ UI_rfunc(solvedp)
   boolean(is_solved());
 }
 
+UI_rfunc(checkCubes)
+{
+  bool Result=true;
+  GETLIST(toCheck)
+  String Next;
+  OUT(Color::red)
+  while(toCheck.good())
+  {
+    toCheck >> Next;
+    CubeSlot index=Sidemarks(Next);
+    if(index != A_map[index])
+    {
+      Result=false;
+      OUT(Sidemarks(Next)<<' ')
+    }  
+  }
+  if(Result==false)
+  {
+    NL_
+  }
+  boolean(Result)
+}
+
 UI_rfunc(doRotations)
 {
   static const int InfiniteLoopLimit=2000;
@@ -292,8 +311,7 @@ UI_rfunc(doRotations)
   
 UI_rfunc(assoc)
 {
-  String A=parser(IS);
-  String B=parser(IS);
+  PARSER2(A,B)
   return (A=="" || B=="") ? A+B : A==B ? A : A+"->"+B;
 }
 
@@ -337,7 +355,7 @@ UI_rfunc(catFiles)
       OUT_(tmp);
     } while (!f.eof());
   } 
-  return t ? L_TRUE : NIL;
+  boolean(t)
 }
 
 UI_rfunc(saveCube)
@@ -410,7 +428,7 @@ UI_rfunc(stringReplace)
 UI_rfunc(list)
 {
   String Result;
-  GETLINE(L) 
+  GETLINE(L)
   Stream buffer(L);
   while(buffer.good())
   {
@@ -423,19 +441,25 @@ UI_rfunc(list)
 
 UI_rfunc(mapcar)
 {
-  String Result, read_in;
-  GET(lambda)
-  if((*Var_space)[lambda]==String(lambda+'&'))
+  String Result;
+  GETLINE(lambda) 
+  GETLIST(core)  
+  (*Var_space)["mapcar-lambda"]=lambda+" ";
+  const bool is_lambda=lambda.find('&')!=String::npos;
+  while(core.good())
   {
-    lambda.push_back('&');
+    if(is_lambda)
+    {
+      Result+= parser(functionResolver(core,"mapcar-lambda"))+' ';
+    }
+    else
+    {
+      String next;
+      core >> next;
+      Result+= parser(lambda+" "+next)+' ';
+    }
   }
-  Stream buffer(list(IS));
-  while(buffer>>read_in)
-  {
-    Stream evaluate(lambda+' '+read_in);
-    Result+=parser(evaluate)+' ';
-  }
-  TRIM_END(Result);
+  delete_var("mapcar-lambda");
   return Result;
 }
 
@@ -476,7 +500,7 @@ UI_rfunc(pathFinder)
 
 UI_rfunc(permute)
 {
-  GET(A)
+  PARSER(A)
   return auxiliary::permute(A);
 }
 
@@ -506,7 +530,7 @@ UI_rfunc(swap)
     {
       Success=NIL;
       break;
-    }
+    } 
     if(Topology::getEigenvalue(from)==Topology::getEigenvalue(to))
     {
       swapTwoPieces(from,to);

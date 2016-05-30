@@ -43,7 +43,6 @@ bool Rubik::is_solved(const CubeSlot* Cubes, const int & Limit) const
       return false;
     }
   }
-  // TODO
   return true;
 }
 

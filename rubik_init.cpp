@@ -147,18 +147,19 @@ void Rubik::initCommandComp()
    //  *** Evaluate object functions ***  //
   //=====================================// 
  
-  auto_comp("do"        )
-  auto_comp("align"     )
-  auto_comp("no_suppose")
-  auto_comp("suppose"   ) 
-  auto_comp("store"     )
-  auto_comp("revert"    )
-  auto_comp("print"     ) 
-  auto_comp("solvedp"   )
-  auto_comp("cube"      )
-  auto_comp("what_is"   )
-  auto_comp("where_is"  )
-  auto_comp("eigenvalue")
+  auto_comp("do"         )
+  auto_comp("align"      )
+  auto_comp("no_suppose" )
+  auto_comp("suppose"    ) 
+  auto_comp("store"      )
+  auto_comp("revert"     )
+  auto_comp("print"      ) 
+  auto_comp("solvedp"    )
+  auto_comp("check-cubes")
+  auto_comp("cube"       )
+  auto_comp("what_is"    )
+  auto_comp("where_is"   )
+  auto_comp("eigenvalue" )
   
     //============================================//
    //  *** Show 3D view of the current cube ***  //

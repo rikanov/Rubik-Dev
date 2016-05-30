@@ -155,19 +155,20 @@ UI_rfunc(parser)
    //  *** Evaluate object functions ***  //
   //=====================================// 
  
-  trigger   ("do",       doRotations)
-  trigger   ("align",       setAlign)
-  trigger_v ("reset",      initRubik)
-  trigger_v ("no_suppose", noSuppose)
-  trigger_pv("suppose",      suppose) 
-  trigger   ("store",          store)
-  trigger   ("revert",        revert)
-  trigger_pv("print",          print) 
-  trigger   ("solvedp",      solvedp)
-  trigger   ("cube",            cube)
-  trigger   ("what_is",      what_is)
-  trigger   ("where_is",    where_is)
-  trigger   ("eigenvalue", eigenFunc)
+  trigger   ("do",         doRotations)
+  trigger   ("align",         setAlign)
+  trigger_v ("reset",        initRubik)
+  trigger_v ("no_suppose",   noSuppose)
+  trigger_pv("suppose",        suppose) 
+  trigger   ("store",            store)
+  trigger   ("revert",          revert)
+  trigger_pv("print",            print) 
+  trigger   ("solvedp",        solvedp)
+  trigger   ("check-cubes", checkCubes)
+  trigger   ("cube",              cube)
+  trigger   ("what_is",        what_is)
+  trigger   ("where_is",      where_is)
+  trigger   ("eigenvalue",   eigenFunc)
   
     //============================================//
    //  *** Show 3D view of the current cube ***  //
