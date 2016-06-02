@@ -70,9 +70,14 @@ void inline NONILL(String & X)
   }
 }
 
-bool inline isletter(const char& x)
+bool inline is_letter(const char& x)
 {
   return ('A'<=((x)&95) && ((x)&95)<='Z');
+}
+
+bool inline is_number(const char& x)
+{
+  return ('0'<=x && x<='9');
 }
 
 int inline OPPOSITE(const int& x) 

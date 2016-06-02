@@ -256,25 +256,20 @@ UI_rfunc(solvedp)
 
 UI_rfunc(checkCubes)
 {
-  bool Result=true;
+  String Result;
   GETLIST(toCheck)
   String Next;
-  OUT(Color::red)
   while(toCheck.good())
   {
     toCheck >> Next;
     CubeSlot index=Sidemarks(Next);
     if(index != A_map[index])
     {
-      Result=false;
-      OUT(Sidemarks(Next)<<' ')
+      Result+=Next+" ";
     }  
   }
-  if(Result==false)
-  {
-    NL_
-  }
-  boolean(Result)
+  TRIM_END(Result);
+  return Result;
 }
 
 UI_rfunc(doRotations)
@@ -575,7 +570,7 @@ UI_rfunc(reverse)
   {
     String next;
     next.push_back(*it);
-    if((it+1)!=A.end() && !isletter(*(it+1)))
+    if((it+1)!=A.end() && !is_letter(*(it+1)))
     {
       next.push_back(*(++it));
       if((it+1)!=A.end() && *(it+1)=='|')
@@ -596,7 +591,7 @@ UI_rfunc(rotationLength)
   {
     C_FOR_STR(A,it)
     {
-      Result+=isletter(*it);
+      Result+=is_letter(*it);
     }
   }
   return std::to_string(Result);

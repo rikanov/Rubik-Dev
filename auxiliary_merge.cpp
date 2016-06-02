@@ -34,7 +34,7 @@ bool auxiliary::checkSimplePath(const String& S)
     {
       return false;
     }
-    if(it+2!=S.end() && isletter(*it) && !isletter(*(it+1)) && *it==*(it+2))
+    if(it+2!=S.end() && is_letter(*it) && !is_letter(*(it+1)) && *it==*(it+2))
     {
       return false;
     }

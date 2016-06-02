@@ -7,6 +7,7 @@
 #define trigger_pv(X,Y) else if(read_in==X) {Y(parser(IS));}
 #define nil_return(X) return(((X)=="" || (X)=="NIL") ? NIL : (X))
 
+
 UI_rfunc(chainParser)
 {
   String Result;
@@ -56,6 +57,20 @@ UI_rfunc(parser)
   else if(read_in==L_TRUE || read_in==NIL || Sidemarks(read_in).valid())
   {
     // SKIP
+  }
+    //===========================================//
+   //  *** Evaluate arithmetic expressions ***  //
+  //===========================================//  
+  else if(is_number(read_in.front()))
+  {
+    // SKIP
+  }
+  else if(arithmeticExpression(read_in))
+  {
+    PARSER2(A,B)
+    const int NumA=atoi(A.c_str());
+    const int NumB=atoi(B.c_str());
+    read_in=std::to_string(evalArithmeticExp(read_in.front(),NumA,NumB));
   }
     //=====================================//
    //  *** New Rubik's cube instance ***  //

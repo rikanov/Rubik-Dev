@@ -8,9 +8,9 @@ defvar test::test-begin \
 defvar test::test-execute \
 	do heuristic *5 Upside; NIL; \
 	# checking the result of heuristic solution: ; \
-	if check-cubes Upside;       \
+	if nil check-cubes Upside;       \
 	  print test::test-result-ok;      \
-	  print test::test-result-wrong;
+	  print test::test-result-wrong check-cubes Upside;
 	  
 defun FRU-swap \
 	swap FRU & ; \

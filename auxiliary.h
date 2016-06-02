@@ -67,6 +67,8 @@ namespace auxiliary
   void drawBarLine(const int & bar, const int & barLength);
   Sidemarks convertToSidemarks(const int & x, const int & y, const int & z);
   void convertToCoordinates(const char & SM, int & x,int & y,int & z);
+  bool arithmeticExpression(const String E);
+  int evalArithmeticExp(const char & Op, const int & A, const int & B);
   void intro();
 }
 

@@ -166,7 +166,7 @@ String auxiliary::findPath(const Sidemarks& From, const Sidemarks& To, const boo
     Sidemarks next_pos=Trace.front().first;
     String path=Trace.front().second;
     const char last_sign=path.back();
-    const char last_move= isletter(last_sign) ? last_sign : path[path.length()-2];
+    const char last_move= is_letter(last_sign) ? last_sign : path[path.length()-2];
     const String sides(AllowMiddle ? "FRUBLD" : next_pos);
     C_FOR_STR(sides,s)
     {
@@ -417,4 +417,56 @@ void auxiliary::drawBarLine(const int& bar, const int& barLength)
   }
   BAR.push_back(']');
   OUT('\r'<<BAR);
+}
+
+bool auxiliary::arithmeticExpression(const String E)
+{
+  static const char symbols[]="<>=+-*/%";
+  if(E.length()!=1)
+  {
+    return false;
+  }
+  for(const char *sym=symbols; *sym!='\0'; ++sym)
+  {
+    if(*sym==E.front())
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+int auxiliary::evalArithmeticExp(const char & Op, const int & A, const int & B)
+{
+  int Result=0;
+  switch(Op)
+  {
+    case '=':
+      Result=(A==B);
+      break;
+    case '<':
+      Result=(A<B);
+      break;
+    case '>':
+      Result=(A>B);
+      break;
+    case '+':
+      Result=(A+B);
+      break;
+    case '-':
+      Result=(A-B);
+      break;
+    case '*':
+      Result=(A*B);
+      break;
+    case '/':
+      Result=(A/B);
+      break; 
+    case '%':
+      Result=(A%B);
+      break;
+    default:
+      ;
+  }
+  return Result;
 }
