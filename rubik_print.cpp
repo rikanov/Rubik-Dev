@@ -1,7 +1,11 @@
 #include"rubik.h"
 
-void Rubik::print(const String & C) const
+void Rubik::printSides(String C) const
 {
+  if(C==NIL)
+  {
+    C="FURBLD";
+  }
   OUT("\nquery: "<<C<<NL<<"--------")
   C_FOR_STR(C,it)
   { 

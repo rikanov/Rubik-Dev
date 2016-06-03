@@ -458,6 +458,22 @@ UI_rfunc(mapcar)
   return Result;
 }
 
+UI_rfunc(convoke)
+{
+  GET2(Symbol,Result)
+  PARSER(Tasks)
+  Stream TaskList(Tasks);
+  while(TaskList.good())
+  {
+    String next(Symbol+" "+Result+" ");
+    String pickNext;
+    TaskList >> pickNext;
+    next+=pickNext;
+    Result=parser(next);
+  }
+  return Result;
+}
+
 UI_rfunc(select)
 {
   String Result;
@@ -504,7 +520,7 @@ UI_rfunc(crypt)
   PARSER2(A,B)
   if(auxiliary::regExp("?*->?*",A.c_str())==false)
   {
-    return A;
+    return B;
   }
   const int split=A.find("->");
   auxiliary::cryptText(A.substr(0,split),A.substr(split+2),B);

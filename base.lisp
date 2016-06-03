@@ -10,7 +10,7 @@ defvar backside  BU BL BD BR BRU BLU BLD BRD
 defvar Upside upside FR FL BL BR
 
 defvar edges     UR UF UL UB DR DF DL DB FR FL BL BR
-defvar corners   URF ULF BRU BLU DRF DLF BRD BLD
+defvar corners   FUR FRD FDL FLU BRU BDR BLD BUL
 defvar all-cubes edges corners
 
 defvar base::changed \
@@ -29,8 +29,8 @@ defun randomize & \
   do random; nil eqp UR what_is &
   
 defmacro append(list_ref) \
-  defvar list_ref list_ref &
-  
+  defvar list_ref merge list_ref &
+
 defun jessicaF \
   store \
   do &; NIL; \

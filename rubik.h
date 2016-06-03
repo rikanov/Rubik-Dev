@@ -149,6 +149,7 @@ class Rubik
   UI_func(condition)
   UI_func(forLoop)
   UI_func(mapcar)
+  UI_func(convoke)
   UI_func(logicalOr)
   UI_func(logicalXor)
   UI_func(logicalAnd)
@@ -203,7 +204,7 @@ public:
  
   Rubik & operator =  (const Rubik& R)=default;
   
-  void print(const String & C ) const;
+  void printSides(String C ) const;
   CubeletColors pickCubelet(const int & x,const int & y,const int & z) const;
   void rotationByAxis(const int & x,const int & y,const int & z, const bool & inv);
   void REPL (std::istream & IS=std::cin, std::ostream & OS=std::cout);
