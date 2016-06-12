@@ -79,7 +79,6 @@ void Rubik::swapTwoPieces(const Sidemarks& A, const Sidemarks& B)
   {
     String mapped(step);
     auxiliary::cryptText(A,B,mapped);
-    temp[Sidemarks(step)]=B_map[Sidemarks(mapped)];
     temp[Sidemarks(mapped)]=B_map[Sidemarks(step)]; 
   }
   CPY_FUNC(B_map,temp)
