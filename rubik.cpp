@@ -80,6 +80,10 @@ void Rubik::swapTwoPieces(const Sidemarks& A, const Sidemarks& B)
     String mapped(step);
     auxiliary::cryptText(A,B,mapped);
     temp[Sidemarks(mapped)]=B_map[Sidemarks(step)]; 
+    if(Sidemarks::sameCubes(A,B)==false)
+    {
+      temp[Sidemarks(step)]=B_map[Sidemarks(mapped)]; 
+    }
   }
   CPY_FUNC(B_map,temp)
   Topology::inverse(B_map,A_map);
