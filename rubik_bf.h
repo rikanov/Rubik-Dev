@@ -17,6 +17,7 @@ class Rubik_BF
   CubeSlot * InitialState;
   CubeSlot * InvInitialState;
   CubeSlot * SolvedState;
+  bool HeuristicSearch;
   String resolver(const Topology::t_state* A,const Topology::t_state* B);
   struct Cluster
   {
@@ -81,7 +82,7 @@ class Rubik_BF
   int heuristicSearch(const Topology::t_state* rot_sequence, const Topology::t_state*);
   int useCache(const Topology::t_state* rot_sequence);
   int useExtendedCache(const Topology::t_state* rot_sequence);
-  bool isHeuristicSearch() const {return cluster->initialized();}
+  bool isHeuristicSearch() const {return HeuristicSearch;}
   // ===============
     int searchManager(int& result, String& Result, const int& level);
     int secondStage  (int& result, String& Result, const Topology::t_state* T);

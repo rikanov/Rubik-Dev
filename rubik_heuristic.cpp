@@ -3,7 +3,8 @@
 Rubik_BF::Cluster * Rubik_BF::cluster = new Cluster;
 Rubik_BF::Rubik_BF(const Rubik* R, Stream& IS, const String& AS):
 RubikBase(R),
-useExtendedPath(false)
+useExtendedPath(false),
+HeuristicSearch(true)
 {
   const int SizeS=auxiliary::countWords(IS);
   initStates(SizeS);
@@ -28,6 +29,7 @@ useExtendedPath(false)
       seekerDepth=0;
     }
     Engine=&Rubik_BF::checkConditions;
+    HeuristicSearch=false;
   }
 }
 
@@ -41,18 +43,14 @@ void Rubik_BF::initStates(const int& SizeS)
   memset(InvInitialState,0,NumberOfSideMarks);
 }
 
-void Rubik_BF::setConditions(std::stringstream& IS)
+void Rubik_BF::setConditions(Stream& IS)
 {
-  CubeSlot *sp=SolvedState, s_counter=0;
-  String s;
+  CubeSlot *sp=SolvedState;
+  int s_counter=0;
+  String s; 
   while(IS>>s)
   {
-    if(s=="*")
-    {
-      *sp=s_counter;
-      s_counter=0;
-    } 
-    else if(atoi(s.c_str())>0)
+    if(atoi(s.c_str())>0)
     {
       *sp=-atoi(s.c_str());
       s_counter=0;
@@ -60,13 +58,13 @@ void Rubik_BF::setConditions(std::stringstream& IS)
     else
     {
       *sp=Sidemarks(s);
-      ++s_counter;
+      --s_counter;
     }
     ++sp;
   }
   if(s_counter)
   {
-    *(sp++)=-s_counter;
+    *(sp++)=s_counter;
   }
   *sp=-128;
   FOR_FUNC(i)
