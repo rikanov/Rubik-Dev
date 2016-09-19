@@ -183,37 +183,40 @@ bool Topology::defOperation(CubeSlot * Q, const std::string& Operations, const i
       default:
 	Rot=C;
     }
-    const int R=Singleton->SideDigits[UPCASE(Rot)]-1;
-    int Modifier= IS_LOWCASE(C) ? Block : SingleSide;
-    if( it+1 !=Operations.end())
+    if(is_letter(Rot))
     {
-      switch(*(it+1))
+      const int R=Singleton->SideDigits[UPCASE(Rot)]-1;
+      int Modifier= IS_LOWCASE(C) ? Block : SingleSide;
+      if( it+1 !=Operations.end())
       {
-	case '\'':
-	  Modifier|=Inverter;
-	  ++it;
-	  break;
-	case '|':
-	  Modifier^=SingleSide;
-	  Modifier|=Middle;
-	  ++it;
-	  if(it+1==Operations.end() || (*(it+1)!='2' && *(it+1)!='|'))
-	  {
+	switch(*(it+1))
+	{
+	  case '\'':
+	    Modifier|=Inverter;
+	    ++it;
 	    break;
-	  } // don't break if middle block rotation is doubled!
-	case '2':
-	  Modifier|=DoubleMove; 
-	  ++it; 
-	  break;
-	default:
-	  break;
+	  case '|':
+	    Modifier^=SingleSide;
+	    Modifier|=Middle;
+	    ++it;
+	    if(it+1==Operations.end() || (*(it+1)!='2' && *(it+1)!='|'))
+	    {
+	      break;
+	    } // don't break if middle block rotation is doubled!
+	  case '2':
+	    Modifier|=DoubleMove; 
+	    ++it; 
+	    break;
+	  default:
+	    break;
+	}
       }
-    }
-    if((Modifier&Restriction)==Restriction)
-    {
-      const CubeSlot * op=operate(R,Modifier|Including|all_cubes);
-      actOn(Q,op);
-      Result=(op!=nullptr);
+      if((Modifier&Restriction)==Restriction)
+      {
+	const CubeSlot * op=operate(R,Modifier|Including|all_cubes);
+	actOn(Q,op);
+	Result=(op!=nullptr);
+      }
     }
   }
   return Result;
