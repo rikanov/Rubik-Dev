@@ -252,19 +252,7 @@ void Topology::actOn(CubeSlot * Q, const CubeSlot * R)
 
 void Topology::initSeekers() const
 {
-  if(PathGenerator.head)
-  {
-    for(t_state * p = PathGenerator.head; p->state; ++p)
-    {
-      p->dealloc();
-    }
-  delete[] PathGenerator.head; 
-  }
-  TraceSize=length_indices[CONFIG_CACHE_MEMORY_BOUND]-1;
-  PathGenerator.head = new t_state[TraceSize+2]; // 976338 -> 877032
-  PathGenerator.head->copy(IdentityMap);
-  PathGenerator.head->inverse=PathGenerator.head;
-  PathGenerator.head->parent =PathGenerator.head;
+  PathGenerator.init();
   t_state * Head=PathGenerator.head;
   t_state * node = Head;
   t_state * next = node+1;

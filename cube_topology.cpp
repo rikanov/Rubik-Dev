@@ -331,6 +331,39 @@ void Topology::initCache(const int& C)
      Singleton->initSeekers();    
   }
 }
+
+Topology::seeker::seeker():
+  head(nullptr)
+{
+  
+}
+
+void Topology::seeker::init()
+{
+  if(head)
+  {
+    for(t_state * p = head; p->state; ++p)
+    {
+      p->dealloc();
+    }
+  delete[] head; 
+  }
+  TraceSize=length_indices[CONFIG_CACHE_MEMORY_BOUND]-1;
+  head = new t_state[TraceSize+2]; // 976338 -> 877032
+  head->copy(IdentityMap);
+  head->inverse=head;
+  head->parent =head; 
+}
+
+Topology::seeker::~seeker()
+{
+  for(int i=0;i<length_indices[CONFIG_CACHE_MEMORY_BOUND];++i)
+  {
+    delete[] head[i].state;
+  }
+  delete[] head;
+}
+
  
 Topology::~Topology()
 {
