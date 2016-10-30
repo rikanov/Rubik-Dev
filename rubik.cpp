@@ -128,14 +128,23 @@ bool Rubik::variableEquality(String A, const String& B) const
 
 void Rubik::select(Stream& IS, String& Result, const bool & Inv)
 {
-  GET(head)
-  GETLIST(SS)
-  while(SS.good())
+  GETLINE(lambda) 
+  GETLIST(core)  
+  (*Var_space)["mapcar-lambda"]=lambda+" ";
+  const bool is_lambda=lambda.find('&')!=String::npos;
+  while(core.good())
   {
-    Stream next;
+    String next;
     String query;
-    SS>>query;
-    next << head << ' ' << query;
+    core >> query;
+    if(is_lambda)
+    {
+      next=functionResolver(query,"mapcar-lambda");
+    }
+    else
+    {
+      next=lambda+" "+query;
+    }
     if((Inv && parser(next)==NIL) ||
       (!Inv && parser(next)!=NIL) )
     {
@@ -192,6 +201,12 @@ Rubik& Rubik::applyRotation()
   
   return *this;
 }
+
+String Rubik::functionResolver(const String & arg,const String & R)
+{
+  return auxiliary::putInString(arg,'&',Var_space->at(R));
+}
+
 String Rubik::functionResolver(Stream& IS,const String & R)
 {
   PARSER(arg); 

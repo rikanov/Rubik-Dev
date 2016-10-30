@@ -88,6 +88,10 @@ class Rubik
   
   String 
   functionResolver	(
+			const String & arg, 
+			const String & R);
+  String 
+  functionResolver	(
 			Stream & IS, 
 			const String & R);
   
