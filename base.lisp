@@ -36,4 +36,16 @@ defun jessicaF \
   do &; NIL; \
   if nil same_colors U; revert
   
+defvar validation::corners \
+  URF UBR ULB UFL DFR DRB DBL DLF
   
+defun validation::corner-value \
+  crypt assoc crypt D->U what_is & 012 U
+
+defun validation::add-corner \
+  + validation::corner-value &
+  
+defvar validation::corner-checksum \
+  convoke + 0 \
+    mapcar  crypt assoc crypt D->U what_is & 012 U; \
+      validation::corners
