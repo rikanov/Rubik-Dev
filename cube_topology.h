@@ -61,7 +61,7 @@ public:
   public:
     RotationRange(const int&,const int&);
     const t_state* state() const;
-    RotationRange* next(); 
+    RotationRange* next();
   };
   struct seeker
   {
@@ -70,7 +70,7 @@ public:
     void init();
     ~seeker();
   };
-private:
+  private:
   
   mutable seeker PathGenerator;
   
@@ -89,14 +89,13 @@ private:
   void setHash();
   void makeConnectionBetween(Topology::Side* A, Topology::Side* B, const int& RotatingSide);
   void makeConnectionBetween(const int& A, const int& B, const int& RotatingSide);
-   int computeRotate(const Topology::Cube& C, const CubeSlot& R);
+    int computeRotate(const Topology::Cube& C, const CubeSlot& R);
   void buildRotations();
   bool createRotation(CubeSlot* Q, const CubeSlot& Rot, const int& A);
   void createTokens();
   
   Topology();
   ~Topology();
-  
 public:
   static void singleton();
   static void close();

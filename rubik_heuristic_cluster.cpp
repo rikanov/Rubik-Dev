@@ -5,11 +5,11 @@ static const int HASH[]={1,24,576,13824,331776,7962624,191102976};
 Rubik_BF::Cluster::Cluster():
   Dim(-1),
   cluster_size(0),
-  HeuristicIndices(nullptr),
   ClusterDimensions(nullptr),
   ClusteredSolutions(nullptr),
   SideClusterDimensions(nullptr),
   SideCluster(nullptr),
+  HeuristicIndices(nullptr),
   found(nullptr),
   trail(nullptr)
 {

@@ -461,7 +461,8 @@ UI_rfunc(mapcar)
 UI_rfunc(convoke)
 {
   GET2(Symbol,Result)
-  GETLIST(TaskList)
+  PARSER(Tasks)
+  Stream TaskList(Tasks);
   while(TaskList.good())
   {
     String next(Symbol+" "+Result+" ");

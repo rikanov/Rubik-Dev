@@ -267,7 +267,7 @@ std::string Topology::token(int T)
 void Topology::makeConnectionBetween(Topology::Side* A, Topology::Side* B, const int & RotatingSide)
 {
     A->ROT[RotatingSide]=B;
-    B->ROT[OPPOSITE(RotatingSide)]=A;
+    B->ROT[5-RotatingSide]=A;
 }
 
 int Topology::getIndex(const std::string& SMarks)
@@ -333,7 +333,7 @@ void Topology::initCache(const int& C)
 }
 
 Topology::seeker::seeker():
-head(nullptr)
+  head(nullptr)
 {
   
 }
