@@ -10,7 +10,6 @@
 #include <time.h>
 #include <algorithm> 
 #include <ncurses.h>
-#include <memory>
 
 const int CURRENT_VERSION_NUMBERS[]={1,0,0};
 
